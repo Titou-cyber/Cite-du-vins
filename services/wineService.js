@@ -13,10 +13,10 @@ const loadWines = () => {
 };
 
 // Get all wines with optional pagination
-const getAllWines = (page = 1, limit = 21) => {
+const getAllWines = (page = 1, limit = 20) => {
   // Ensure page and limit are numbers
   page = parseInt(page) || 1;
-  limit = parseInt(limit) || 21;
+  limit = parseInt(limit) || 20;
   
   const wines = loadWines();
   
@@ -67,16 +67,123 @@ const searchWines = (query) => {
 
 // Filter wines by region, variety, and price range
 const filterWines = (region, variety, minPrice, maxPrice) => {
-  const wines = loadWines();
-  
-  return wines.filter(wine => {
-    const matchesRegion = !region || wine.region_1 === region || wine.region_2 === region;
-    const matchesVariety = !variety || wine.variety === variety;
-    const matchesMinPrice = !minPrice || (wine.price && wine.price >= parseFloat(minPrice));
-    const matchesMaxPrice = !maxPrice || (wine.price && wine.price <= parseFloat(maxPrice));
+  try {
+    // Load all wines
+    const allWines = loadWines();
     
-    return matchesRegion && matchesVariety && matchesMinPrice && matchesMaxPrice;
-  });
+    console.log(`Total wines before filtering: ${allWines.length}`);
+    console.log('Filter criteria:', { 
+      region: region || 'not specified', 
+      variety: variety || 'not specified', 
+      minPrice: minPrice || 'not specified', 
+      maxPrice: maxPrice || 'not specified' 
+    });
+    
+    // If no filters applied, return all wines
+    if (!region && !variety && !minPrice && !maxPrice) {
+      console.log('No filters applied, returning all wines');
+      return allWines;
+    }
+    
+    // Convert price filters to numbers if provided
+    const minPriceValue = minPrice ? parseFloat(minPrice) : null;
+    const maxPriceValue = maxPrice ? parseFloat(maxPrice) : null;
+    
+    // Apply filters one by one to see which ones might be causing issues
+    let filtered = [...allWines];
+    
+    // Apply region filter if specified
+    if (region && region.trim() !== '') {
+      const regionLower = region.toLowerCase().trim();
+      
+      filtered = filtered.filter(wine => {
+        const region1Match = wine.region_1 && wine.region_1.toLowerCase().includes(regionLower);
+        const region2Match = wine.region_2 && wine.region_2.toLowerCase().includes(regionLower);
+        return region1Match || region2Match;
+      });
+      
+      console.log(`After region filter (${region}): ${filtered.length} wines`);
+    }
+    
+    // Apply variety filter if specified
+    if (variety && variety.trim() !== '') {
+      const varietyLower = variety.toLowerCase().trim();
+      
+      filtered = filtered.filter(wine => {
+        return wine.variety && wine.variety.toLowerCase().includes(varietyLower);
+      });
+      
+      console.log(`After variety filter (${variety}): ${filtered.length} wines`);
+    }
+    
+    // Apply price filters if specified
+    if (minPriceValue !== null) {
+      filtered = filtered.filter(wine => wine.price && wine.price >= minPriceValue);
+      console.log(`After min price filter (${minPriceValue}): ${filtered.length} wines`);
+    }
+    
+    if (maxPriceValue !== null) {
+      filtered = filtered.filter(wine => wine.price && wine.price <= maxPriceValue);
+      console.log(`After max price filter (${maxPriceValue}): ${filtered.length} wines`);
+    }
+    
+    console.log(`Final count after all filters: ${filtered.length} wines`);
+    
+    // Analyze data if no results found
+    if (filtered.length === 0) {
+      console.log('No wines matched all filters. Analyzing data to help troubleshoot:');
+      
+      // Check for region existence if that filter was applied
+      if (region && region.trim() !== '') {
+        const regionLower = region.toLowerCase().trim();
+        const regionsInData = new Set();
+        
+        allWines.forEach(wine => {
+          if (wine.region_1) regionsInData.add(wine.region_1.toLowerCase());
+          if (wine.region_2) regionsInData.add(wine.region_2.toLowerCase());
+        });
+        
+        const exactMatch = regionsInData.has(regionLower);
+        console.log(`Exact match for region "${region}" in data: ${exactMatch}`);
+        
+        // Find similar regions for troubleshooting
+        const similarRegions = Array.from(regionsInData).filter(r => 
+          r.includes(regionLower) || regionLower.includes(r)
+        );
+        
+        if (similarRegions.length > 0) {
+          console.log(`Similar regions found: ${similarRegions.join(', ')}`);
+        }
+      }
+      
+      // Check for variety existence if that filter was applied
+      if (variety && variety.trim() !== '') {
+        const varietyLower = variety.toLowerCase().trim();
+        const varietiesInData = new Set();
+        
+        allWines.forEach(wine => {
+          if (wine.variety) varietiesInData.add(wine.variety.toLowerCase());
+        });
+        
+        const exactMatch = varietiesInData.has(varietyLower);
+        console.log(`Exact match for variety "${variety}" in data: ${exactMatch}`);
+        
+        // Find similar varieties for troubleshooting
+        const similarVarieties = Array.from(varietiesInData).filter(v => 
+          v.includes(varietyLower) || varietyLower.includes(v)
+        );
+        
+        if (similarVarieties.length > 0) {
+          console.log(`Similar varieties found: ${similarVarieties.join(', ')}`);
+        }
+      }
+    }
+    
+    return filtered;
+  } catch (error) {
+    console.error('Error in filterWines function:', error);
+    return []; // Return empty array instead of throwing error
+  }
 };
 
 // Simple recommendation system (in a real system, this would be more sophisticated)

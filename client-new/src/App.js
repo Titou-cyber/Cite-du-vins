@@ -15,7 +15,7 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalWines, setTotalWines] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(21);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
   const [filters, setFilters] = useState({
     region: '',
     variety: '',
@@ -52,7 +52,7 @@ const App = () => {
         setLoading(false);
       }
     };
-  
+
     fetchWines();
   }, [currentPage, itemsPerPage, API_URL]);
   
@@ -79,7 +79,7 @@ const App = () => {
     };
 
     fetchFilterOptions();
-  }, []);
+  }, [API_URL]);
   
   // Handle search
   const handleSearch = async (e) => {
@@ -117,34 +117,91 @@ const App = () => {
     
     try {
       setLoading(true);
+      setError(null); // Clear any previous errors
+      
       const queryParams = new URLSearchParams();
-      if (filters.region) queryParams.append('region', filters.region);
-      if (filters.variety) queryParams.append('variety', filters.variety);
-      if (filters.minPrice) queryParams.append('minPrice', filters.minPrice);
-      if (filters.maxPrice) queryParams.append('maxPrice', filters.maxPrice);
-
-      const response = await fetch(`${API_URL}/wines/filter?${queryParams}`);
+      
+      // Only add parameters that have values
+      if (filters.region && filters.region.trim() !== '') 
+        queryParams.append('region', filters.region);
+      
+      if (filters.variety && filters.variety.trim() !== '') 
+        queryParams.append('variety', filters.variety);
+      
+      if (filters.minPrice && filters.minPrice.trim() !== '') 
+        queryParams.append('minPrice', filters.minPrice);
+      
+      if (filters.maxPrice && filters.maxPrice.trim() !== '') 
+        queryParams.append('maxPrice', filters.maxPrice);
+      
+      console.log('Frontend - Applying filters:', filters);
+      console.log('Frontend - Query string:', queryParams.toString());
+      
+      const url = `${API_URL}/wines/filter?${queryParams.toString()}`;
+      console.log('Frontend - Request URL:', url);
+      
+      const response = await fetch(url);
+      
       if (!response.ok) {
-        throw new Error('Filtering failed');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error during filtering');
       }
+      
       const data = await response.json();
+      console.log(`Frontend - Filter returned ${data.length} wines`);
+      
+      // Always update the UI with results
+      setCurrentPage(1);
       setFilteredWines(data);
+      
+      // Show a message if no results, but don't treat as error
+      if (data.length === 0) {
+        setError('No wines found matching these criteria. Try broadening your search.');
+      }
+      
       setLoading(false);
     } catch (err) {
-      setError(err.message);
+      console.error('Frontend - Filter error:', err);
+      setFilteredWines([]); // Clear results on error
+      setError(`${err.message}. Please try again or check the console for details.`);
       setLoading(false);
     }
   };
   
   // Reset filters
   const resetFilters = () => {
-    setFilters({
+    // Clear filter values
+    const resetFiltersObj = {
       region: '',
       variety: '',
       minPrice: '',
       maxPrice: ''
-    });
-    setFilteredWines(wines);
+    };
+    
+    setFilters(resetFiltersObj);
+    setError(null);
+    
+    // Fetch original wines without filters
+    const fetchOriginalWines = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_URL}/wines?page=${currentPage}&limit=${itemsPerPage}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch wines');
+        }
+        const data = await response.json();
+        setFilteredWines(data.wines || []);
+        setTotalWines(data.total || 0);
+        setTotalPages(data.totalPages || Math.ceil(data.total / itemsPerPage));
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching original wines:', err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+    
+    fetchOriginalWines();
   };
   
   return (
@@ -293,7 +350,7 @@ const App = () => {
               
               {error && (
                 <div className="bg-red-50 text-red-700 p-4 rounded-md mb-6">
-                  Error: {error}
+                  {error}
                 </div>
               )}
               
