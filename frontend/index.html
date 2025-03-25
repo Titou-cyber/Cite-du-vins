@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cité du Vin Marketplace</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Simple icons library to replace Lucide icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Cité du Vin Marketplace</h1>
+                
+                <!-- Search Bar -->
+                <form id="search-form" class="search-form">
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Search wines by name, winery or description...">
+                        <button type="submit">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="main-layout">
+            <!-- Sidebar with Filters -->
+            <aside class="sidebar">
+                <div class="filter-panel">
+                    <h2><i class="fas fa-filter"></i> Filter Wines</h2>
+                    
+                    <form id="filter-form">
+                        <div class="filter-group">
+                            <label for="region">Region</label>
+                            <select id="region" name="region">
+                                <option value="">All Regions</option>
+                                <!-- Regions will be populated via JavaScript -->
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="variety">Grape Variety</label>
+                            <select id="variety" name="variety">
+                                <option value="">All Varieties</option>
+                                <!-- Varieties will be populated via JavaScript -->
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="minPrice">Min Price ($)</label>
+                            <input type="number" id="minPrice" name="minPrice" min="0">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="maxPrice">Max Price ($)</label>
+                            <input type="number" id="maxPrice" name="maxPrice" min="0">
+                        </div>
+                        
+                        <div class="filter-buttons">
+                            <button type="submit" class="btn primary">Apply Filters</button>
+                            <button type="button" id="reset-filters" class="btn secondary">Reset</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Recommendations Panel -->
+                <div class="recommendations-panel">
+                    <h2>Recommended For You</h2>
+                    <p>
+                        Browse our collection to get personalized wine recommendations based on your preferences.
+                    </p>
+                </div>
+            </aside>
+            
+            <!-- Wine Listings -->
+            <div class="content">
+                <div class="wines-panel">
+                    <h2>Available Wines</h2>
+                    
+                    <!-- Error message container -->
+                    <div id="error-container" class="error-container" style="display: none;"></div>
+                    
+                    <!-- Items per page selector -->
+                    <div class="pagination-controls">
+                        <span>Wines per page:</span>
+                        <select id="items-per-page">
+                            <option value="10">10</option>
+                            <option value="20" selected>20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Loading indicator -->
+                    <div id="loading-indicator" class="loading-indicator" style="display: none;">
+                        <div class="spinner"></div>
+                    </div>
+                    
+                    <!-- Wines grid container -->
+                    <div id="wines-grid" class="wines-grid">
+                        <!-- Wines will be populated here via JavaScript -->
+                    </div>
+                    
+                    <!-- Empty state message -->
+                    <div id="empty-state" class="empty-state" style="display: none;">
+                        No wines found matching your criteria.
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <div id="pagination-info" class="pagination-info">
+                            Showing 0 of 0 wines (Page 1 of 1)
+                        </div>
+                        
+                        <div class="pagination-buttons">
+                            <button id="prev-page" class="btn page-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            
+                            <div id="page-numbers" class="page-numbers">
+                                <!-- Page numbers will be populated via JavaScript -->
+                            </div>
+                            
+                            <button id="next-page" class="btn page-btn" disabled>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h2>Cité du Vin Marketplace</h2>
+                    <p>A project for wine enthusiasts</p>
+                </div>
+                
+                <div class="copyright">
+                    &copy; <span id="current-year"></span> Cité du Vin - Class Project
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
