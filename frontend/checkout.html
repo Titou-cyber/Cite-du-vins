@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre Panier - Cité du Vin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header (Same as other pages) -->
+    <header>
+        <!-- Header content will be the same -->
+    </header>
+    
+    <nav class="main-nav">
+        <!-- Navigation content will be the same -->
+    </nav>
+    
+    <!-- Cart Page Content -->
+    <main class="cart-page">
+        <div class="container">
+            <div class="cart-header">
+                <h1>Votre Panier</h1>
+            </div>
+            
+            <!-- Empty Cart State (Hidden if cart has items) -->
+            <div id="cart-empty" class="cart-empty" style="display: none;">
+                <div class="cart-empty-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h2 class="cart-empty-message">Votre panier est vide</h2>
+                <p class="mb-4">Explorez notre collection et ajoutez des vins à votre panier.</p>
+                <a href="index.html" class="btn primary">Découvrir nos vins</a>
+            </div>
+            
+            <!-- Cart with Items -->
+            <div id="cart-with-items">
+                <div class="table-responsive">
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%;">Produit</th>
+                                <th>Prix</th>
+                                <th>Quantité</th>
+                                <th>Sous-total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-items">
+                            <!-- Cart items will be populated via JavaScript -->
+                            <tr class="cart-item-row">
+                                <td>
+                                    <div class="cart-item">
+                                        <div class="cart-item-image">
+                                            <img src="assets/images/wine-placeholder.jpg" alt="Château Margaux 2015">
+                                        </div>
+                                        <div class="cart-item-details">
+                                            <h3 class="cart-item-title">Château Margaux 2015</h3>
+                                            <div class="cart-item-meta">
+                                                <span>Bordeaux, France</span> | <span>Rouge</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cart-price">€420.00</td>
+                                <td>
+                                    <div class="quantity-input">
+                                        <button type="button" class="quantity-btn decrease-btn" data-id="1">-</button>
+                                        <input type="number" class="quantity-value" value="1" min="1" max="12" data-id="1">
+                                        <button type="button" class="quantity-btn increase-btn" data-id="1">+</button>
+                                    </div>
+                                </td>
+                                <td class="cart-subtotal">€420.00</td>
+                                <td>
+                                    <button type="button" class="cart-remove" data-id="1">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="cart-item-row">
+                                <td>
+                                    <div class="cart-item">
+                                        <div class="cart-item-image">
+                                            <img src="assets/images/wine-placeholder2.jpg" alt="Domaine de la Romanée-Conti 2018">
+                                        </div>
+                                        <div class="cart-item-details">
+                                            <h3 class="cart-item-title">Domaine de la Romanée-Conti 2018</h3>
+                                            <div class="cart-item-meta">
+                                                <span>Bourgogne, France</span> | <span>Rouge</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cart-price">€1,250.00</td>
+                                <td>
+                                    <div class="quantity-input">
+                                        <button type="button" class="quantity-btn decrease-btn" data-id="2">-</button>
+                                        <input type="number" class="quantity-value" value="1" min="1" max="12" data-id="2">
+                                        <button type="button" class="quantity-btn increase-btn" data-id="2">+</button>
+                                    </div>
+                                </td>
+                                <td class="cart-subtotal">€1,250.00</td>
+                                <td>
+                                    <button type="button" class="cart-remove" data-id="2">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="cart-footer">
+                    <div class="cart-actions">
+                        <a href="index.html" class="btn secondary">
+                            <i class="fas fa-arrow-left"></i> Continuer les achats
+                        </a>
+                        
+                        <div class="coupon-form">
+                            <input type="text" class="form-control" placeholder="Code promotionnel">
+                            <button type="button" class="btn primary">Appliquer</button>
+                        </div>
+                        
+                        <button type="button" id="clear-cart" class="btn secondary">
+                            <i class="fas fa-trash"></i> Vider le panier
+                        </button>
+                    </div>
+                    
+                    <div class="cart-summary">
+                        <h2 class="cart-summary-title">Récapitulatif</h2>
+                        
+                        <div class="cart-summary-row">
+                            <div class="cart-summary-label">Sous-total</div>
+                            <div class="cart-summary-value" id="cart-subtotal">€1,670.00</div>
+                        </div>
+                        
+                        <div class="cart-summary-row">
+                            <div class="cart-summary-label">Frais de livraison</div>
+                            <div class="cart-summary-value" id="cart-shipping">€15.00</div>
+                        </div>
+                        
+                        <div class="cart-summary-row">
+                            <div class="cart-summary-label">TVA (20%)</div>
+                            <div class="cart-summary-value" id="cart-tax">€334.00</div>
+                        </div>
+                        
+                        <div class="cart-summary-total-row">
+                            <div class="cart-summary-total-label">Total</div>
+                            <div class="cart-summary-total-value" id="cart-total">€2,019.00</div>
+                        </div>
+                        
+                        <a href="checkout.html" class="btn primary cart-checkout-btn">
+                            Procéder au paiement <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer (Same as other pages) -->
+    <footer>
+        <!-- Footer content will be the same -->
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement - Cité du Vin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="assets/images/logo.png" alt="Cité du Vin Logo" id="logo-image">
+                    <h1>Cité du Vin</h1>
+                </div>
+                
+                <!-- Search Bar -->
+                <form id="search-form" class="search-form">
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Rechercher des vins, régions, cépages...">
+                        <button type="submit">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Header Actions -->
+                <div class="header-actions">
+                    <button type="button" class="cart-btn" id="cart-button">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-badge" id="cart-count">0</span>
+                    </button>
+                    
+                    <!-- Cart Preview (Hidden by default) -->
+                    <div class="cart-preview" id="cart-preview">
+                        <div class="cart-preview-title">
+                            <h3>Votre Panier</h3>
+                            <button class="btn-link" id="cart-preview-close">Fermer</button>
+                        </div>
+                        <div class="cart-preview-items" id="cart-preview-items">
+                            <!-- Cart items will be inserted here via JavaScript -->
+                        </div>
+                        <div class="cart-preview-total">
+                            <span>Total:</span>
+                            <span id="cart-preview-total-amount">€0.00</span>
+                        </div>
+                        <div class="cart-preview-actions">
+                            <a href="cart.html" class="btn secondary">Voir le panier</a>
+                            <a href="checkout.html" class="btn primary">Commander</a>
+                        </div>
+                    </div>
+                    
+                    <div class="user-menu">
+                        <button type="button" class="user-btn" id="user-button">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Mon Compte</span>
+                        </button>
+                        
+                        <!-- User Dropdown (Hidden by default) -->
+                        <div class="user-dropdown" id="user-dropdown">
+                            <a href="account.html" class="dropdown-item">Mon profil</a>
+                            <a href="orders.html" class="dropdown-item">Mes commandes</a>
+                            <a href="favorites.html" class="dropdown-item">Mes favoris</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" id="logout-button">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-container">
+                <button class="menu-btn" id="menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="nav-links" id="nav-links">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link active">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="wines.html" class="nav-link">Notre Sélection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="regions.html" class="nav-link">Régions Viticoles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="experience.html" class="nav-link">Expérience Dégustation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="quiz.html" class="nav-link">Quiz Œnologique</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">Blog</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Checkout Page Content -->
+    <main class="checkout-page">
+        <div class="container">
+            <div class="cart-header">
+                <h1>Finaliser Votre Commande</h1>
+            </div>
+            
+            <div class="checkout-container">
+                <div class="checkout-form">
+                    <form id="checkout-form">
+                        <div class="checkout-section">
+                            <h2 class="checkout-section-title">
+                                <i class="fas fa-user"></i> Informations Personnelles
+                            </h2>
+                            
+                            <div class="checkout-form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="customer-firstname">Prénom</label>
+                                    <input type="text" id="customer-firstname" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="customer-lastname">Nom</label>
+                                    <input type="text" id="customer-lastname" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="customer-email">Email</label>
+                                    <input type="email" id="customer-email" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="customer-phone">Téléphone</label>
+                                    <input type="tel" id="customer-phone" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="checkout-section">
+                            <h2 class="checkout-section-title">
+                                <i class="fas fa-map-marker-alt"></i> Adresse de Livraison
+                            </h2>
+                            
+                            <div class="checkout-form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="shipping-address">Adresse</label>
+                                    <input type="text" id="shipping-address" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="shipping-address2">Complément d'adresse</label>
+                                    <input type="text" id="shipping-address2" class="form-control">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="shipping-city">Ville</label>
+                                    <input type="text" id="shipping-city" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="shipping-postal">Code Postal</label>
+                                    <input type="text" id="shipping-postal" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="shipping-country">Pays</label>
+                                    <div class="custom-select">
+                                        <select id="shipping-country" class="form-control" required>
+                                            <option value="">Sélectionnez un pays</option>
+                                            <option value="FR">France</option>
+                                            <option value="BE">Belgique</option>
+                                            <option value="CH">Suisse</option>
+                                            <option value="LU">Luxembourg</option>
+                                            <option value="DE">Allemagne</option>
+                                            <option value="IT">Italie</option>
+                                            <option value="ES">Espagne</option>
+                                            <option value="GB">Royaume-Uni</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group mt-3">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="billing-same" checked>
+                                    <label for="billing-same">L'adresse de facturation est identique à l'adresse de livraison</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Billing Address (Hidden by default) -->
+                        <div class="checkout-section" id="billing-address-section" style="display: none;">
+                            <h2 class="checkout-section-title">
+                                <i class="fas fa-file-invoice"></i> Adresse de Facturation
+                            </h2>
+                            
+                            <div class="checkout-form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="billing-address">Adresse</label>
+                                    <input type="text" id="billing-address" class="form-control">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="billing-address2">Complément d'adresse</label>
+                                    <input type="text" id="billing-address2" class="form-control">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="billing-city">Ville</label>
+                                    <input type="text" id="billing-city" class="form-control">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="billing-postal">Code Postal</label>
+                                    <input type="text" id="billing-postal" class="form-control">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="billing-country">Pays</label>
+                                    <div class="custom-select">
+                                        <select id="billing-country" class="form-control">
+                                            <option value="">Sélectionnez un pays</option>
+                                            <option value="FR">France</option>
+                                            <option value="BE">Belgique</option>
+                                            <option value="CH">Suisse</option>
+                                            <option value="LU">Luxembourg</option>
+                                            <option value="DE">Allemagne</option>
+                                            <option value="IT">Italie</option>
+                                            <option value="ES">Espagne</option>
+                                            <option value="GB">Royaume-Uni</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="checkout-section">
+                            <h2 class="checkout-section-title">
+                                <i class="fas fa-truck"></i> Mode de Livraison
+                            </h2>
+                            
+                            <div class="shipping-methods">
+                                <div class="payment-method active">
+                                    <input type="radio" name="shipping_method" id="shipping-standard" value="standard" checked>
+                                    <div class="payment-method-icon">
+                                        <i class="fas fa-truck"></i>
+                                    </div>
+                                    <div class="payment-method-details">
+                                        <h3 class="payment-method-title">Livraison Standard</h3>
+                                        <p class="payment-method-description">3-5 jours ouvrés - €15.00</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-method">
+                                    <input type="radio" name="shipping_method" id="shipping-express" value="express">
+                                    <div class="payment-method-icon">
+                                        <i class="fas fa-shipping-fast"></i>
+                                    </div>
+                                    <div class="payment-method-details">
+                                        <h3 class="payment-method-title">Livraison Express</h3>
+                                        <p class="payment-method-description">1-2 jours ouvrés - €25.00</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="checkout-section">
+                            <h2 class="checkout-section-title">
+                                <i class="fas fa-credit-card"></i> Mode de Paiement
+                            </h2>
+                            
+                            <div class="checkout-payment-methods">
+                                <div class="payment-method active">
+                                    <input type="radio" name="payment_method" id="payment-card" value="card" checked>
+                                    <div class="payment-method-icon">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div class="payment-method-details">
+                                        <h3 class="payment-method-title">Carte Bancaire</h3>
+                                        <p class="payment-method-description">Paiement sécurisé par carte Visa, Mastercard, American Express</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-method">
+                                    <input type="radio" name="payment_method" id="payment-paypal" value="paypal">
+                                    <div class="payment-method-icon">
+                                        <i class="fab fa-paypal"></i>
+                                    </div>
+                                    <div class="payment-method-details">
+                                        <h3 class="payment-method-title">PayPal</h3>
+                                        <p class="payment-method-description">Paiement sécurisé via votre compte PayPal</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-method">
+                                    <input type="radio" name="payment_method" id="payment-bank-transfer" value="bank_transfer">
+                                    <div class="payment-method-icon">
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <div class="payment-method-details">
+                                        <h3 class="payment-method-title">Virement Bancaire</h3>
+                                        <p class="payment-method-description">Paiement par virement bancaire (délai de traitement supplémentaire)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Credit Card Form (Shown when credit card is selected) -->
+                            <div id="credit-card-form" class="mt-3">
+                                <div class="checkout-form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label" for="card-number">Numéro de carte</label>
+                                        <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="card-name">Nom sur la carte</label>
+                                        <input type="text" id="card-name" class="form-control" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="card-expiry">Date d'expiration</label>
+                                        <input type="text" id="card-expiry" class="form-control" placeholder="MM/AA" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="card-cvc">Code de sécurité (CVC)</label>
+                                        <input type="text" id="card-cvc" class="form-control" placeholder="123" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="checkout-section">
+                            <div class="form-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="terms-agree" required>
+                                    <label for="terms-agree">J'accepte les <a href="terms.html">conditions générales</a> et la <a href="privacy.html">politique de confidentialité</a></label>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn primary place-order-btn">
+                                Confirmer et Payer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="checkout-sidebar">
+                    <div class="checkout-sidebar-section">
+                        <h2 class="checkout-summary-title">Résumé de la Commande</h2>
+                        
+                        <div class="checkout-items" id="checkout-items">
+                            <!-- Checkout items will be populated via JavaScript -->
+                            <div class="checkout-item">
+                                <div class="checkout-item-image">
+                                    <img src="assets/images/wine-placeholder.jpg" alt="Château Margaux 2015">
+                                </div>
+                                <div class="checkout-item-details">
+                                    <h3 class="checkout-item-title">Château Margaux 2015</h3>
+                                    <div class="checkout-item-meta">
+                                        Quantité: 1
+                                    </div>
+                                </div>
+                                <div class="checkout-item-price">€420.00</div>
+                            </div>
+                            <div class="checkout-item">
+                                <div class="checkout-item-image">
+                                    <img src="assets/images/wine-placeholder2.jpg" alt="Domaine de la Romanée-Conti 2018">
+                                </div>
+                                <div class="checkout-item-details">
+                                    <h3 class="checkout-item-title">Domaine de la Romanée-Conti 2018</h3>
+                                    <div class="checkout-item-meta">
+                                        Quantité: 1
+                                    </div>
+                                </div>
+                                <div class="checkout-item-price">€1,250.00</div>
+                            </div>
+                        </div>
+                        
+                        <div class="checkout-summary-totals">
+                            <div class="checkout-summary-row">
+                                <div class="checkout-summary-label">Sous-total</div>
+                                <div class="checkout-summary-value" id="checkout-subtotal">€1,670.00</div>
+                            </div>
+                            
+                            <div class="checkout-summary-row">
+                                <div class="checkout-summary-label">Frais de livraison</div>
+                                <div class="checkout-summary-value" id="checkout-shipping">€15.00</div>
+                            </div>
+                            
+                            <div class="checkout-summary-row">
+                                <div class="checkout-summary-label">TVA (20%)</div>
+                                <div class="checkout-summary-value" id="checkout-tax">€334.00</div>
+                            </div>
+                            
+                            <div class="checkout-summary-total">
+                                <div class="checkout-summary-total-label">Total</div>
+                                <div class="checkout-summary-total-value" id="checkout-total">€2,019.00</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkout-sidebar-section">
+                        <h2 class="checkout-summary-title">Besoin d'aide ?</h2>
+                        <p>Pour toute question concernant votre commande, n'hésitez pas à nous contacter :</p>
+                        <div class="contact-info mt-3">
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i> +33 5 56 16 20 20
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i> commandes@citeduvin.com
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer (Same as other pages) -->
+    <footer>
+        <!-- Footer content will be the same -->
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/checkout.js"></script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation de Commande - Cité du Vin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header (Same as other pages) -->
+    <header>
+        <!-- Header content will be the same -->
+    </header>
+    
+    <nav class="main-nav">
+        <!-- Navigation content will be the same -->
+    </nav>
+    
+    <!-- Order Confirmation Page Content -->
+    <main class="confirmation-page">
+        <div class="container">
+            <div class="confirmation-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h1 class="confirmation-title">Commande Confirmée !</h1>
+            
+            <p class="confirmation-message">
+                Merci pour votre commande. Votre commande <span class="order-number">#ORD-2023-1254</span> a été traitée avec succès. Vous recevrez sous peu un email de confirmation avec les détails de votre commande.
+            </p>
+            
+            <div class="confirmation-details">
+                <div class="details-section">
+                    <h2 class="details-title">Détails de la Commande</h2>
+                    
+                    <div class="details-row">
+                        <div class="details-label">Numéro de commande</div>
+                        <div class="details-value">#ORD-2023-1254</div>
+                    </div>
+                    
+                    <div class="details-row">
+                        <div class="details-label">Date</div>
+                        <div class="details-value">25 Mars 2023</div>
+                    </div>
+                    
+                    <div class="details-row">
+                        <div class="details-label">Statut</div>
+                        <div class="details-value">Paiement accepté</div>
+                    </div>
+                    
+                    <div class="details-row">
+                        <div class="details-label">Total</div>
+                        <div class="details-value">€2,019.00</div>
+                    </div>
+                    
+                    <div class="details-row">
+                        <div class="details-label">Méthode de paiement</div>
+                        <div class="details-value">Carte bancaire</div>
+                    </div>
+                </div>
+                
+                <div class="details-section">
+                    <h2 class="details-title">Adresse de Livraison</h2>
+                    
+                    <div class="address-details">
+                        <p>
+                            Jean Dupont<br>
+                            123 Rue de Bordeaux<br>
+                            33000 Bordeaux<br>
+                            France
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="details-section">
+                    <h2 class="details-title">Méthode de Livraison</h2>
+                    
+                    <div class="details-row">
+                        <div class="details-label">Type de livraison</div>
+                        <div class="details-value">Livraison Standard</div>
+                    </div>
+                    
+                    <div class="details-row">
+                        <div class="details-label">Délai estimé</div>
+                        <div class="details-value">28 - 30 Mars 2023</div>
+                    </div>
+                    
+                    <div class="details-row">
+                        <div class="details-label">Transporteur</div>
+                        <div class="details-value">Chronopost</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="confirmation-actions">
+                <a href="index.html" class="btn secondary">
+                    <i class="fas fa-home"></i> Retour à l'accueil
+                </a>
+                
+                <a href="#" class="btn primary" id="download-invoice">
+                    <i class="fas fa-file-invoice"></i> Télécharger la facture
+                </a>
+            </div>
+        </div>
+    </main>
+    
+     <!-- Footer -->
+     <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3 class="footer-column-title">À Propos</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="about.html">Notre Histoire</a></li>
+                        <li class="footer-link"><a href="terms.html">Conditions Générales</a></li>
+                        <li class="footer-link"><a href="privacy.html">Politique de Confidentialité</a></li>
+                        <li class="footer-link"><a href="shipping.html">Livraisons & Retours</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-column-title">Découvrir</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="regions.html">Régions Viticoles</a></li>
+                        <li class="footer-link"><a href="experience.html">Guide de Dégustation</a></li>
+                        <li class="footer-link"><a href="quiz.html">Quiz Œnologique</a></li>
+                        <li class="footer-link"><a href="blog.html">Blog & Actualités</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-column-title">Contact</h3>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                134 Quai de Bacalan<br>
+                                33300 Bordeaux, France
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>+33 5 56 16 20 20</div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>contact@citeduvin.com</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-column-title">Newsletter</h3>
+                    <p>Inscrivez-vous pour recevoir nos offres et actualités.</p>
+                    <form class="newsletter-form">
+                        <input type="email" class="newsletter-input form-control" placeholder="Votre email" required>
+                        <button type="submit" class="newsletter-button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; <span id="current-year"></span> Cité du Vin - Tous droits réservés
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/confirmation.js"></script>
+</body>
+</html>

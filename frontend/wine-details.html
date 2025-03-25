@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Château Margaux 2015 - Cité du Vin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header (Same as index.html) -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="assets/images/logo.png" alt="Cité du Vin Logo" id="logo-image">
+                    <h1>Cité du Vin</h1>
+                </div>
+                
+                <!-- Search Bar -->
+                <form id="search-form" class="search-form">
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Rechercher des vins, régions, cépages...">
+                        <button type="submit">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Header Actions -->
+                <div class="header-actions">
+                    <button type="button" class="cart-btn" id="cart-button">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-badge" id="cart-count">0</span>
+                    </button>
+                    
+                    <!-- Cart Preview (Hidden by default) -->
+                    <div class="cart-preview" id="cart-preview">
+                        <div class="cart-preview-title">
+                            <h3>Votre Panier</h3>
+                            <button class="btn-link" id="cart-preview-close">Fermer</button>
+                        </div>
+                        <div class="cart-preview-items" id="cart-preview-items">
+                            <!-- Cart items will be inserted here via JavaScript -->
+                        </div>
+                        <div class="cart-preview-total">
+                            <span>Total:</span>
+                            <span id="cart-preview-total-amount">€0.00</span>
+                        </div>
+                        <div class="cart-preview-actions">
+                            <a href="cart.html" class="btn secondary">Voir le panier</a>
+                            <a href="checkout.html" class="btn primary">Commander</a>
+                        </div>
+                    </div>
+                    
+                    <div class="user-menu">
+                        <button type="button" class="user-btn" id="user-button">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Mon Compte</span>
+                        </button>
+                        
+                        <!-- User Dropdown (Hidden by default) -->
+                        <div class="user-dropdown" id="user-dropdown">
+                            <a href="account.html" class="dropdown-item">Mon profil</a>
+                            <a href="orders.html" class="dropdown-item">Mes commandes</a>
+                            <a href="favorites.html" class="dropdown-item">Mes favoris</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" id="logout-button">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+     <!-- Main Navigation -->
+     <nav class="main-nav">
+        <div class="container">
+            <div class="nav-container">
+                <button class="menu-btn" id="menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="nav-links" id="nav-links">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link active">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="wines.html" class="nav-link">Notre Sélection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="regions.html" class="nav-link">Régions Viticoles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="experience.html" class="nav-link">Expérience Dégustation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="quiz.html" class="nav-link">Quiz Œnologique</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">Blog</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Wine Detail Page Content -->
+    <main class="wine-detail-page">
+        <div class="container">
+            <div class="wine-detail-breadcrumb">
+                <div class="breadcrumb">
+                    <div class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Accueil</a>
+                        <span class="breadcrumb-separator">/</span>
+                    </div>
+                    <div class="breadcrumb-item">
+                        <a href="wines.html" class="breadcrumb-link">Vins</a>
+                        <span class="breadcrumb-separator">/</span>
+                    </div>
+                    <div class="breadcrumb-item">
+                        <a href="wines.html?region=bordeaux" class="breadcrumb-link">Bordeaux</a>
+                        <span class="breadcrumb-separator">/</span>
+                    </div>
+                    <div class="breadcrumb-item">
+                        <span class="breadcrumb-current" id="wine-name-breadcrumb">Château Margaux 2015</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wine-details">
+                <div class="wine-details-image">
+                    <img src="assets/images/wine-placeholder.jpg" alt="Château Margaux 2015" id="wine-image">
+                </div>
+                
+                <div class="wine-details-content">
+                    <div class="wine-details-header">
+                        <h1 id="wine-title">Château Margaux 2015</h1>
+                        
+                        <div class="wine-details-meta">
+                            <div class="wine-details-meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="wine-region">Bordeaux, France</span>
+                            </div>
+                            <div class="wine-details-meta-item">
+                                <i class="fas fa-wine-glass"></i>
+                                <span id="wine-variety">Cabernet Sauvignon, Merlot</span>
+                            </div>
+                            <div class="wine-details-meta-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="wine-vintage">2015</span>
+                            </div>
+                        </div>
+                        
+                        <div class="wine-details-rating">
+                            <div class="wine-details-points">
+                                <span class="wine-details-points-value" id="wine-points">98</span>
+                                <span class="wine-details-points-label">points</span>
+                            </div>
+                            
+                            <div class="wine-details-stars">
+                                <span class="star"><i class="fas fa-star"></i></span>
+                                <span class="star"><i class="fas fa-star"></i></span>
+                                <span class="star"><i class="fas fa-star"></i></span>
+                                <span class="star"><i class="fas fa-star"></i></span>
+                                <span class="star"><i class="fas fa-star-half-alt"></i></span>
+                                <span>(127 avis)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="wine-details-price-container">
+                        <div class="wine-details-price" id="wine-price">€420.00</div>
+                        <div class="wine-details-availability">
+                            <span class="wine-details-in-stock">
+                                <i class="fas fa-check-circle"></i> En stock
+                            </span>
+                            <span id="wine-stock-count">12 bouteilles disponibles</span>
+                        </div>
+                    </div>
+                    
+                    <div class="wine-details-description" id="wine-description">
+                        <p>Le Château Margaux 2015 est un vin d'une concentration et d'une profondeur remarquables. Au nez, il révèle des arômes de fruits noirs, de violette, de truffe et de cèdre. En bouche, il est d'une élégance exceptionnelle, avec des tanins soyeux et une longueur impressionnante.</p>
+                        <p>Ce millésime exceptionnel est considéré comme l'un des plus grands de Château Margaux, représentant parfaitement l'équilibre et la finesse caractéristiques de ce Premier Grand Cru Classé.</p>
+                    </div>
+                    
+                    <div class="wine-details-actions">
+                        <div class="quantity-input">
+                            <button type="button" class="quantity-btn" id="decrease-quantity">-</button>
+                            <input type="number" id="quantity" class="quantity-value" value="1" min="1" max="12">
+                            <button type="button" class="quantity-btn" id="increase-quantity">+</button>
+                        </div>
+                        
+                        <button type="button" class="btn primary" id="add-to-cart">
+                            <i class="fas fa-shopping-cart"></i> Ajouter au panier
+                        </button>
+                        
+                        <button type="button" class="favorite-btn" id="add-to-favorites">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Interactive Wine Experience -->
+                    <div class="wine-experience-preview">
+                        <h3>Expérience Virtuelle</h3>
+                        <p>Découvrez ce vin en détail avec notre expérience interactive de dégustation virtuelle.</p>
+                        <button class="btn outline" id="launch-experience">
+                            <i class="fas fa-vr-cardboard"></i> Lancer l'expérience
+                        </button>
+                    </div>
+                    
+                    <div class="wine-details-tabs">
+                        <div class="tabs-nav">
+                            <button type="button" class="tab-btn active" data-tab="characteristics">Caractéristiques</button>
+                            <button type="button" class="tab-btn" data-tab="producer">Producteur</button>
+                            <button type="button" class="tab-btn" data-tab="reviews">Avis</button>
+                            <button type="button" class="tab-btn" data-tab="food-pairing">Accords Mets-Vins</button>
+                        </div>
+                        
+                        <div id="characteristics" class="tab-content active">
+                            <div class="wine-attributes">
+                                <div class="wine-attribute">
+                                    <div class="attribute-label">Type de Vin</div>
+                                    <div class="attribute-value" id="wine-type">Rouge</div>
+                                </div>
+                                <div class="wine-attribute">
+                                    <div class="attribute-label">Cépage Principal</div>
+                                    <div class="attribute-value" id="wine-main-variety">Cabernet Sauvignon</div>
+                                </div>
+                                <div class="wine-attribute">
+                                    <div class="attribute-label">Région</div>
+                                    <div class="attribute-value" id="wine-region-detail">Bordeaux, Margaux</div>
+                                </div>
+                                <div class="wine-attribute">
+                                    <div class="attribute-label">Pays</div>
+                                    <div class="attribute-value" id="wine-country">France</div>
+                                </div>
+                                <div class="wine-attribute">
+                                    <div class="attribute-label">Millésime</div>
+                                    <div class="attribute-value" id="wine-year">2015</div>
+                                </div>
+                                <div class="wine-attribute">
+                                    <div class="attribute-label">Volume</div>
+                                    <div class="attribute-value">75cl</div>
+                                </div>
+                                <div class="wine-attribute">
+                                    <div class="attribute-label">Alcool</div>
+                                    <div class="attribute-value" id="wine-alcohol">13.5%</div>
+                                </div>
+                                <div class="wine-attribute">
+                                    <div class="attribute-label">Potentiel de Garde</div>
+                                    <div class="attribute-value" id="wine-aging">15-25 ans</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="producer" class="tab-content">
+                            <div class="producer-info">
+                                <h3 id="producer-name">Château Margaux</h3>
+                                <p id="producer-description">Fondé au XII<sup>e</sup> siècle, Château Margaux est l'un des plus prestigieux domaines viticoles au monde. Premier Grand Cru Classé en 1855, il produit des vins d'une finesse et d'une élégance légendaires.</p>
+                                <p>Le domaine s'étend sur 82 hectares dans l'appellation Margaux et bénéficie d'un terroir exceptionnel. Sous la direction de Philippe Bascaules, le château continue de produire des vins d'une qualité exceptionnelle tout en respectant les traditions et le savoir-faire ancestral.</p>
+                            </div>
+                        </div>
+                        
+                        <div id="reviews" class="tab-content">
+                            <div class="review-list">
+                                <div class="review">
+                                    <div class="review-header">
+                                        <div class="review-author">
+                                            <div class="review-avatar">
+                                                <img src="assets/images/user1.jpg" alt="User Avatar">
+                                            </div>
+                                            <div>
+                                                <div class="review-author-name">Jacques Dupont</div>
+                                                <div class="review-date">12 mars 2023</div>
+                                            </div>
+                                        </div>
+                                        <div class="review-rating">
+                                            <span class="star"><i class="fas fa-star"></i></span>
+                                            <span class="star"><i class="fas fa-star"></i></span>
+                                            <span class="star"><i class="fas fa-star"></i></span>
+                                            <span class="star"><i class="fas fa-star"></i></span>
+                                            <span class="star"><i class="fas fa-star"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="review-text">
+                                        <p>Un vin exceptionnel qui montre toute la grandeur de ce millésime à Bordeaux. Des arômes complexes, une structure parfaite et une finesse remarquable. À déguster dès maintenant ou à garder pendant au moins 15 ans.</p>
+                                    </div>
+                                    <div class="review-actions">
+                                        <button type="button" class="review-action">
+                                            <i class="fas fa-thumbs-up"></i> Utile (8)
+                                        </button>
+                                        <button type="button" class="review-action">
+                                            <i class="fas fa-reply"></i> Répondre
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="review">
+                                    <div class="review-header">
+                                        <div class="review-author">
+                                            <div class="review-avatar">
+                                                <img src="assets/images/user2.jpg" alt="User Avatar">
+                                            </div>
+                                            <div>
+                                                <div class="review-author-name">Sophie Martin</div>
+                                                <div class="review-date">5 février 2023</div>
+                                            </div>
+                                        </div>
+                                        <div class="review-rating">
+                                            <span class="star"><i class="fas fa-star"></i></span>
+                                            <span class="star"><i class="fas fa-star"></i></span>
+                                            <span class="star"><i class="fas fa-star"></i></span>
+                                            <span class="star"><i class="fas fa-star"></i></span>
+                                            <span class="star"><i class="far fa-star"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="review-text">
+                                        <p>Une bouteille qui a dépassé mes attentes. Les tanins sont déjà bien intégrés malgré la jeunesse du vin. Belle profondeur aromatique avec des notes de cassis, de cèdre et de violette. Un grand Margaux qui mérite sa réputation.</p>
+                                    </div>
+                                    <div class="review-actions">
+                                        <button type="button" class="review-action">
+                                            <i class="fas fa-thumbs-up"></i> Utile (5)
+                                        </button>
+                                        <button type="button" class="review-action">
+                                            <i class="fas fa-reply"></i> Répondre
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn secondary write-review-btn">
+                                <i class="fas fa-pen"></i> Écrire un avis
+                            </button>
+                        </div>
+                        
+                        <div id="food-pairing" class="tab-content">
+                            <div class="pairing-section">
+                                <p class="mb-4">Ce grand vin de Bordeaux s'accorde parfaitement avec:</p>
+                                
+                                <div class="pairing-grid">
+                                    <div class="pairing-card">
+                                        <div class="pairing-image">
+                                            <img src="assets/images/pairing-beef.jpg" alt="Bœuf">
+                                        </div>
+                                        <div class="pairing-content">
+                                            <h4 class="pairing-card-title">Filet de Bœuf Rossini</h4>
+                                            <p class="pairing-description">La richesse et la texture du filet de bœuf surmonté de foie gras s'harmonisent parfaitement avec la structure tannique du vin.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="pairing-card">
+                                        <div class="pairing-image">
+                                            <img src="assets/images/pairing-lamb.jpg" alt="Agneau">
+                                        </div>
+                                        <div class="pairing-content">
+                                            <h4 class="pairing-card-title">Carré d'Agneau aux Herbes</h4>
+                                            <p class="pairing-description">Les saveurs délicates de l'agneau se marient élégamment avec les notes de fruits noirs et d'épices du vin.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="pairing-card">
+                                        <div class="pairing-image">
+                                            <img src="assets/images/pairing-cheese.jpg" alt="Fromage">
+                                        </div>
+                                        <div class="pairing-content">
+                                            <h4 class="pairing-card-title">Plateau de Fromages Affinés</h4>
+                                            <p class="pairing-description">Des fromages à pâte dure comme le Comté vieilli ou le Beaufort révèlent toute la complexité de ce grand cru.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="pairing-card">
+                                        <div class="pairing-image">
+                                            <img src="assets/images/pairing-truffle.jpg" alt="Truffe">
+                                        </div>
+                                        <div class="pairing-content">
+                                            <h4 class="pairing-card-title">Risotto aux Truffes</h4>
+                                            <p class="pairing-description">Les arômes terreux et intenses de la truffe noire complètent parfaitement les notes boisées et complexes du vin.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Similar Wines -->
+            <section class="similar-wines">
+                <h2 class="similar-wines-title">Vins Similaires</h2>
+                
+                <div class="similar-wines-grid" id="similar-wines-container">
+                    <!-- Similar wines will be populated via JavaScript -->
+                </div>
+            </section>
+            
+            <!-- Interactive Tasting Notes Visualizer -->
+            <section class="tasting-notes-visualizer">
+                <h2 class="section-title">Profil Aromatique</h2>
+                
+                <div class="aroma-profile-container">
+                    <div class="aroma-chart-container" id="aroma-chart">
+                        <!-- Interactive aroma chart will be inserted via JavaScript -->
+                    </div>
+                    
+                    <div class="aroma-legend">
+                        <div class="aroma-category">
+                            <h4>Fruits</h4>
+                            <div class="aroma-tags">
+                                <span class="aroma-tag" style="--intensity: 85%">Cassis</span>
+                                <span class="aroma-tag" style="--intensity: 70%">Mûre</span>
+                                <span class="aroma-tag" style="--intensity: 60%">Cerise noire</span>
+                                <span class="aroma-tag" style="--intensity: 40%">Prune</span>
+                            </div>
+                        </div>
+                        
+                        <div class="aroma-category">
+                            <h4>Boisé</h4>
+                            <div class="aroma-tags">
+                                <span class="aroma-tag" style="--intensity: 75%">Cèdre</span>
+                                <span class="aroma-tag" style="--intensity: 65%">Vanille</span>
+                                <span class="aroma-tag" style="--intensity: 55%">Tabac</span>
+                                <span class="aroma-tag" style="--intensity: 45%">Fumé</span>
+                            </div>
+                        </div>
+                        
+                        <div class="aroma-category">
+                            <h4>Floral & Épices</h4>
+                            <div class="aroma-tags">
+                                <span class="aroma-tag" style="--intensity: 60%">Violette</span>
+                                <span class="aroma-tag" style="--intensity: 50%">Poivre noir</span>
+                                <span class="aroma-tag" style="--intensity: 40%">Réglisse</span>
+                                <span class="aroma-tag" style="--intensity: 30%">Truffe</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Virtual Tasting Experience Modal -->
+    <div class="modal" id="tasting-experience-modal">
+        <div class="modal-dialog" style="max-width: 900px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Expérience de Dégustation Virtuelle</h3>
+                <button type="button" class="modal-close" id="experience-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="virtual-tasting-experience" id="virtual-tasting-container">
+                    <!-- Virtual tasting experience will be inserted via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3 class="footer-column-title">À Propos</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="about.html">Notre Histoire</a></li>
+                        <li class="footer-link"><a href="terms.html">Conditions Générales</a></li>
+                        <li class="footer-link"><a href="privacy.html">Politique de Confidentialité</a></li>
+                        <li class="footer-link"><a href="shipping.html">Livraisons & Retours</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-column-title">Découvrir</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="regions.html">Régions Viticoles</a></li>
+                        <li class="footer-link"><a href="experience.html">Guide de Dégustation</a></li>
+                        <li class="footer-link"><a href="quiz.html">Quiz Œnologique</a></li>
+                        <li class="footer-link"><a href="blog.html">Blog & Actualités</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-column-title">Contact</h3>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                134 Quai de Bacalan<br>
+                                33300 Bordeaux, France
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>+33 5 56 16 20 20</div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>contact@citeduvin.com</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-column-title">Newsletter</h3>
+                    <p>Inscrivez-vous pour recevoir nos offres et actualités.</p>
+                    <form class="newsletter-form">
+                        <input type="email" class="newsletter-input form-control" placeholder="Votre email" required>
+                        <button type="submit" class="newsletter-button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; <span id="current-year"></span> Cité du Vin - Tous droits réservés
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/ui-components.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/wine-details.js"></script>
+    <script src="js/aroma-chart.js"></script>
+    <script src="js/virtual-tasting.js"></script>
+</body>
+</html>

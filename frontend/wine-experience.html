@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expérience de Dégustation Interactive - Cité du Vin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="assets/images/logo.png" alt="Cité du Vin Logo" id="logo-image">
+                    <h1>Cité du Vin</h1>
+                </div>
+                
+                <!-- Search Bar -->
+                <form id="search-form" class="search-form">
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Rechercher des vins, régions, cépages...">
+                        <button type="submit">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Header Actions -->
+                <div class="header-actions">
+                    <button type="button" class="cart-btn" id="cart-button">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-badge" id="cart-count">0</span>
+                    </button>
+                    
+                    <!-- Cart Preview (Hidden by default) -->
+                    <div class="cart-preview" id="cart-preview">
+                        <div class="cart-preview-title">
+                            <h3>Votre Panier</h3>
+                            <button class="btn-link" id="cart-preview-close">Fermer</button>
+                        </div>
+                        <div class="cart-preview-items" id="cart-preview-items">
+                            <!-- Cart items will be inserted here via JavaScript -->
+                        </div>
+                        <div class="cart-preview-total">
+                            <span>Total:</span>
+                            <span id="cart-preview-total-amount">€0.00</span>
+                        </div>
+                        <div class="cart-preview-actions">
+                            <a href="cart.html" class="btn secondary">Voir le panier</a>
+                            <a href="checkout.html" class="btn primary">Commander</a>
+                        </div>
+                    </div>
+                    
+                    <div class="user-menu">
+                        <button type="button" class="user-btn" id="user-button">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Mon Compte</span>
+                        </button>
+                        
+                        <!-- User Dropdown (Hidden by default) -->
+                        <div class="user-dropdown" id="user-dropdown">
+                            <a href="account.html" class="dropdown-item">Mon profil</a>
+                            <a href="orders.html" class="dropdown-item">Mes commandes</a>
+                            <a href="favorites.html" class="dropdown-item">Mes favoris</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" id="logout-button">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-container">
+                <button class="menu-btn" id="menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="nav-links" id="nav-links">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link active">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="wines.html" class="nav-link">Notre Sélection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="regions.html" class="nav-link">Régions Viticoles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="experience.html" class="nav-link">Expérience Dégustation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="quiz.html" class="nav-link">Quiz Œnologique</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">Blog</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Experience Page Content -->
+    <main class="experience-page">
+        <div class="container">
+            <div class="experience-header">
+                <h1 class="experience-title">L'Art de la Dégustation</h1>
+                <p class="experience-subtitle">Découvrez les secrets de la dégustation des vins avec notre guide interactif</p>
+            </div>
+            
+            <!-- Interactive Wine Glass Visualization -->
+            <section class="wine-glass-visualization">
+                <div class="glass-visualization-container">
+                    <div class="glass-model">
+                        <canvas id="glass-canvas"></canvas>
+                    </div>
+                    
+                    <div class="glass-controls">
+                        <div class="wine-type-selector">
+                            <h3>Sélectionnez un Type de Vin</h3>
+                            <div class="wine-type-buttons">
+                                <button class="wine-type-btn active" data-wine-type="red">
+                                    <span class="color-sample red"></span>
+                                    Rouge
+                                </button>
+                                <button class="wine-type-btn" data-wine-type="white">
+                                    <span class="color-sample white"></span>
+                                    Blanc
+                                </button>
+                                <button class="wine-type-btn" data-wine-type="rose">
+                                    <span class="color-sample rose"></span>
+                                    Rosé
+                                </button>
+                                <button class="wine-type-btn" data-wine-type="sparkling">
+                                    <span class="color-sample sparkling"></span>
+                                    Mousseux
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="wine-characteristics">
+                            <div class="characteristic-slider">
+                                <label>Intensité de Couleur</label>
+                                <input type="range" id="color-intensity" min="0" max="100" value="70">
+                                <div class="range-labels">
+                                    <span>Pâle</span>
+                                    <span>Intense</span>
+                                </div>
+                            </div>
+                            
+                            <div class="characteristic-slider">
+                                <label>Viscosité (Jambes)</label>
+                                <input type="range" id="viscosity" min="0" max="100" value="60">
+                                <div class="range-labels">
+                                    <span>Légère</span>
+                                    <span>Élevée</span>
+                                </div>
+                            </div>
+                            
+                            <div class="characteristic-slider">
+                                <label>Effervescence (pour Mousseux)</label>
+                                <input type="range" id="effervescence" min="0" max="100" value="80" disabled>
+                                <div class="range-labels">
+                                    <span>Légère</span>
+                                    <span>Vive</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Tasting Steps Guide -->
+            <section class="tasting-guide">
+                <h2 class="section-title">Les Étapes de la Dégustation</h2>
+                
+                <div class="tasting-steps">
+                    <div class="tasting-step">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">L'Examen Visuel</h3>
+                        
+                        <div class="step-content">
+                            <div class="step-image">
+                                <img src="assets/images/tasting-visual.jpg" alt="Examen visuel du vin">
+                            </div>
+                            
+                            <div class="step-description">
+                                <p>Tenez votre verre par le pied et observez le vin à la lumière naturelle. Examinez la couleur, la brillance, l'intensité et la transparence.</p>
+                                
+                                <p>Pour les vins rouges, la couleur peut varier du rubis au grenat, en passant par le pourpre. Les vins blancs peuvent aller du jaune pâle au doré, tandis que les rosés offrent des teintes allant du rose pâle au saumon.</p>
+                                
+                                <p>Inclinez légèrement le verre et observez les "jambes" ou "larmes" qui se forment sur les parois. Elles vous renseignent sur la teneur en alcool et la viscosité du vin.</p>
+                                
+                                <div class="interactive-tip">
+                                    <div class="tip-title">
+                                        <i class="fas fa-lightbulb"></i> Astuce Interactive
+                                    </div>
+                                    <p>Utilisez notre simulateur de verre ci-dessus pour visualiser les différentes teintes et caractéristiques des vins.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tasting-step">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">L'Examen Olfactif</h3>
+                        
+                        <div class="step-content">
+                            <div class="step-image">
+                                <img src="assets/images/tasting-smell.jpg" alt="Examen olfactif du vin">
+                            </div>
+                            
+                            <div class="step-description">
+                                <p>Faites tourner doucement le vin dans votre verre pour libérer les arômes. Approchez votre nez du verre et respirez profondément.</p>
+                                
+                                <p>Le premier nez (sans agitation) vous révèle les arômes les plus volatils. Le deuxième nez (après agitation) libère des arômes plus complexes et intenses.</p>
+                                
+                                <p>Identifiez les familles d'arômes : fruits, fleurs, épices, boisé, minéral, etc. Chaque vin possède sa propre signature olfactive.</p>
+                                
+                                <div class="interactive-tip">
+                                    <div class="tip-title">
+                                        <i class="fas fa-lightbulb"></i> Astuce Interactive
+                                    </div>
+                                    <p>Essayez notre <a href="#aroma-wheel">roue des arômes interactive</a> pour identifier les différentes familles d'arômes que vous pourriez rencontrer.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tasting-step">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">L'Examen Gustatif</h3>
+                        
+                        <div class="step-content">
+                            <div class="step-image">
+                                <img src="assets/images/tasting-taste.jpg" alt="Examen gustatif du vin">
+                            </div>
+                            
+                            <div class="step-description">
+                                <p>Prenez une petite gorgée et faites-la circuler dans votre bouche. Évaluez les saveurs, la texture et la structure du vin.</p>
+                                
+                                <p>L'attaque correspond aux premières impressions gustatives. Le milieu de bouche révèle l'équilibre entre l'acidité, les tanins, l'alcool et le corps du vin. La finale est la persistance des saveurs après avoir avalé ou recraché le vin.</p>
+                                
+                                <p>Notez l'équilibre général, la complexité et l'harmonie des différents éléments.</p>
+                                
+                                <div class="interactive-tip">
+                                    <div class="tip-title">
+                                        <i class="fas fa-lightbulb"></i> Astuce Interactive
+                                    </div>
+                                    <p>Utilisez notre <a href="#taste-simulator">simulateur de goût</a> pour comprendre l'interaction entre les différentes saveurs dans un vin.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Interactive Aroma Wheel -->
+            <section id="aroma-wheel" class="aroma-wheel-section">
+                <h2 class="section-title">La Roue des Arômes</h2>
+                
+                <div class="aroma-wheel-container">
+                    <div class="aroma-wheel-visualization">
+                        <div id="aroma-wheel-canvas"></div>
+                    </div>
+                    
+                    <div class="aroma-wheel-details">
+                        <div class="aroma-category-details" id="aroma-details">
+                            <h3>Explorez les Arômes</h3>
+                            <p>Cliquez sur une section de la roue pour découvrir les différentes familles d'arômes que l'on peut trouver dans un vin.</p>
+                            <p>La roue des arômes est un outil précieux pour développer votre vocabulaire de dégustation et affiner votre perception.</p>
+                        </div>
+                        
+                        <div class="aroma-examples">
+                            <h4>Exemples de vins par arômes dominants:</h4>
+                            <div class="aroma-examples-list" id="aroma-examples-list">
+                                <!-- Examples will be updated dynamically based on aroma selection -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Taste Profile Simulator -->
+            <section id="taste-simulator" class="taste-simulator-section">
+                <h2 class="section-title">Simulateur de Profil Gustatif</h2>
+                
+                <div class="taste-simulator-container">
+                    <div class="taste-controls">
+                        <div class="taste-element-slider">
+                            <label>Acidité</label>
+                            <input type="range" id="acidity-slider" min="0" max="100" value="50">
+                            <div class="range-labels">
+                                <span>Faible</span>
+                                <span>Élevée</span>
+                            </div>
+                        </div>
+                        
+                        <div class="taste-element-slider">
+                            <label>Tanins (pour vins rouges)</label>
+                            <input type="range" id="tannin-slider" min="0" max="100" value="60">
+                            <div class="range-labels">
+                                <span>Doux</span>
+                                <span>Astringents</span>
+                            </div>
+                        </div>
+                        
+                        <div class="taste-element-slider">
+                            <label>Douceur</label>
+                            <input type="range" id="sweetness-slider" min="0" max="100" value="30">
+                            <div class="range-labels">
+                                <span>Sec</span>
+                                <span>Doux</span>
+                            </div>
+                        </div>
+                        
+                        <div class="taste-element-slider">
+                            <label>Corps</label>
+                            <input type="range" id="body-slider" min="0" max="100" value="50">
+                            <div class="range-labels">
+                                <span>Léger</span>
+                                <span>Corsé</span>
+                            </div>
+                        </div>
+                        
+                        <div class="taste-element-slider">
+                            <label>Alcool</label>
+                            <input type="range" id="alcohol-slider" min="0" max="100" value="50">
+                            <div class="range-labels">
+                                <span>Faible</span>
+                                <span>Élevé</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="taste-visualization">
+                        <div id="taste-radar-chart"></div>
+                        
+                        <div class="wine-recommendations">
+                            <h3>Vins Similaires à Ce Profil</h3>
+                            <div id="taste-wine-recommendations" class="taste-wine-grid">
+                                <!-- Wine recommendations will be populated via JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Wine and Food Pairing Tool -->
+            <section class="pairing-tool-section">
+                <h2 class="section-title">Outil d'Accords Mets & Vins</h2>
+                
+                <div class="pairing-tool-container">
+                    <div class="pairing-selector">
+                        <div class="pairing-mode-tabs">
+                            <button class="pairing-mode-tab active" data-mode="food-to-wine">
+                                J'ai un plat, quel vin choisir ?
+                            </button>
+                            <button class="pairing-mode-tab" data-mode="wine-to-food">
+                                J'ai un vin, quel plat préparer ?
+                            </button>
+                        </div>
+                        
+                        <div id="food-to-wine-mode" class="pairing-mode">
+                            <div class="food-categories">
+                                <div class="food-category">
+                                    <h3>Catégorie</h3>
+                                    <div class="custom-select">
+                                        <select id="food-category-select" class="form-control">
+                                            <option value="">Sélectionnez une catégorie</option>
+                                            <option value="meat">Viandes</option>
+                                            <option value="seafood">Poissons & Fruits de mer</option>
+                                            <option value="vegetable">Légumes & Végétarien</option>
+                                            <option value="cheese">Fromages</option>
+                                            <option value="dessert">Desserts</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="food-subcategory">
+                                    <h3>Type</h3>
+                                    <div class="custom-select">
+                                        <select id="food-subcategory-select" class="form-control" disabled>
+                                            <option value="">Sélectionnez d'abord une catégorie</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="food-preparation">
+                                    <h3>Préparation</h3>
+                                    <div class="custom-select">
+                                        <select id="food-preparation-select" class="form-control" disabled>
+                                            <option value="">Sélectionnez d'abord un type</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button id="find-wine-btn" class="btn primary" disabled>
+                                Trouver des vins adaptés
+                            </button>
+                        </div>
+                        
+                        <div id="wine-to-food-mode" class="pairing-mode" style="display: none;">
+                            <div class="wine-selection">
+                                <div class="wine-type-selection">
+                                    <h3>Type de Vin</h3>
+                                    <div class="custom-select">
+                                        <select id="wine-type-select" class="form-control">
+                                            <option value="">Sélectionnez un type</option>
+                                            <option value="red">Rouge</option>
+                                            <option value="white">Blanc</option>
+                                            <option value="rose">Rosé</option>
+                                            <option value="sparkling">Mousseux</option>
+                                            <option value="dessert">Vin de dessert</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="wine-variety-selection">
+                                    <h3>Cépage / Style</h3>
+                                    <div class="custom-select">
+                                        <select id="wine-variety-select" class="form-control" disabled>
+                                            <option value="">Sélectionnez d'abord un type</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button id="find-food-btn" class="btn primary" disabled>
+                                Découvrir des accords parfaits
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="pairing-results">
+                        <div id="pairing-results-container">
+                            <div class="pairing-placeholder">
+                                <div class="pairing-placeholder-icon">
+                                    <i class="fas fa-wine-glass-alt"></i>
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <p>Utilisez l'outil de sélection pour découvrir des accords parfaits entre mets et vins.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Interactive Wine Quiz Teaser -->
+            <section class="quiz-teaser-section">
+                <div class="quiz-teaser-container">
+                    <div class="quiz-teaser-content">
+                        <h2>Testez Vos Connaissances</h2>
+                        <p>Êtes-vous un amateur ou un expert en vin ? Découvrez-le avec notre quiz interactif !</p>
+                        <a href="quiz.html" class="btn primary">
+                            <i class="fas fa-graduation-cap"></i> Commencer le Quiz
+                        </a>
+                    </div>
+                    <div class="quiz-teaser-image">
+                        <img src="assets/images/wine-quiz.jpg" alt="Quiz sur le vin">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+   <!-- Footer -->
+   <footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3 class="footer-column-title">À Propos</h3>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="about.html">Notre Histoire</a></li>
+                    <li class="footer-link"><a href="terms.html">Conditions Générales</a></li>
+                    <li class="footer-link"><a href="privacy.html">Politique de Confidentialité</a></li>
+                    <li class="footer-link"><a href="shipping.html">Livraisons & Retours</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-column-title">Découvrir</h3>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="regions.html">Régions Viticoles</a></li>
+                    <li class="footer-link"><a href="experience.html">Guide de Dégustation</a></li>
+                    <li class="footer-link"><a href="quiz.html">Quiz Œnologique</a></li>
+                    <li class="footer-link"><a href="blog.html">Blog & Actualités</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-column-title">Contact</h3>
+                <div class="footer-contact">
+                    <div class="footer-contact-item">
+                        <div class="footer-contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            134 Quai de Bacalan<br>
+                            33300 Bordeaux, France
+                        </div>
+                    </div>
+                    <div class="footer-contact-item">
+                        <div class="footer-contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>+33 5 56 16 20 20</div>
+                    </div>
+                    <div class="footer-contact-item">
+                        <div class="footer-contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>contact@citeduvin.com</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-column-title">Newsletter</h3>
+                <p>Inscrivez-vous pour recevoir nos offres et actualités.</p>
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input form-control" placeholder="Votre email" required>
+                    <button type="submit" class="newsletter-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; <span id="current-year"></span> Cité du Vin - Tous droits réservés
+            </div>
+        </div>
+    </div>
+</footer>
+    
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.0.0/d3.min.js"></script>
+    <script src="js/wine-glass-simulator.js"></script>
+    <script src="js/aroma-wheel.js"></script>
+    <script src="js/taste-simulator.js"></script>
+    <script src="js/pairing-tool.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/experience.js"></script>
+</body>
+</html>
