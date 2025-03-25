@@ -13,6 +13,9 @@ const App = () => {
   const [varieties, setVarieties] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalWines, setTotalWines] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(21);
   const [filters, setFilters] = useState({
     region: '',
     variety: '',
@@ -28,22 +31,30 @@ const App = () => {
     const fetchWines = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_URL}/wines?page=${currentPage}`);
+        console.log(`Fetching wines: page=${currentPage}, itemsPerPage=${itemsPerPage}`);
+        
+        const response = await fetch(`${API_URL}/wines?page=${currentPage}&limit=${itemsPerPage}`);
         if (!response.ok) {
           throw new Error('Failed to fetch wines');
         }
+        
         const data = await response.json();
+        console.log('API Response:', data);
+        console.log('Number of wines returned:', data.wines ? data.wines.length : 0);
+        
         setWines(data.wines || []);
         setFilteredWines(data.wines || []);
+        setTotalWines(data.total || 0);
+        setTotalPages(data.totalPages || Math.ceil(data.total / itemsPerPage));
         setLoading(false);
       } catch (err) {
         setError(err.message);
         setLoading(false);
       }
     };
-
+  
     fetchWines();
-  }, [currentPage]);
+  }, [currentPage, itemsPerPage, API_URL]);
   
   // Fetch filter options on initial load
   useEffect(() => {
@@ -286,6 +297,24 @@ const App = () => {
                 </div>
               )}
               
+              {/* Items per page selector */}
+              <div className="flex items-center space-x-2 mb-4">
+                <span className="text-sm text-gray-700">Wines per page:</span>
+                <select 
+                  value={itemsPerPage}
+                  onChange={(e) => {
+                    setItemsPerPage(Number(e.target.value));
+                    setCurrentPage(1); // Reset to first page when changing items per page
+                  }}
+                  className="border border-gray-300 rounded-md px-2 py-1 text-sm"
+                >
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              
               {loading ? (
                 <div className="flex justify-center items-center h-64">
                   <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-800"></div>
@@ -340,7 +369,11 @@ const App = () => {
                   </div>
                   
                   {/* Pagination */}
-                  <div className="flex justify-center mt-8">
+                  <div className="flex flex-col items-center mt-8">
+                    <div className="text-sm text-gray-600 mb-4">
+                      Showing {filteredWines.length} of {totalWines} wines (Page {currentPage} of {totalPages})
+                    </div>
+                    
                     <div className="flex items-center space-x-1">
                       <button 
                         onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
@@ -349,12 +382,37 @@ const App = () => {
                       >
                         <ChevronLeft size={16} />
                       </button>
-                      <span className="px-4 py-2 text-gray-700">
-                        Page {currentPage}
-                      </span>
+                      
+                      {/* Display page numbers */}
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => setCurrentPage(pageNum)}
+                            className={`px-3 py-2 border border-gray-300 rounded-md ${
+                              currentPage === pageNum ? 'bg-red-800 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                      
                       <button 
-                        onClick={() => setCurrentPage(prev => prev + 1)}
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                         className="px-3 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                        disabled={currentPage === totalPages}
                       >
                         <ChevronRight size={16} />
                       </button>

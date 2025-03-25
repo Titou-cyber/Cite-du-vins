@@ -13,19 +13,30 @@ const loadWines = () => {
 };
 
 // Get all wines with optional pagination
-const getAllWines = (page = 1, limit = 20) => {
+const getAllWines = (page = 1, limit = 21) => {
+  // Ensure page and limit are numbers
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 21;
+  
   const wines = loadWines();
+  
+  // Calculate start and end indices for slicing
   const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
+  const endIndex = startIndex + limit;
   
-  const results = {
+  // Get only the wines for the current page
+  const paginatedWines = wines.slice(startIndex, endIndex);
+  
+  console.log(`Pagination: Returning ${paginatedWines.length} wines for page ${page}, limit ${limit}`);
+  console.log(`Indices: start=${startIndex}, end=${endIndex}, total wines=${wines.length}`);
+  
+  return {
     total: wines.length,
-    page,
-    limit,
-    wines: wines.slice(startIndex, endIndex)
+    page: page,
+    limit: limit,
+    totalPages: Math.ceil(wines.length / limit),
+    wines: paginatedWines
   };
-  
-  return results;
 };
 
 // Get wine by ID (using index as ID for simplicity)

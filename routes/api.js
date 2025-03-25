@@ -5,9 +5,15 @@ const wineService = require('../services/wineService');
 // Get all wines
 router.get('/wines', (req, res) => {
   try {
-    const wines = wineService.getAllWines();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 21;
+    
+    console.log(`API request for wines: page=${page}, limit=${limit}`);
+    
+    const wines = wineService.getAllWines(page, limit);
     res.json(wines);
   } catch (error) {
+    console.error('Error fetching wines:', error);
     res.status(500).json({ message: error.message });
   }
 });
