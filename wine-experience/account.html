@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage your Terroir wine account, view order history, update your profile, and track your wine journey.">
+    <title>My Account | Terroir - La Cité Du Vin</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Modern Navbar with Cart -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <span class="brand-icon"><i class="fas fa-wine-glass-alt"></i></span>
+                <span class="brand-text">Terroir</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Discover</a></li>
+                    <li class="nav-item"><a class="nav-link" href="wines.html">Collection</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sommelier.html">Sommelier</a></li>
+                    <li class="nav-item"><a class="nav-link" href="knowledge.html">Expertise</a></li>
+                </ul>
+                <div class="navbar-nav ms-auto d-flex align-items-center">
+                    <div class="search-icon me-3" role="button" tabindex="0" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="cart-icon me-3 position-relative" id="cart-icon" role="button" tabindex="0" aria-label="Shopping cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </div>
+                    <div class="user-menu dropdown">
+                        <div class="user-icon active" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" tabindex="0" aria-label="User account">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end user-dropdown" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item active" href="account.html"><i class="fas fa-user-circle me-2"></i>My Account</a></li>
+                            <li><a class="dropdown-item" href="account.html?tab=orders"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
+                            <li><a class="dropdown-item" href="account.html?tab=preferences"><i class="fas fa-wine-glass me-2"></i>My Preferences</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout-link"><i class="fas fa-sign-out-alt me-2"></i>Sign Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero account-hero">
+        <div class="container text-center text-white">
+            <h1 class="display-4">My Account</h1>
+            <p class="lead">Manage your profile and explore your wine journey</p>
+        </div>
+    </header>
+
+    <!-- Account Section -->
+    <section class="py-5">
+        <div class="container account-container">
+            <!-- Account Header with User Info -->
+            <div class="account-header">
+                <div class="account-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Account Avatar" id="user-avatar">
+                </div>
+                
+                <div class="account-user-info">
+                    <h1 id="user-name">Wine Enthusiast</h1>
+                    <p id="user-email">example@domain.com</p>
+                    <p>Member since <span id="join-date">March 2025</span></p>
+                    
+                    <div class="account-badges">
+                        <span class="account-badge">
+                            <i class="fas fa-award"></i> Wine Explorer
+                        </span>
+                        <span class="account-badge">
+                            <i class="fas fa-star"></i> Premium Member
+                        </span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-outline-primary" id="edit-profile-btn">
+                    <i class="fas fa-edit me-2"></i>Edit Profile
+                </button>
+            </div>
+            
+            <!-- Account Navigation Tabs -->
+            <div class="account-tabs">
+                <div class="account-tab active" data-tab="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </div>
+                <div class="account-tab" data-tab="orders">
+                    <i class="fas fa-shopping-bag"></i> Orders
+                </div>
+                <div class="account-tab" data-tab="addresses">
+                    <i class="fas fa-map-marker-alt"></i> Addresses
+                </div>
+                <div class="account-tab" data-tab="preferences">
+                    <i class="fas fa-wine-glass"></i> Wine Preferences
+                </div>
+                <div class="account-tab" data-tab="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </div>
+            </div>
+            
+            <!-- Account Content - Dashboard Tab -->
+            <div class="account-content" id="dashboard-content">
+                <div class="account-section">
+                    <div class="account-section-header">
+                        <h2 class="account-section-title">Account Overview</h2>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="account-stats-card">
+                                <div class="stats-icon">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <h3 class="stats-number">5</h3>
+                                    <p class="stats-label">Orders Placed</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <div class="account-stats-card">
+                                <div class="stats-icon">
+                                    <i class="fas fa-wine-bottle"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <h3 class="stats-number">12</h3>
+                                    <p class="stats-label">Bottles Purchased</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <div class="account-stats-card">
+                                <div class="stats-icon">
+                                    <i class="fas fa-award"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <h3 class="stats-number">120</h3>
+                                    <p class="stats-label">Loyalty Points</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="account-section">
+                    <div class="account-section-header">
+                        <h2 class="account-section-title">Recent Orders</h2>
+                        <a href="#" class="btn btn-sm btn-outline" id="view-all-orders">View All</a>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="order-table">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>TRR-2025-1234</td>
+                                    <td>Mar 15, 2025</td>
+                                    <td>3 items</td>
+                                    <td>$145.00</td>
+                                    <td><span class="order-status status-delivered">Delivered</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-outline">Details</a></td>
+                                </tr>
+                                <tr>
+                                    <td>TRR-2025-1102</td>
+                                    <td>Feb 28, 2025</td>
+                                    <td>2 items</td>
+                                    <td>$87.50</td>
+                                    <td><span class="order-status status-shipped">Shipped</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-outline">Details</a></td>
+                                </tr>
+                                <tr>
+                                    <td>TRR-2025-0987</td>
+                                    <td>Feb 10, 2025</td>
+                                    <td>1 item</td>
+                                    <td>$35.00</td>
+                                    <td><span class="order-status status-delivered">Delivered</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-outline">Details</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="account-section">
+                    <div class="account-section-header">
+                        <h2 class="account-section-title">Recommended for You</h2>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="wine-card">
+                                <div class="wine-type-icon wine-type-red">
+                                    <h3 class="text-white">Château Margaux 2018</h3>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="card-subtitle mb-2 text-muted">Margaux, Bordeaux</h4>
+                                    <p class="card-text small">An exceptional vintage with elegant tannins, rich dark fruit, and subtle floral notes. Perfect for aging or special occasions.</p>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <span class="badge badge-red">Cabernet Blend</span>
+                                        <span class="wine-price">$395.00</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn-add-to-cart">
+                                        <i class="fas fa-plus-circle me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <div class="wine-card">
+                                <div class="wine-type-icon wine-type-white">
+                                    <h3 class="text-dark">Puligny-Montrachet 2020</h3>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="card-subtitle mb-2 text-muted">Côte de Beaune, Burgundy</h4>
+                                    <p class="card-text small">A vibrant white Burgundy with notes of citrus, white flowers, and a distinctive mineral character. Perfectly balanced acidity.</p>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <span class="badge badge-white">Chardonnay</span>
+                                        <span class="wine-price">$127.00</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn-add-to-cart">
+                                        <i class="fas fa-plus-circle me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <div class="wine-card">
+                                <div class="wine-type-icon wine-type-sparkling">
+                                    <h3 class="text-dark">Dom Pérignon 2012</h3>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="card-subtitle mb-2 text-muted">Champagne, France</h4>
+                                    <p class="card-text small">A perfect harmony of complexity and vibrancy. Offers notes of ripe fruit, brioche, and a refined mineral finish. Outstanding precision.</p>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <span class="badge badge-sparkling">Champagne</span>
+                                        <span class="wine-price">$239.00</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn-add-to-cart">
+                                        <i class="fas fa-plus-circle me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Content - Orders Tab -->
+            <div class="account-content d-none" id="orders-content">
+                <div class="account-section">
+                    <div class="account-section-header">
+                        <h2 class="account-section-title">Order History</h2>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="order-table">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>TRR-2025-1234</td>
+                                    <td>Mar 15, 2025</td>
+                                    <td>3 items</td>
+                                    <td>$145.00</td>
+                                    <td><span class="order-status status-delivered">Delivered</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-outline">Details</a></td>
+                                </tr>
+                                <tr>
+                                    <td>TRR-2025-1102</td>
+                                    <td>Feb 28, 2025</td>
+                                    <td>2 items</td>
+                                    <td>$87.50</td>
+                                    <td><span class="order-status status-shipped">Shipped</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-outline">Details</a></td>
+                                </tr>
+                                <tr>
+                                    <td>TRR-2025-0987</td>
+                                    <td>Feb 10, 2025</td>
+                                    <td>1 item</td>
+                                    <td>$35.00</td>
+                                    <td><span class="order-status status-delivered">Delivered</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-outline">Details</a></td>
+                                </tr>
+                                <tr>
+                                    <td>TRR-2025-0854</td>
+                                    <td>Jan 25, 2025</td>
+                                    <td>2 items</td>
+                                    <td>$110.00</td>
+                                    <td><span class="order-status status-delivered">Delivered</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-outline">Details</a></td>
+                                </tr>
+                                <tr>
+                                    <td>TRR-2025-0702</td>
+                                    <td>Jan 12, 2025</td>
+                                    <td>4 items</td>
+                                    <td>$245.00</td>
+                                    <td><span class="order-status status-delivered">Delivered</span></td>
+                                    <td><a href="#" class="btn btn-sm btn-outline">Details</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Content - Addresses Tab -->
+            <div class="account-content d-none" id="addresses-content">
+                <div class="account-section">
+                    <div class="account-section-header">
+                        <h2 class="account-section-title">Saved Addresses</h2>
+                        <button class="btn btn-sm btn-burgundy" id="add-address-btn">
+                            <i class="fas fa-plus me-2"></i>Add New Address
+                        </button>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="address-card selected">
+                                <div class="address-card-header">
+                                    <h3 class="address-card-title">Home</h3>
+                                    <span class="address-card-default">Default</span>
+                                </div>
+                                <div class="address-card-content">
+                                    <p>Wine Enthusiast<br>
+                                    123 Vineyard Lane<br>
+                                    Wine Country, CA 95476<br>
+                                    United States<br>
+                                    Phone: (555) 123-4567</p>
+                                </div>
+                                <div class="address-card-actions">
+                                    <button class="address-action edit-address">Edit</button>
+                                    <button class="address-action remove-address">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <div class="address-card">
+                                <div class="address-card-header">
+                                    <h3 class="address-card-title">Office</h3>
+                                </div>
+                                <div class="address-card-content">
+                                    <p>Wine Enthusiast<br>
+                                    456 Corporate Plaza, Suite 300<br>
+                                    San Francisco, CA 94107<br>
+                                    United States<br>
+                                    Phone: (555) 987-6543</p>
+                                </div>
+                                <div class="address-card-actions">
+                                    <button class="address-action edit-address">Edit</button>
+                                    <button class="address-action remove-address">Remove</button>
+                                    <button class="address-action set-default">Set as Default</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Content - Wine Preferences Tab -->
+            <div class="account-content d-none" id="preferences-content">
+                <div class="account-section">
+                    <div class="account-section-header">
+                        <h2 class="account-section-title">Wine Preferences</h2>
+                        <button class="btn btn-sm btn-burgundy" id="update-preferences-btn">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                    </div>
+                    
+                    <p class="mb-4">Update your preferences to receive personalized wine recommendations.</p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5 mb-3">Wine Types</h3>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="red-wine" checked>
+                                <label class="form-check-label" for="red-wine">Red Wine</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="white-wine" checked>
+                                <label class="form-check-label" for="white-wine">White Wine</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="rose-wine">
+                                <label class="form-check-label" for="rose-wine">Rosé Wine</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="sparkling-wine" checked>
+                                <label class="form-check-label" for="sparkling-wine">Sparkling Wine</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="dessert-wine">
+                                <label class="form-check-label" for="dessert-wine">Dessert Wine</label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5 mb-3">Flavor Profiles</h3>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="fruity" checked>
+                                <label class="form-check-label" for="fruity">Fruity</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="earthy">
+                                <label class="form-check-label" for="earthy">Earthy</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="spicy">
+                                <label class="form-check-label" for="spicy">Spicy</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="floral" checked>
+                                <label class="form-check-label" for="floral">Floral</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="oaky" checked>
+                                <label class="form-check-label" for="oaky">Oaky</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5 mb-3">Price Range</h3>
+                            <select class="form-control" id="price-range">
+                                <option value="any">Any Price</option>
+                                <option value="budget">Budget ($25 and under)</option>
+                                <option value="moderate" selected>Moderate ($25-$60)</option>
+                                <option value="premium">Premium ($60-$120)</option>
+                                <option value="luxury">Luxury ($120+)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5 mb-3">Favorite Regions</h3>
+                            <select class="form-control" id="favorite-regions" multiple>
+                                <option value="bordeaux" selected>Bordeaux, France</option>
+                                <option value="burgundy" selected>Burgundy, France</option>
+                                <option value="tuscany">Tuscany, Italy</option>
+                                <option value="napa">Napa Valley, USA</option>
+                                <option value="rioja">Rioja, Spain</option>
+                                <option value="barossa">Barossa Valley, Australia</option>
+                                <option value="marlborough">Marlborough, New Zealand</option>
+                                <option value="mosel">Mosel, Germany</option>
+                            </select>
+                            <small class="form-text">Hold Ctrl or Cmd to select multiple regions</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Content - Settings Tab -->
+            <div class="account-content d-none" id="settings-content">
+                <div class="account-section">
+                    <div class="account-section-header">
+                        <h2 class="account-section-title">Account Settings</h2>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5 mb-3">Profile Information</h3>
+                            <form id="profile-form">
+                                <div class="form-group">
+                                    <label for="profile-first-name" class="form-label">First Name</label>
+                                    <input type="text" id="profile-first-name" class="form-control" value="Wine">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-last-name" class="form-label">Last Name</label>
+                                    <input type="text" id="profile-last-name" class="form-control" value="Enthusiast">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-email" class="form-label">Email</label>
+                                    <input type="email" id="profile-email" class="form-control" value="example@domain.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-phone" class="form-label">Phone</label>
+                                    <input type="tel" id="profile-phone" class="form-control" value="(555) 123-4567">
+                                </div>
+                                <button type="submit" class="btn btn-burgundy">Save Changes</button>
+                            </form>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5 mb-3">Password</h3>
+                            <form id="password-form">
+                                <div class="form-group">
+                                    <label for="current-password" class="form-label">Current Password</label>
+                                    <input type="password" id="current-password" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-password" class="form-label">New Password</label>
+                                    <input type="password" id="new-password" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm-password" class="form-label">Confirm New Password</label>
+                                    <input type="password" id="confirm-password" class="form-control">
+                                </div>
+                                <button type="submit" class="btn btn-burgundy">Update Password</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="account-section">
+                        <div class="account-section-header">
+                            <h3 class="h5">Notification Preferences</h3>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="email-updates" checked>
+                            <label class="form-check-label" for="email-updates">Email Updates</label>
+                            <small class="form-text d-block">Receive emails about new releases, special offers, and wine events.</small>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="order-updates" checked>
+                            <label class="form-check-label" for="order-updates">Order Updates</label>
+                            <small class="form-text d-block">Receive emails about your order status and delivery updates.</small>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="recommendations" checked>
+                            <label class="form-check-label" for="recommendations">Personalized Recommendations</label>
+                            <small class="form-text d-block">Receive personalized wine recommendations based on your preferences.</small>
+                        </div>
+                        
+                        <button id="save-notifications" class="btn btn-burgundy mt-3">Save Preferences</button>
+                    </div>
+                    
+                    <div class="account-section">
+                        <div class="account-section-header">
+                            <h3 class="h5 text-danger">Danger Zone</h3>
+                        </div>
+                        
+                        <p>This action will permanently delete your account and all associated data.</p>
+                        <button id="delete-account" class="btn btn-outline-danger">Delete Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="search-overlay">
+        <div class="search-content">
+            <div class="search-header">
+                <h3>Search Wines</h3>
+                <button id="close-search" class="close-search" aria-label="Close search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-form-container">
+                <form class="search-form">
+                    <div class="search-input-group">
+                        <input type="text" id="search-input" placeholder="Search for wines, regions, or varieties..." aria-label="Search">
+                        <button type="submit" aria-label="Submit search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="search-suggestions">
+                    <h4>Popular Searches</h4>
+                    <div class="suggestion-tags">
+                        <span class="suggestion-tag">Bordeaux</span>
+                        <span class="suggestion-tag">Cabernet Sauvignon</span>
+                        <span class="suggestion-tag">Champagne</span>
+                        <span class="suggestion-tag">Tuscany</span>
+                        <span class="suggestion-tag">Chardonnay</span>
+                    </div>
+                </div>
+            </div>
+            <div class="search-results" id="search-results">
+                <!-- Search results will be displayed here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Your Collection</h3>
+                <button id="close-cart" class="close-cart" aria-label="Close cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be dynamically added here -->
+                <p class="empty-cart-message">Your collection is empty</p>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <button id="checkout-btn" class="btn btn-checkout" disabled>
+                    <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+
+    <!-- Modern Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="row">
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <div class="footer-brand">
+                            <h3>Terroir</h3>
+                            <p>An exclusive collection of fine wines from La Cité Du Vin, celebrating the art and culture of wine appreciation.</p>
+                        </div>
+                        <div class="social-icons">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                        <h5>Explore</h5>
+                        <ul class="footer-links">
+                            <li><a href="index.html">Wine Map</a></li>
+                            <li><a href="wines.html">Collection</a></li>
+                            <li><a href="sommelier.html">Sommelier</a></li>
+                            <li><a href="knowledge.html">Wine Education</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                        <h5>Visit Us</h5>
+                        <address class="footer-address">
+                            La Cité du Vin<br>
+                            134 Quai de Bacalan<br>
+                            33300 Bordeaux<br>
+                            France
+                        </address>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Stay Updated</h5>
+                        <p>Subscribe for exclusive offers and wine release notifications.</p>
+                        <form class="footer-form">
+                            <div class="input-with-button">
+                                <input type="email" placeholder="Your email address" required aria-label="Subscribe to newsletter">
+                                <button type="submit" aria-label="Submit subscription">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <p class="copyright">© 2025 La Cité Du Vin. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="footer-meta-links">
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Terms of Service</a>
+                            <a href="#">Cookie Policy</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="js/ui-components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const userJson = localStorage.getItem('terroir_user');
+            if (!userJson) {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const user = JSON.parse(userJson);
+            
+            // Update user info
+            document.getElementById('user-name').textContent = user.name || 'Wine Enthusiast';
+            document.getElementById('user-email').textContent = user.email || 'example@domain.com';
+            
+            // Set profile form values
+            if (user.name) {
+                const nameParts = user.name.split(' ');
+                if (nameParts.length > 0) {
+                    document.getElementById('profile-first-name').value = nameParts[0];
+                }
+                if (nameParts.length > 1) {
+                    document.getElementById('profile-last-name').value = nameParts.slice(1).join(' ');
+                }
+            }
+            document.getElementById('profile-email').value = user.email || '';
+            
+            // Set up tab navigation
+            const tabs = document.querySelectorAll('.account-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all content sections
+                    const contentSections = document.querySelectorAll('.account-content');
+                    contentSections.forEach(section => section.classList.add('d-none'));
+                    
+                    // Show the selected content section
+                    const tabName = this.getAttribute('data-tab');
+                    document.getElementById(`${tabName}-content`).classList.remove('d-none');
+                    
+                    // Update URL to allow for direct linking to tabs
+                    history.pushState({}, '', `?tab=${tabName}`);
+                });
+            });
+            
+            // Check for tab parameter in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            if (tabParam) {
+                const tabElement = document.querySelector(`.account-tab[data-tab="${tabParam}"]`);
+                if (tabElement) {
+                    tabElement.click();
+                }
+            }
+            
+            // Handle view all orders button
+            document.getElementById('view-all-orders').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('.account-tab[data-tab="orders"]').click();
+            });
+            
+            // Handle logout
+            document.getElementById('logout-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Clear user data
+                localStorage.removeItem('terroir_user');
+                
+                // Redirect to login page
+                window.location.href = 'login.html';
+            });
+            
+            // Form submissions
+            document.getElementById('profile-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const firstName = document.getElementById('profile-first-name').value;
+                const lastName = document.getElementById('profile-last-name').value;
+                const email = document.getElementById('profile-email').value;
+                
+                // Update user data
+                user.name = `${firstName} ${lastName}`;
+                user.email = email;
+                localStorage.setItem('terroir_user', JSON.stringify(user));
+                
+                // Update displayed name
+                document.getElementById('user-name').textContent = user.name;
+                document.getElementById('user-email').textContent = user.email;
+                
+                // Show success message
+                showToast('Profile updated successfully', 'success');
+            });
+            
+            document.getElementById('password-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // In a real app, this would call an API to update the password
+                // For this demo, just show a success message
+                showToast('Password updated successfully', 'success');
+                
+                // Clear form
+                this.reset();
+            });
+            
+            // Delete account confirmation
+            document.getElementById('delete-account').addEventListener('click', function() {
+                if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                    localStorage.removeItem('terroir_user');
+                    window.location.href = 'login.html';
+                }
+            });
+            
+            // Update notification preferences
+            document.getElementById('save-notifications').addEventListener('click', function() {
+                // In a real app, this would call an API to update preferences
+                showToast('Notification preferences updated', 'success');
+            });
+            
+            // Update wine preferences
+            document.getElementById('update-preferences-btn').addEventListener('click', function() {
+                // In a real app, this would call an API to update preferences
+                showToast('Wine preferences updated', 'success');
+            });
+            
+            // Add address button
+            document.getElementById('add-address-btn').addEventListener('click', function() {
+                // In a real app, this would open a form to add a new address
+                showToast('Address functionality will be implemented soon', 'info');
+            });
+            
+            // Edit profile button
+            document.getElementById('edit-profile-btn').addEventListener('click', function() {
+                document.querySelector('.account-tab[data-tab="settings"]').click();
+            });
+            
+            // Address card actions
+            document.querySelectorAll('.edit-address').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // In a real app, this would open a form to edit address
+                    showToast('Address edit functionality will be implemented soon', 'info');
+                });
+            });
+            
+            document.querySelectorAll('.remove-address').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to remove this address?')) {
+                        // In a real app, this would remove the address from the server
+                        const addressCard = this.closest('.address-card');
+                        addressCard.style.opacity = '0';
+                        setTimeout(() => {
+                            addressCard.remove();
+                        }, 300);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.set-default').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove default from all cards
+                    document.querySelectorAll('.address-card').forEach(card => {
+                        card.classList.remove('selected');
+                        const defaultBadge = card.querySelector('.address-card-default');
+                        if (defaultBadge) {
+                            defaultBadge.remove();
+                        }
+                        
+                        // Add "Set as Default" button if missing
+                        const actionsDiv = card.querySelector('.address-card-actions');
+                        if (actionsDiv && !actionsDiv.querySelector('.set-default')) {
+                            const setDefaultBtn = document.createElement('button');
+                            setDefaultBtn.className = 'address-action set-default';
+                            setDefaultBtn.textContent = 'Set as Default';
+                            actionsDiv.appendChild(setDefaultBtn);
+                        }
+                    });
+                    
+                    // Set this card as default
+                    const addressCard = this.closest('.address-card');
+                    addressCard.classList.add('selected');
+                    
+                    // Add default badge
+                    const headerDiv = addressCard.querySelector('.address-card-header');
+                    const defaultBadge = document.createElement('span');
+                    defaultBadge.className = 'address-card-default';
+                    defaultBadge.textContent = 'Default';
+                    headerDiv.appendChild(defaultBadge);
+                    
+                    // Remove "Set as Default" button
+                    this.remove();
+                });
+            });
+        });
+        
+        // Simulated cart functionality
+        document.querySelectorAll('.btn-add-to-cart').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Simulate adding to cart
+                this.innerHTML = '<i class="fas fa-check"></i> Added to Cart';
+                this.classList.add('added');
+                
+                // Update cart count
+                const cartCount = document.getElementById('cart-count');
+                cartCount.textContent = parseInt(cartCount.textContent || 0) + 1;
+                cartCount.classList.add('pulse');
+                
+                // Reset button after delay
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add to Cart';
+                    this.classList.remove('added');
+                    cartCount.classList.remove('pulse');
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
