@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Cité du Vin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header (Same as other pages) -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="assets/images/logo.png" alt="Cité du Vin Logo" id="logo-image">
+                    <h1>Cité du Vin</h1>
+                </div>
+                
+                <!-- Search Bar -->
+                <form id="search-form" class="search-form">
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Rechercher des vins, régions, cépages...">
+                        <button type="submit">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Header Actions (simplified for login page) -->
+                <div class="header-actions">
+                    <a href="register.html" class="btn outline">Créer un compte</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-container">
+                <button class="menu-btn" id="menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="nav-links" id="nav-links">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="wines.html" class="nav-link">Notre Sélection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="regions.html" class="nav-link">Régions Viticoles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="experience.html" class="nav-link">Expérience Dégustation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="quiz.html" class="nav-link">Quiz Œnologique</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">Blog</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Login Page Content -->
+    <main class="login-page">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h1>Connexion</h1>
+                        <p>Connectez-vous pour accéder à votre compte.</p>
+                    </div>
+                    
+                    <div id="error-message" class="error-message" style="display: none;"></div>
+                    
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password" class="form-label">Mot de passe</label>
+                            <div class="password-input-container">
+                                <input type="password" id="password" name="password" class="form-control" required>
+                                <button type="button" class="password-toggle" id="password-toggle">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-options">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="remember-me" name="remember-me">
+                                <label for="remember-me">Se souvenir de moi</label>
+                            </div>
+                            <a href="forgot-password.html" class="form-link">Mot de passe oublié ?</a>
+                        </div>
+                        
+                        <button type="submit" class="btn primary auth-btn">
+                            <span id="login-btn-text">Se connecter</span>
+                            <div id="login-spinner" class="spinner" style="display: none;"></div>
+                        </button>
+                    </form>
+                    
+                    <div class="auth-separator">
+                        <span>OU</span>
+                    </div>
+                    
+                    <div class="social-auth">
+                        <button class="btn outline social-auth-btn google-btn">
+                            <i class="fab fa-google"></i> Continuer avec Google
+                        </button>
+                        <button class="btn outline social-auth-btn facebook-btn">
+                            <i class="fab fa-facebook-f"></i> Continuer avec Facebook
+                        </button>
+                    </div>
+                    
+                    <div class="auth-footer">
+                        <p>Vous n'avez pas de compte ? <a href="register.html" class="form-link">Inscrivez-vous</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3 class="footer-column-title">À Propos</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="about.html">Notre Histoire</a></li>
+                        <li class="footer-link"><a href="terms.html">Conditions Générales</a></li>
+                        <li class="footer-link"><a href="privacy.html">Politique de Confidentialité</a></li>
+                        <li class="footer-link"><a href="shipping.html">Livraisons & Retours</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-column-title">Découvrir</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="regions.html">Régions Viticoles</a></li>
+                        <li class="footer-link"><a href="experience.html">Guide de Dégustation</a></li>
+                        <li class="footer-link"><a href="quiz.html">Quiz Œnologique</a></li>
+                        <li class="footer-link"><a href="blog.html">Blog & Actualités</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-column-title">Contact</h3>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                134 Quai de Bacalan<br>
+                                33300 Bordeaux, France
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>+33 5 56 16 20 20</div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>contact@citeduvin.com</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-column-title">Newsletter</h3>
+                    <p>Inscrivez-vous pour recevoir nos offres et actualités.</p>
+                    <form class="newsletter-form">
+                        <input type="email" class="newsletter-input form-control" placeholder="Votre email" required>
+                        <button type="submit" class="newsletter-button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; <span id="current-year"></span> Cité du Vin - Tous droits réservés
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Toggle password visibility
+            const passwordToggle = document.getElementById('password-toggle');
+            const passwordInput = document.getElementById('password');
+            
+            if (passwordToggle && passwordInput) {
+                passwordToggle.addEventListener('click', () => {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    // Toggle icon
+                    const icon = passwordToggle.querySelector('i');
+                    icon.classList.toggle('fa-eye');
+                    icon.classList.toggle('fa-eye-slash');
+                });
+            }
+            
+            // Handle login form submission
+            const loginForm = document.getElementById('login-form');
+            const errorMessage = document.getElementById('error-message');
+            const loginBtnText = document.getElementById('login-btn-text');
+            const loginSpinner = document.getElementById('login-spinner');
+            
+            if (loginForm) {
+                loginForm.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    
+                    // Get form values
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    
+                    // Show loading spinner
+                    loginBtnText.style.display = 'none';
+                    loginSpinner.style.display = 'inline-block';
+                    
+                    try {
+                        // Call login function from auth.js
+                        const result = await authApi.login(email, password);
+                        
+                        // Store user data and token in localStorage
+                        localStorage.setItem('token', result.token);
+                        localStorage.setItem('user', JSON.stringify(result.user));
+                        
+                        // Redirect to home page
+                        window.location.href = 'index.html';
+                    } catch (error) {
+                        // Show error message
+                        errorMessage.textContent = error.message || 'Une erreur est survenue. Veuillez réessayer.';
+                        errorMessage.style.display = 'block';
+                        
+                        // Hide loading spinner
+                        loginBtnText.style.display = 'inline-block';
+                        loginSpinner.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
