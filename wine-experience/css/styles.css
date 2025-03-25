@@ -1,0 +1,162 @@
+/* Custom Styles */
+:root {
+    --wine-burgundy: #722F37;
+    --wine-red: #AB2328;
+    --wine-gold: #E6C17B;
+    --wine-cream: #F9F3E9;
+    --wine-cork: #BB9F7C;
+    --wine-bottle: #0F3327;
+}
+
+body {
+    background-color: var(--wine-cream);
+    font-family: 'Arial', sans-serif;
+}
+
+.navbar {
+    background-color: var(--wine-burgundy) !important;
+}
+
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+    background-size: cover;
+    background-position: center;
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.btn-primary {
+    background-color: var(--wine-burgundy);
+    border-color: var(--wine-burgundy);
+}
+
+.btn-primary:hover {
+    background-color: var(--wine-red);
+    border-color: var(--wine-red);
+}
+
+.btn-outline-primary {
+    border-color: var(--wine-burgundy);
+    color: var(--wine-burgundy);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--wine-burgundy);
+    border-color: var(--wine-burgundy);
+    color: white;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--wine-burgundy);
+    border-bottom-color: var(--wine-burgundy);
+    font-weight: bold;
+}
+
+.nav-tabs .nav-link {
+    color: #555;
+}
+
+.wine-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.wine-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.wine-filter {
+    position: sticky;
+    top: 20px;
+}
+
+.map-container {
+    height: 500px;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+}
+
+.wine-rating {
+    background-color: var(--wine-gold);
+    color: var(--wine-burgundy);
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.wine-price {
+    font-weight: bold;
+}
+
+/* Wine type badges */
+.badge-red {
+    background-color: var(--wine-red);
+    color: white;
+}
+
+.badge-white {
+    background-color: #f8f9fa;
+    color: #212529;
+    border: 1px solid #dee2e6;
+}
+
+.badge-sparkling {
+    background-color: #a2d9ff;
+    color: #212529;
+}
+
+.badge-rose {
+    background-color: #ffc0cb;
+    color: #212529;
+}
+
+/* Sticky footer */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+/* Map styles */
+.leaflet-popup-content {
+    font-family: Arial, sans-serif;
+}
+
+.leaflet-popup-content strong {
+    color: var(--wine-burgundy);
+}
+
+/* Quiz styles */
+.question {
+    font-weight: 500;
+    color: var(--wine-burgundy);
+}
+
+.form-check-input:checked {
+    background-color: var(--wine-burgundy);
+    border-color: var(--wine-burgundy);
+}
+
+/* Animation for cards */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    animation: fadeIn 0.5s ease-out;
+}
