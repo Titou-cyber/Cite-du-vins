@@ -3,43 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Expand your wine knowledge with Terroir's educational resources - covering wine regions, varieties, tasting techniques, and interactive wine quizzes.">
     <title>Wine Knowledge | Terroir - La Cité Du Vin</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+<body class="knowledge-page">
+    <!-- Modern Navbar with Cart -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Terroir - La Cité Du Vin</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand" href="index.html">
+                <span class="brand-icon"><i class="fas fa-wine-glass-alt"></i></span>
+                <span class="brand-text">Terroir</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Wine Map</a></li>
-                    <li class="nav-item"><a class="nav-link" href="wines.html">Wines</a></li>
-                    <li class="nav-item"><a class="nav-link" href="sommelier.html">AI Sommelier</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="knowledge.html">Wine Knowledge</a></li>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Discover</a></li>
+                    <li class="nav-item"><a class="nav-link" href="wines.html">Collection</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sommelier.html">Sommelier</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="knowledge.html" aria-current="page">Expertise</a></li>
                 </ul>
+                <div class="navbar-nav ms-auto d-flex align-items-center">
+                    <div class="search-icon me-3" role="button" tabindex="0" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="cart-icon me-3 position-relative" id="cart-icon" role="button" tabindex="0" aria-label="Shopping cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </div>
+                    <div class="user-menu dropdown">
+                        <div class="user-icon" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" tabindex="0" aria-label="User account">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end user-dropdown" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-in-alt me-2"></i>Sign In</a></li>
+                            <li><a class="dropdown-item" href="register.html"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="account.html"><i class="fas fa-user-circle me-2"></i>My Account</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
-    <header class="hero">
+    <!-- Hero Section -->
+    <header class="hero knowledge-hero">
         <div class="container text-center text-white">
             <h1 class="display-4">Wine Knowledge</h1>
-            <p class="lead">Learn about wine and test your expertise</p>
+            <p class="lead">Expand your understanding of wine with our educational resources</p>
+            <div class="hero-cta">
+                <a href="#knowledge-tabs" class="btn btn-gold mt-4">
+                    <i class="fas fa-book-open me-2"></i>Start Learning
+                </a>
+            </div>
         </div>
     </header>
 
-    <section class="py-5">
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress-container">
+        <div id="reading-progress" class="reading-progress"></div>
+    </div>
+
+    <!-- Knowledge Tabs Section -->
+    <section id="knowledge-tabs" class="py-5">
         <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">Explore Wine Knowledge</h2>
+                <p class="section-subtitle">Discover the fascinating world of wine through our educational resources</p>
+                <div class="title-decoration">
+                    <span></span><i class="fas fa-book-open"></i><span></span>
+                </div>
+            </div>
+            
             <!-- Custom Navigation Tabs -->
-            <div class="mb-4">
-                <div class="d-flex border-bottom">
-                    <div class="knowledge-tab active" data-tab="learn">Learn</div>
-                    <div class="knowledge-tab" data-tab="quiz">Wine Quiz</div>
-                    <div class="knowledge-tab" data-tab="glossary">Wine Glossary</div>
+            <div class="knowledge-nav mb-4">
+                <div class="knowledge-tabs">
+                    <div class="knowledge-tab active" data-tab="learn">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Learn</span>
+                    </div>
+                    <div class="knowledge-tab" data-tab="quiz">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Wine Quiz</span>
+                    </div>
+                    <div class="knowledge-tab" data-tab="glossary">
+                        <i class="fas fa-book"></i>
+                        <span>Glossary</span>
+                    </div>
+                    <div class="knowledge-tab" data-tab="aroma">
+                        <i class="fas fa-wine-glass-alt"></i>
+                        <span>Aroma Wheel</span>
+                    </div>
                 </div>
             </div>
             
@@ -48,7 +123,7 @@
                 <div id="learn-tab-content" class="tab-pane active">
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <div class="card knowledge-module">
+                            <div class="card knowledge-module animate-on-scroll">
                                 <div class="wine-type-icon wine-type-red">
                                     <h3 class="text-white">Wine Basics</h3>
                                 </div>
@@ -56,25 +131,27 @@
                                     <p class="text-muted mb-3">Learn about different wine types, production methods, and basic tasting techniques.</p>
                                     
                                     <div class="mb-3">
-                                        <h5>Types of Wine</h5>
+                                        <h5><i class="fas fa-wine-bottle me-2"></i>Types of Wine</h5>
                                         <p class="small">There are five basic types of wine: red, white, rosé, sparkling, and dessert. Each has distinct characteristics based on the grapes used and production methods.</p>
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <h5>Wine Production</h5>
+                                        <h5><i class="fas fa-industry me-2"></i>Wine Production</h5>
                                         <p class="small">Wine production involves harvesting grapes, crushing them, fermenting the juice, aging the wine, and finally bottling it. Each step influences the final flavor.</p>
                                     </div>
                                     
                                     <div>
-                                        <h5>Wine Tasting</h5>
+                                        <h5><i class="fas fa-glass-cheers me-2"></i>Wine Tasting</h5>
                                         <p class="small">Wine tasting involves examining a wine's appearance, smelling its aromas, and tasting it to evaluate its flavors, body, and finish.</p>
                                     </div>
+                                    
+                                    <a href="#" class="btn btn-outline mt-3 read-more">Read More</a>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="col-md-4 mb-4">
-                            <div class="card knowledge-module">
+                            <div class="card knowledge-module animate-on-scroll" style="animation-delay: 0.2s;">
                                 <div class="wine-type-icon wine-type-white">
                                     <h3 class="text-dark">Wine Regions</h3>
                                 </div>
@@ -82,25 +159,27 @@
                                     <p class="text-muted mb-3">Discover the major wine regions of the world and what makes each unique.</p>
                                     
                                     <div class="mb-3">
-                                        <h5>France</h5>
+                                        <h5><i class="fas fa-map-marker-alt me-2"></i>France</h5>
                                         <p class="small">France is home to famous regions like Bordeaux, Burgundy, and Champagne. Each region specializes in certain grape varieties and has distinct terroir.</p>
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <h5>Italy</h5>
+                                        <h5><i class="fas fa-map-marker-alt me-2"></i>Italy</h5>
                                         <p class="small">Italy boasts more grape varieties than any other country, with regions like Tuscany, Piedmont, and Veneto producing world-renowned wines.</p>
                                     </div>
                                     
                                     <div>
-                                        <h5>New World Regions</h5>
+                                        <h5><i class="fas fa-map-marker-alt me-2"></i>New World Regions</h5>
                                         <p class="small">Regions like Napa Valley (USA), Mendoza (Argentina), and Marlborough (New Zealand) have made their mark with distinctive wines and innovative techniques.</p>
                                     </div>
+                                    
+                                    <a href="#" class="btn btn-outline mt-3 read-more">Read More</a>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="col-md-4 mb-4">
-                            <div class="card knowledge-module">
+                            <div class="card knowledge-module animate-on-scroll" style="animation-delay: 0.4s;">
                                 <div class="wine-type-icon wine-type-sparkling">
                                     <h3 class="text-dark">Food Pairing</h3>
                                 </div>
@@ -108,18 +187,50 @@
                                     <p class="text-muted mb-3">Master the art of pairing wines with food to enhance both culinary experiences.</p>
                                     
                                     <div class="mb-3">
-                                        <h5>Basic Principles</h5>
-                                        <p class="small">The basic principle of wine pairing is to match the weight and intensity of food with a similarly weighted wine.</p>
+                                        <h5><i class="fas fa-balance-scale me-2"></i>Basic Principles</h5>
+                                        <p class="small">The basic principle of wine pairing is to match the weight and intensity of food with a similarly weighted wine. Consider complementary or contrasting flavors.</p>
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <h5>Red Wine Pairings</h5>
-                                        <p class="small">Red wines typically pair well with red meats, hearty pasta dishes, and strong cheeses.</p>
+                                        <h5><i class="fas fa-hamburger me-2"></i>Red Wine Pairings</h5>
+                                        <p class="small">Red wines typically pair well with red meats, hearty pasta dishes, and strong cheeses. The tannins in red wine cut through fatty proteins.</p>
                                     </div>
                                     
                                     <div>
-                                        <h5>White Wine Pairings</h5>
-                                        <p class="small">White wines often complement fish, chicken, and lighter vegetable dishes.</p>
+                                        <h5><i class="fas fa-fish me-2"></i>White Wine Pairings</h5>
+                                        <p class="small">White wines often complement fish, chicken, and lighter vegetable dishes. The acidity in white wine provides a refreshing contrast.</p>
+                                    </div>
+                                    
+                                    <a href="#" class="btn btn-outline mt-3 read-more">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="resources-section mt-5">
+                        <h3 class="text-center mb-4">Additional Resources</h3>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="resource-card">
+                                    <div class="resource-icon">
+                                        <i class="fas fa-video"></i>
+                                    </div>
+                                    <div class="resource-content">
+                                        <h4>Video Tutorials</h4>
+                                        <p>Learn wine tasting techniques from professional sommeliers through our video series.</p>
+                                        <a href="#" class="resource-link">View Videos <i class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="resource-card">
+                                    <div class="resource-icon">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div class="resource-content">
+                                        <h4>Downloadable Guides</h4>
+                                        <p>Access our collection of printable wine guides, tasting sheets, and region maps.</p>
+                                        <a href="#" class="resource-link">Download <i class="fas fa-arrow-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -130,20 +241,37 @@
                 <!-- Quiz Tab -->
                 <div id="quiz-tab-content" class="tab-pane">
                     <div class="row justify-content-center">
-                        <div class="col-md-8">
-                            <div class="card">
+                        <div class="col-lg-8">
+                            <div class="card quiz-card">
                                 <div class="card-body">
                                     <div id="quiz-intro">
                                         <h2 class="card-title text-center mb-4">Test Your Wine Knowledge</h2>
-                                        <p class="text-center">This quiz contains 10 questions about wine. Let's see how much you know!</p>
+                                        <p class="text-center">This quiz contains 12 questions about wine. Let's see how much you know!</p>
+                                        <div class="quiz-features">
+                                            <div class="quiz-feature">
+                                                <i class="fas fa-clock"></i>
+                                                <span>10 min</span>
+                                            </div>
+                                            <div class="quiz-feature">
+                                                <i class="fas fa-star"></i>
+                                                <span>12 questions</span>
+                                            </div>
+                                            <div class="quiz-feature">
+                                                <i class="fas fa-trophy"></i>
+                                                <span>Certificate</span>
+                                            </div>
+                                        </div>
                                         <div class="text-center mt-4">
-                                            <button id="start-quiz" class="btn btn-primary">Start Quiz</button>
+                                            <button id="start-quiz" class="btn btn-primary">
+                                                <i class="fas fa-play me-2"></i>Start Quiz
+                                            </button>
                                         </div>
                                     </div>
                                     
                                     <div id="quiz-container" class="d-none">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <h3 class="h5 mb-0">Question <span id="current-question">1</span>/10</h3>
+                                            <h3 class="h5 mb-0">Question <span id="current-question">1</span>/12</h3>
+                                            <div id="quiz-timer" class="quiz-timer">10:00</div>
                                         </div>
                                         
                                         <div class="quiz-progress">
@@ -159,20 +287,51 @@
                                         </div>
                                         
                                         <div class="d-flex justify-content-between mt-4">
-                                            <button id="prev-question" class="btn btn-outline-secondary d-none">Previous</button>
-                                            <button id="next-question" class="btn btn-primary" disabled>Next</button>
+                                            <button id="prev-question" class="btn btn-outline-secondary d-none">
+                                                <i class="fas fa-arrow-left me-2"></i>Previous
+                                            </button>
+                                            <button id="next-question" class="btn btn-primary" disabled>
+                                                Next<i class="fas fa-arrow-right ms-2"></i>
+                                            </button>
                                         </div>
                                     </div>
                                     
                                     <div id="quiz-results" class="text-center d-none">
                                         <h2 class="card-title mb-4">Quiz Results</h2>
-                                        <div class="mb-4">
-                                            <div class="display-4 mb-2">
-                                                <span id="result-score">0</span>/10
+                                        <div class="result-progress mb-4">
+                                            <div class="result-progress-circle">
+                                                <svg viewBox="0 0 36 36" class="circular-chart">
+                                                    <path class="circle-bg" d="M18 2.0845
+                                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                                    <path class="circle" stroke-dasharray="0, 100" d="M18 2.0845
+                                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                                </svg>
+                                                <div class="percentage">
+                                                    <span id="score-percentage">0</span>%
+                                                </div>
                                             </div>
-                                            <p id="result-message" class="lead">Your knowledge level will appear here.</p>
                                         </div>
-                                        <button id="restart-quiz" class="btn btn-primary">Take Quiz Again</button>
+                                        <div class="mb-4">
+                                            <span class="display-6 fw-bold">
+                                                <span id="result-score">0</span>/<span id="total-questions">12</span>
+                                            </span>
+                                            <p id="result-message" class="lead mt-2">Your knowledge level will appear here.</p>
+                                        </div>
+                                        
+                                        <div id="quiz-statistics" class="d-flex justify-content-center mb-4">
+                                            <!-- Statistics will be added here -->
+                                        </div>
+                                        
+                                        <div class="quiz-actions">
+                                            <button id="restart-quiz" class="btn btn-primary">
+                                                <i class="fas fa-redo me-2"></i>Take Quiz Again
+                                            </button>
+                                            <button id="share-results" class="btn btn-outline-primary ms-2">
+                                                <i class="fas fa-share-alt me-2"></i>Share Results
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -182,82 +341,146 @@
                 
                 <!-- Glossary Tab -->
                 <div id="glossary-tab-content" class="tab-pane">
-                    <div class="card">
+                    <div class="glossary-header mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <h3>Wine Terminology Glossary <span class="badge bg-burgundy"><span id="glossary-count">0</span> terms</span></h3>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="glossary-search">
+                                    <input type="text" id="glossary-search" class="form-control" placeholder="Search terms...">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glossary-categories mb-4">
+                        <div class="glossary-category active" data-category="all">All Terms</div>
+                        <div class="glossary-category" data-category="Tasting">Tasting</div>
+                        <div class="glossary-category" data-category="Regions">Regions</div>
+                        <div class="glossary-category" data-category="Production">Production</div>
+                        <div class="glossary-category" data-category="Wine Types">Wine Types</div>
+                        <div class="glossary-category" data-category="Serving">Serving</div>
+                        <div class="glossary-category" data-category="Faults">Faults</div>
+                        <button class="glossary-reset" onclick="resetGlossaryFilters()">
+                            <i class="fas fa-undo-alt"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="card glossary-card">
                         <div class="card-body">
-                            <h3 class="card-title mb-4">Wine Terminology Glossary</h3>
-                            <p class="card-text mb-4">Explore common wine terms to enhance your wine vocabulary.</p>
+                            <dl id="glossary-container" class="glossary-terms">
+                                <!-- Glossary terms will be added here -->
+                                <div class="text-center py-4">
+                                    <div class="spinner">
+                                        <div class="double-bounce1"></div>
+                                        <div class="double-bounce2"></div>
+                                    </div>
+                                    <p class="mt-3">Loading wine terminology...</p>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                    
+                    <div class="glossary-vocabulary mt-4">
+                        <h4 class="mb-3">Wine Tasting Vocabulary</h4>
+                        <p class="mb-3">When describing wines, professionals use these terms:</p>
+                        <div class="vocabulary-cloud">
+                            <span class="vocabulary-tag">Bold</span>
+                            <span class="vocabulary-tag">Crisp</span>
+                            <span class="vocabulary-tag">Earthy</span>
+                            <span class="vocabulary-tag">Fruity</span>
+                            <span class="vocabulary-tag">Herbaceous</span>
+                            <span class="vocabulary-tag">Jammy</span>
+                            <span class="vocabulary-tag">Mineral</span>
+                            <span class="vocabulary-tag">Oaky</span>
+                            <span class="vocabulary-tag">Tannic</span>
+                            <span class="vocabulary-tag">Balanced</span>
+                            <span class="vocabulary-tag">Complex</span>
+                            <span class="vocabulary-tag">Elegant</span>
+                            <span class="vocabulary-tag">Velvety</span>
+                            <span class="vocabulary-tag">Vibrant</span>
+                            <span class="vocabulary-tag">Lush</span>
+                            <span class="vocabulary-tag">Austere</span>
+                            <span class="vocabulary-tag">Tart</span>
+                            <span class="vocabulary-tag">Supple</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Aroma Wheel Tab -->
+                <div id="aroma-tab-content" class="tab-pane">
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                            <h3 class="mb-4">Wine Aroma Wheel</h3>
+                            <p>The wine aroma wheel helps you identify and describe the complex aromas in wine. Click on the segments to learn more about each aroma category.</p>
                             
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="glossary-term">
-                                        <dt>Acidity</dt>
-                                        <dd>The tart or sour taste in wine that makes it refreshing and gives it structure.</dd>
+                            <div class="aroma-wheel-container">
+                                <div id="aroma-wheel" class="aroma-wheel">
+                                    <div class="aroma-segment" data-category="fruit">
+                                        <span>Fruit</span>
                                     </div>
-                                    
-                                    <div class="glossary-term">
-                                        <dt>Body</dt>
-                                        <dd>The perception of weight and fullness of a wine in your mouth (light, medium, or full).</dd>
+                                    <div class="aroma-segment" data-category="floral">
+                                        <span>Floral</span>
                                     </div>
-                                    
-                                    <div class="glossary-term">
-                                        <dt>Bouquet</dt>
-                                        <dd>The complex aromas that develop in wines as they age.</dd>
+                                    <div class="aroma-segment" data-category="spice">
+                                        <span>Spice</span>
                                     </div>
-                                    
-                                    <div class="glossary-term">
-                                        <dt>Finish</dt>
-                                        <dd>The taste and sensations that linger after swallowing wine.</dd>
+                                    <div class="aroma-segment" data-category="earth">
+                                        <span>Earth</span>
                                     </div>
-                                    
-                                    <div class="glossary-term">
-                                        <dt>Legs</dt>
-                                        <dd>The streams of wine that run down the side of a glass after swirling, indicating alcohol content.</dd>
+                                    <div class="aroma-segment" data-category="oak">
+                                        <span>Oak</span>
+                                    </div>
+                                    <div class="aroma-segment" data-category="mineral">
+                                        <span>Mineral</span>
+                                    </div>
+                                    <div class="wheel-inner">
+                                        <span>Wine<br>Aromas</span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="glossary-term">
-                                        <dt>Tannins</dt>
-                                        <dd>Compounds that create a drying sensation in the mouth, mainly found in red wines.</dd>
-                                    </div>
-                                    
-                                    <div class="glossary-term">
-                                        <dt>Terroir</dt>
-                                        <dd>The complete natural environment in which a wine is produced, including soil, climate, and topography.</dd>
-                                    </div>
-                                    
-                                    <div class="glossary-term">
-                                        <dt>Vintage</dt>
-                                        <dd>The year in which a wine's grapes were harvested.</dd>
-                                    </div>
-                                    
-                                    <div class="glossary-term">
-                                        <dt>Sommelier</dt>
-                                        <dd>A trained wine professional who specializes in all aspects of wine service and food pairing.</dd>
-                                    </div>
-                                    
-                                    <div class="glossary-term">
-                                        <dt>Appellation</dt>
-                                        <dd>A legally defined and protected geographical indication used to identify where grapes for a wine were grown.</dd>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="card aroma-card">
+                                <div class="card-body">
+                                    <div id="aroma-descriptions" class="aroma-descriptions">
+                                        <h4>Select a category</h4>
+                                        <p>Click on a segment of the aroma wheel to learn about different wine aroma categories.</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="glossary-vocabulary">
-                                <h4 class="h5 mb-3">Wine Tasting Vocabulary</h4>
-                                <p class="mb-3">When describing wines, professionals use these terms:</p>
-                                <div>
-                                    <span class="vocabulary-tag">Bold</span>
-                                    <span class="vocabulary-tag">Crisp</span>
-                                    <span class="vocabulary-tag">Earthy</span>
-                                    <span class="vocabulary-tag">Fruity</span>
-                                    <span class="vocabulary-tag">Herbaceous</span>
-                                    <span class="vocabulary-tag">Jammy</span>
-                                    <span class="vocabulary-tag">Mineral</span>
-                                    <span class="vocabulary-tag">Oaky</span>
-                                    <span class="vocabulary-tag">Tannic</span>
-                                    <span class="vocabulary-tag">Balanced</span>
-                                    <span class="vocabulary-tag">Complex</span>
-                                    <span class="vocabulary-tag">Elegant</span>
+                            <div class="aroma-tips mt-4">
+                                <h4>Tasting Tips</h4>
+                                <div class="tip-item">
+                                    <div class="tip-icon">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                    <div class="tip-content">
+                                        <h5>Smell Before Sipping</h5>
+                                        <p>Always take time to smell the wine before tasting. Most of what we perceive as "flavor" is actually aroma.</p>
+                                    </div>
+                                </div>
+                                <div class="tip-item">
+                                    <div class="tip-icon">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </div>
+                                    <div class="tip-content">
+                                        <h5>Swirl to Release Aromas</h5>
+                                        <p>Swirling the wine in your glass increases surface area and releases more aromatic compounds.</p>
+                                    </div>
+                                </div>
+                                <div class="tip-item">
+                                    <div class="tip-icon">
+                                        <i class="fas fa-temperature-low"></i>
+                                    </div>
+                                    <div class="tip-content">
+                                        <h5>Temperature Matters</h5>
+                                        <p>Serve wine at the proper temperature to fully experience its aromatic profile.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -267,21 +490,229 @@
         </div>
     </section>
 
-    <footer class="bg-dark text-white py-4">
+    <!-- Featured Articles Section -->
+    <section class="articles-section py-5">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Terroir - La Cité Du Vin</h5>
-                    <p>An immersive wine experience platform</p>
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">Featured Articles</h2>
+                <p class="section-subtitle">Deepen your understanding with our expert wine guides</p>
+                <div class="title-decoration">
+                    <span></span><i class="fas fa-newspaper"></i><span></span>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; 2025 La Cité Du Vin. All rights reserved.</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <article class="article-card animate-on-scroll">
+                        <div class="article-image">
+                            <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Bordeaux Wine Guide">
+                            <div class="article-category">Region</div>
+                        </div>
+                        <div class="article-content">
+                            <h3>Understanding Bordeaux Classifications</h3>
+                            <p>Navigate the complex classification system of Bordeaux wines, from Premier Cru to Cru Bourgeois.</p>
+                            <a href="#" class="article-link">Read Article <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <article class="article-card animate-on-scroll" style="animation-delay: 0.2s;">
+                        <div class="article-image">
+                            <img src="https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Wine Tasting Guide">
+                            <div class="article-category">Tasting</div>
+                        </div>
+                        <div class="article-content">
+                            <h3>The Art of Blind Tasting</h3>
+                            <p>Learn the techniques professionals use to identify wine varieties, regions, and vintages through blind tasting.</p>
+                            <a href="#" class="article-link">Read Article <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <article class="article-card animate-on-scroll" style="animation-delay: 0.4s;">
+                        <div class="article-image">
+                            <img src="https://images.unsplash.com/photo-1507434800635-78f25bc18784?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="New World Wines">
+                            <div class="article-category">Trends</div>
+                        </div>
+                        <div class="article-content">
+                            <h3>Rising Stars: Emerging Wine Regions</h3>
+                            <p>Discover the next generation of wine regions making their mark on the global stage with innovative approaches.</p>
+                            <a href="#" class="article-link">Read Article <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-burgundy">
+                    <i class="fas fa-book me-2"></i>View All Articles
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section py-5">
+        <div class="container">
+            <div class="newsletter-box">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="newsletter-title">Elevate Your Wine Knowledge</h2>
+                        <p class="newsletter-text">
+                            Subscribe to receive our wine education articles, tasting guides, and expert insights.
+                        </p>
+                    </div>
+                    <div class="col-lg-6">
+                        <form class="newsletter-form">
+                            <div class="input-with-button">
+                                <input type="email" placeholder="Your email address" required aria-label="Email address">
+                                <button type="submit" aria-label="Subscribe">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Your Collection</h3>
+                <button id="close-cart" class="close-cart" aria-label="Close cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be dynamically added here -->
+                <p class="empty-cart-message">Your collection is empty</p>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <button id="checkout-btn" class="btn btn-checkout" disabled>
+                    <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="search-overlay">
+        <div class="search-content">
+            <div class="search-header">
+                <h3>Search Wine Knowledge</h3>
+                <button id="close-search" class="close-search" aria-label="Close search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-form-container">
+                <form class="search-form">
+                    <div class="search-input-group">
+                        <input type="text" id="search-input" placeholder="Search for topics, terms, or regions..." aria-label="Search">
+                        <button type="submit" aria-label="Submit search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="search-suggestions">
+                    <h4>Popular Searches</h4>
+                    <div class="suggestion-tags">
+                        <span class="suggestion-tag">Terroir</span>
+                        <span class="suggestion-tag">Wine Pairing</span>
+                        <span class="suggestion-tag">Tannins</span>
+                        <span class="suggestion-tag">Decanting</span>
+                        <span class="suggestion-tag">Viticulture</span>
+                    </div>
+                </div>
+            </div>
+            <div class="search-results" id="search-results">
+                <!-- Search results will be displayed here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+
+    <!-- Modern Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="row">
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <div class="footer-brand">
+                            <h3>Terroir</h3>
+                            <p>An exclusive collection of fine wines from La Cité Du Vin, celebrating the art and culture of wine appreciation.</p>
+                        </div>
+                        <div class="social-icons">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                        <h5>Explore</h5>
+                        <ul class="footer-links">
+                            <li><a href="index.html">Wine Map</a></li>
+                            <li><a href="wines.html">Collection</a></li>
+                            <li><a href="sommelier.html">Sommelier</a></li>
+                            <li><a href="knowledge.html">Wine Education</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                        <h5>Visit Us</h5>
+                        <address class="footer-address">
+                            La Cité du Vin<br>
+                            134 Quai de Bacalan<br>
+                            33300 Bordeaux<br>
+                            France
+                        </address>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Stay Updated</h5>
+                        <p>Subscribe for exclusive offers and wine release notifications.</p>
+                        <form class="footer-form">
+                            <div class="input-with-button">
+                                <input type="email" placeholder="Your email address" required aria-label="Subscribe to newsletter">
+                                <button type="submit" aria-label="Submit subscription">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <p class="copyright">© 2025 La Cité Du Vin. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="footer-meta-links">
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Terms of Service</a>
+                            <a href="#">Cookie Policy</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- JavaScript Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
     <script src="js/knowledge.js"></script>
+    <script src="js/ui-components.js"></script>
 </body>
 </html>

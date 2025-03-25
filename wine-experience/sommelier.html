@@ -3,39 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Get personalized wine recommendations with Terroir's AI Sommelier - powered by La Cité Du Vin's wine expertise and advanced preference matching.">
     <title>AI Sommelier | Terroir - La Cité Du Vin</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+<body class="sommelier-page">
+    <!-- Modern Navbar with Cart -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Terroir - La Cité Du Vin</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand" href="index.html">
+                <span class="brand-icon"><i class="fas fa-wine-glass-alt"></i></span>
+                <span class="brand-text">Terroir</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Wine Map</a></li>
-                    <li class="nav-item"><a class="nav-link" href="wines.html">Wines</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="sommelier.html">AI Sommelier</a></li>
-                    <li class="nav-item"><a class="nav-link" href="knowledge.html">Wine Knowledge</a></li>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Discover</a></li>
+                    <li class="nav-item"><a class="nav-link" href="wines.html">Collection</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="sommelier.html" aria-current="page">Sommelier</a></li>
+                    <li class="nav-item"><a class="nav-link" href="knowledge.html">Expertise</a></li>
                 </ul>
+                <div class="navbar-nav ms-auto d-flex align-items-center">
+                    <div class="search-icon me-3" role="button" tabindex="0" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="cart-icon me-3 position-relative" id="cart-icon" role="button" tabindex="0" aria-label="Shopping cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </div>
+                    <div class="user-menu dropdown">
+                        <div class="user-icon" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" tabindex="0" aria-label="User account">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end user-dropdown" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-in-alt me-2"></i>Sign In</a></li>
+                            <li><a class="dropdown-item" href="register.html"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="account.html"><i class="fas fa-user-circle me-2"></i>My Account</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
-    <header class="hero">
+    <!-- Hero Section -->
+    <header class="hero sommelier-hero">
         <div class="container text-center text-white">
             <h1 class="display-4">AI Sommelier</h1>
-            <p class="lead">Get personalized wine recommendations</p>
+            <p class="lead">Discover your perfect wine match with our personalized recommendations</p>
+            <div class="hero-cta">
+                <a href="#sommelier" class="btn btn-gold mt-4">
+                    <i class="fas fa-wine-glass-alt me-2"></i>Start Your Wine Journey
+                </a>
+            </div>
         </div>
     </header>
 
+    <!-- Sommelier Section -->
     <section id="sommelier" class="py-5">
         <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">Your Personal Wine Guide</h2>
+                <p class="section-subtitle">Tell us about your preferences, and we'll suggest the perfect wines for you</p>
+                <div class="title-decoration">
+                    <span></span><i class="fas fa-wine-glass-alt"></i><span></span>
+                </div>
+            </div>
+
             <div class="row justify-content-center">
-                <div class="col-md-8">
+                <div class="col-lg-10">
                     <!-- Step Indicator -->
                     <div class="sommelier-progress mb-4" id="sommelier-progress">
                         <div class="sommelier-step active" id="step-1">
@@ -55,56 +112,92 @@
                     <!-- Step Forms -->
                     <div id="step-form-container">
                         <!-- Step 1: Flavors -->
-                        <div class="card mb-4" id="step-form-1">
+                        <div class="card sommelier-card mb-4" id="step-form-1">
                             <div class="card-body">
                                 <h3 class="card-title h4 mb-4">What flavors do you enjoy?</h3>
                                 <p class="text-muted mb-4">Select all that apply to help us find your perfect wine match.</p>
                                 
                                 <div class="row mb-4">
                                     <div class="col-md-6 mb-3">
-                                        <div class="preference-option" data-preference="fruity">
-                                            Fruity (berries, citrus, tropical)
+                                        <div class="preference-option" data-preference="fruity" data-bs-toggle="tooltip" title="Wines with pronounced fruit flavors like berries, citrus, or tropical fruits">
+                                            <div class="preference-icon"><i class="fas fa-apple-alt"></i></div>
+                                            <div class="preference-content">
+                                                <h4>Fruity</h4>
+                                                <p>Berries, citrus, tropical</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <div class="preference-option" data-preference="earthy">
-                                            Earthy (soil, leather, mineral)
+                                        <div class="preference-option" data-preference="earthy" data-bs-toggle="tooltip" title="Wines with notes of soil, mushroom, or forest floor">
+                                            <div class="preference-icon"><i class="fas fa-leaf"></i></div>
+                                            <div class="preference-content">
+                                                <h4>Earthy</h4>
+                                                <p>Soil, leather, mineral</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <div class="preference-option" data-preference="spicy">
-                                            Spicy (pepper, cinnamon, herbs)
+                                        <div class="preference-option" data-preference="spicy" data-bs-toggle="tooltip" title="Wines with peppery, herbal, or warm spice notes">
+                                            <div class="preference-icon"><i class="fas fa-pepper-hot"></i></div>
+                                            <div class="preference-content">
+                                                <h4>Spicy</h4>
+                                                <p>Pepper, cinnamon, herbs</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <div class="preference-option" data-preference="floral">
-                                            Floral (rose, violet, blossom)
+                                        <div class="preference-option" data-preference="floral" data-bs-toggle="tooltip" title="Wines with delicate floral aromas like violet, rose, or blossom">
+                                            <div class="preference-icon"><i class="fas fa-spa"></i></div>
+                                            <div class="preference-content">
+                                                <h4>Floral</h4>
+                                                <p>Rose, violet, blossom</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="preference-option" data-preference="tannic" data-bs-toggle="tooltip" title="Wines with that mouth-drying sensation, common in bold reds">
+                                            <div class="preference-icon"><i class="fas fa-grip-lines"></i></div>
+                                            <div class="preference-content">
+                                                <h4>Tannic</h4>
+                                                <p>Bold, structured, firm</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="preference-option" data-preference="smooth" data-bs-toggle="tooltip" title="Wines with a velvety, round texture and balanced profile">
+                                            <div class="preference-icon"><i class="fas fa-water"></i></div>
+                                            <div class="preference-content">
+                                                <h4>Smooth</h4>
+                                                <p>Velvety, balanced, elegant</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="text-end">
-                                    <button class="btn btn-primary" id="step-1-next">Next</button>
+                                    <button class="btn btn-primary" id="step-1-next" disabled>
+                                        Next <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Step 2: Details -->
-                        <div class="card mb-4 d-none" id="step-form-2">
+                        <div class="card sommelier-card mb-4 d-none" id="step-form-2">
                             <div class="card-body">
                                 <h3 class="card-title h4 mb-4">Tell us more about your preferences</h3>
                                 
                                 <form id="sommelier-details-form">
-                                    <div class="mb-3">
+                                    <div class="mb-4">
                                         <label class="form-label">What's your price range?</label>
                                         <select class="form-select" id="price-preference">
-                                            <option value="budget">Under $20</option>
-                                            <option value="moderate" selected>$20-$50</option>
-                                            <option value="premium">$50-$100</option>
-                                            <option value="luxury">$100+</option>
+                                            <option value="budget">Under $25 (Budget-friendly)</option>
+                                            <option value="moderate" selected>$25-$60 (Moderate)</option>
+                                            <option value="premium">$60-$120 (Premium)</option>
+                                            <option value="luxury">$120+ (Luxury)</option>
                                         </select>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-4">
                                         <label class="form-label">Wine type preference</label>
                                         <select class="form-select" id="type-preference">
                                             <option value="any">Any Type</option>
@@ -112,34 +205,60 @@
                                             <option value="white">White Wine</option>
                                             <option value="rose">Rosé Wine</option>
                                             <option value="sparkling">Sparkling Wine</option>
+                                            <option value="dessert">Dessert Wine</option>
                                         </select>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-4">
                                         <label class="form-label">What will you be eating?</label>
                                         <select class="form-select" id="food-preference">
                                             <option value="none">Not pairing with food</option>
-                                            <option value="beef">Beef</option>
+                                            <option value="beef">Beef/Red Meat</option>
                                             <option value="chicken">Chicken/Poultry</option>
                                             <option value="fish">Fish/Seafood</option>
                                             <option value="pasta">Pasta</option>
                                             <option value="cheese">Cheese</option>
                                             <option value="dessert">Dessert</option>
+                                            <option value="spicy">Spicy Food</option>
+                                            <option value="vegetarian">Vegetarian</option>
+                                            <option value="salad">Salad/Light Food</option>
                                         </select>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-4">
+                                        <label class="form-label">Body preference <span id="body-preference-value">Medium</span></label>
+                                        <input type="range" class="form-range" min="1" max="5" id="body-preference" value="3">
+                                        <div class="range-labels">
+                                            <span>Light</span>
+                                            <span>Medium</span>
+                                            <span>Full</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
                                         <label class="form-label">What's the occasion?</label>
                                         <select class="form-select" id="occasion-preference">
                                             <option value="casual">Casual Dinner</option>
                                             <option value="celebration">Celebration</option>
                                             <option value="gift">Gift</option>
                                             <option value="collection">For My Collection</option>
+                                            <option value="dinner">Dinner Party</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Aging potential</label>
+                                        <select class="form-select" id="ageability-preference">
+                                            <option value="any">No Preference</option>
+                                            <option value="now">Ready to Drink Now</option>
+                                            <option value="aging">Age-worthy (Can be cellared)</option>
                                         </select>
                                     </div>
                                 </form>
                                 
                                 <div class="d-flex justify-content-between mt-4">
-                                    <button class="btn btn-outline-secondary" id="step-2-back">Back</button>
-                                    <button class="btn btn-primary" id="step-2-next">Get Recommendations</button>
+                                    <button class="btn btn-outline-secondary" id="step-2-back">
+                                        <i class="fas fa-arrow-left me-2"></i> Back
+                                    </button>
+                                    <button class="btn btn-primary" id="step-2-next">
+                                        Get Recommendations <i class="fas fa-wine-glass ms-2"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -149,14 +268,16 @@
                     <div id="recommendations-container" class="d-none">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h2 class="h3 mb-0">Your Perfect Matches</h2>
-                            <button id="restart-sommelier" class="btn btn-outline-secondary">Start Over</button>
+                            <button id="restart-sommelier" class="btn btn-outline-secondary">
+                                <i class="fas fa-redo me-2"></i>Start Over
+                            </button>
                         </div>
                         
                         <div id="recommendations" class="row">
                             <!-- Recommendations will be added here by JavaScript -->
                         </div>
                         
-                        <div class="card mt-4">
+                        <div class="card recommendation-explanation mt-4">
                             <div class="card-body">
                                 <h3 class="card-title h5">Why We Recommended These Wines</h3>
                                 <p id="recommendation-explanation" class="mb-3">
@@ -167,27 +288,292 @@
                                 </ul>
                             </div>
                         </div>
+                        
+                        <div class="text-center mt-4">
+                            <a href="wines.html" class="btn btn-burgundy">
+                                <i class="fas fa-wine-bottle me-2"></i>Explore Full Collection
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-dark text-white py-4">
+    <!-- How It Works Section -->
+    <section class="how-it-works-section py-5">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Terroir - La Cité Du Vin</h5>
-                    <p>An immersive wine experience platform</p>
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">How Our AI Sommelier Works</h2>
+                <p class="section-subtitle">Discover the technology and expertise behind our wine recommendations</p>
+                <div class="title-decoration">
+                    <span></span><i class="fas fa-cogs"></i><span></span>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; 2025 La Cité Du Vin. All rights reserved.</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="process-card animate-on-scroll">
+                        <div class="process-icon">
+                            <i class="fas fa-brain"></i>
+                            <span class="process-number">1</span>
+                        </div>
+                        <h3>Taste Analysis</h3>
+                        <p>Our algorithm analyzes your flavor preferences to understand your unique taste profile.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="process-card animate-on-scroll" style="animation-delay: 0.2s;">
+                        <div class="process-icon">
+                            <i class="fas fa-database"></i>
+                            <span class="process-number">2</span>
+                        </div>
+                        <h3>Wine Database</h3>
+                        <p>We match your preferences against our extensive database of wines, regions, and flavor profiles.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="process-card animate-on-scroll" style="animation-delay: 0.4s;">
+                        <div class="process-icon">
+                            <i class="fas fa-wine-glass-alt"></i>
+                            <span class="process-number">3</span>
+                        </div>
+                        <h3>Expert Curation</h3>
+                        <p>Our recommendations combine AI precision with the expertise of La Cité Du Vin's sommeliers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section py-5">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">What Wine Lovers Say</h2>
+                <p class="section-subtitle">Discover how our AI Sommelier has enhanced others' wine journeys</p>
+                <div class="title-decoration">
+                    <span></span><i class="fas fa-quote-right"></i><span></span>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"The AI Sommelier introduced me to a Nebbiolo that perfectly matched my preference for earthy flavors. I never would have discovered it on my own!"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sophie L.">
+                            </div>
+                            <div class="author-info">
+                                <h4>Sophie L.</h4>
+                                <p>Wine Enthusiast</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"I used the wine pairing feature for a dinner party, and all my guests were impressed with how perfectly the wines complemented each course."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Marcus T.">
+                            </div>
+                            <div class="author-info">
+                                <h4>Marcus T.</h4>
+                                <p>Home Chef</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"As a wine collector, I appreciate how the AI recognizes subtle preferences in body and structure. It's like having a personal sommelier at home."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Elena R.">
+                            </div>
+                            <div class="author-info">
+                                <h4>Elena R.</h4>
+                                <p>Wine Collector</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section py-5">
+        <div class="container">
+            <div class="newsletter-box">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="newsletter-title">Join Our Wine Journey</h2>
+                        <p class="newsletter-text">
+                            Subscribe to receive personalized recommendations, wine insights, and exclusive offers.
+                        </p>
+                    </div>
+                    <div class="col-lg-6">
+                        <form class="newsletter-form">
+                            <div class="input-with-button">
+                                <input type="email" placeholder="Your email address" required aria-label="Email address">
+                                <button type="submit" aria-label="Subscribe">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Your Collection</h3>
+                <button id="close-cart" class="close-cart" aria-label="Close cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be dynamically added here -->
+                <p class="empty-cart-message">Your collection is empty</p>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <button id="checkout-btn" class="btn btn-checkout" disabled>
+                    <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="search-overlay">
+        <div class="search-content">
+            <div class="search-header">
+                <h3>Search Wines</h3>
+                <button id="close-search" class="close-search" aria-label="Close search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-form-container">
+                <form class="search-form">
+                    <div class="search-input-group">
+                        <input type="text" id="search-input" placeholder="Search for wines, regions, or varieties..." aria-label="Search">
+                        <button type="submit" aria-label="Submit search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="search-suggestions">
+                    <h4>Popular Searches</h4>
+                    <div class="suggestion-tags">
+                        <span class="suggestion-tag">Bordeaux</span>
+                        <span class="suggestion-tag">Cabernet Sauvignon</span>
+                        <span class="suggestion-tag">Champagne</span>
+                        <span class="suggestion-tag">Tuscany</span>
+                        <span class="suggestion-tag">Chardonnay</span>
+                    </div>
+                </div>
+            </div>
+            <div class="search-results" id="search-results">
+                <!-- Search results will be displayed here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+
+    <!-- Modern Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="row">
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <div class="footer-brand">
+                            <h3>Terroir</h3>
+                            <p>An exclusive collection of fine wines from La Cité Du Vin, celebrating the art and culture of wine appreciation.</p>
+                        </div>
+                        <div class="social-icons">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                        <h5>Explore</h5>
+                        <ul class="footer-links">
+                            <li><a href="index.html">Wine Map</a></li>
+                            <li><a href="wines.html">Collection</a></li>
+                            <li><a href="sommelier.html">Sommelier</a></li>
+                            <li><a href="knowledge.html">Wine Education</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                        <h5>Visit Us</h5>
+                        <address class="footer-address">
+                            La Cité du Vin<br>
+                            134 Quai de Bacalan<br>
+                            33300 Bordeaux<br>
+                            France
+                        </address>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Stay Updated</h5>
+                        <p>Subscribe for exclusive offers and wine release notifications.</p>
+                        <form class="footer-form">
+                            <div class="input-with-button">
+                                <input type="email" placeholder="Your email address" required aria-label="Subscribe to newsletter">
+                                <button type="submit" aria-label="Submit subscription">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <p class="copyright">© 2025 La Cité Du Vin. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="footer-meta-links">
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Terms of Service</a>
+                            <a href="#">Cookie Policy</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- JavaScript Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
     <script src="js/sommelier.js"></script>
+    <script src="js/ui-components.js"></script>
 </body>
 </html>
