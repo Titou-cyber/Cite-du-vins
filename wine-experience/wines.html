@@ -3,106 +3,425 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wines | Terroir - La Cité Du Vin</title>
+    <title>Premium Wine Collection | Terroir</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/premium-styles.css">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+<body class="wine-shop-page">
+    <!-- Modern Navbar with Cart -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Terroir - La Cité Du Vin</a>
+            <a class="navbar-brand" href="index.html">
+                <span class="brand-icon"><i class="fas fa-wine-glass-alt"></i></span>
+                <span class="brand-text">Terroir</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Wine Map</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="wines.html">Wines</a></li>
-                    <li class="nav-item"><a class="nav-link" href="sommelier.html">AI Sommelier</a></li>
-                    <li class="nav-item"><a class="nav-link" href="knowledge.html">Wine Knowledge</a></li>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Discover</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="wines.html">Collection</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sommelier.html">Sommelier</a></li>
+                    <li class="nav-item"><a class="nav-link" href="knowledge.html">Expertise</a></li>
                 </ul>
+                <div class="navbar-nav ms-auto d-flex align-items-center">
+                    <div class="search-icon me-3">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="cart-icon me-3 position-relative" id="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </div>
+                    <div class="user-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="container text-center text-white">
-            <h1 class="display-4">Explore Our Wine Collection</h1>
-            <p class="lead">Discover exceptional wines from around the world</p>
+    <!-- Hero Section -->
+    <header class="wine-collection-hero">
+        <div class="container text-center">
+            <h1 class="display-4">Curated Wine Collection</h1>
+            <p class="lead">Exceptional wines selected from the world's finest vineyards</p>
         </div>
     </header>
 
-    <section id="wines" class="py-5">
+    <!-- Wine Collection -->
+    <section class="collection-section py-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 col-lg-3 mb-4">
-                    <div class="card wine-filter">
-                        <div class="card-body">
-                            <h3 class="card-title h5">Filter Wines</h3>
-                            <div class="mb-3">
-                                <label for="search" class="form-label">Search</label>
-                                <input type="text" class="form-control" id="search" placeholder="Enter wine name...">
+                <!-- Filters Sidebar -->
+                <div class="col-lg-3 mb-4">
+                    <div class="filters-container">
+                        <h3 class="filter-heading">Refine Selection</h3>
+                        <div class="filter-group">
+                            <label class="filter-label">Search</label>
+                            <div class="search-input">
+                                <input type="text" id="search" placeholder="Search wines..." class="form-control">
+                                <i class="fas fa-search"></i>
                             </div>
-                            <div class="mb-3">
-                                <label for="region" class="form-label">Region</label>
-                                <select class="form-select" id="region">
-                                    <option value="">All Regions</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="variety" class="form-label">Variety</label>
-                                <select class="form-select" id="variety">
-                                    <option value="">All Varieties</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="price-range" class="form-label">Price Range</label>
-                                <div class="row">
-                                    <div class="col">
-                                        <input type="number" class="form-control" id="min-price" placeholder="Min">
-                                    </div>
-                                    <div class="col">
-                                        <input type="number" class="form-control" id="max-price" placeholder="Max">
-                                    </div>
-                                </div>
-                            </div>
-                            <button id="apply-filters" class="btn btn-primary w-100">Apply Filters</button>
                         </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Region</label>
+                            <select id="region" class="form-select">
+                                <option value="">All Regions</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Variety</label>
+                            <select id="variety" class="form-select">
+                                <option value="">All Varieties</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Price Range</label>
+                            <div class="price-inputs">
+                                <input type="number" id="min-price" placeholder="Min" class="form-control">
+                                <span class="price-separator">-</span>
+                                <input type="number" id="max-price" placeholder="Max" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <button id="apply-filters" class="btn btn-filter">Apply Filters</button>
                     </div>
                 </div>
-                <div class="col-md-8 col-lg-9">
+                
+                <!-- Wine Grid -->
+                <div class="col-lg-9">
                     <div id="wine-list" class="row">
                         <!-- Wine cards will be dynamically added here -->
                         <div class="text-center py-5 col-12">
-                            <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Loading...</span>
+                            <div class="spinner">
+                                <div class="double-bounce1"></div>
+                                <div class="double-bounce2"></div>
                             </div>
-                            <p class="mt-2">Loading wines...</p>
+                            <p class="mt-4">Discovering exceptional wines...</p>
                         </div>
                     </div>
-                    <div class="text-center mt-4">
-                        <button id="load-more" class="btn btn-outline-primary">Load More</button>
+                    <div class="text-center mt-5">
+                        <button id="load-more" class="btn btn-outline">Explore More Wines</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-dark text-white py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Terroir - La Cité Du Vin</h5>
-                    <p>An immersive wine experience platform</p>
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Your Collection</h3>
+                <button id="close-cart" class="close-cart"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be dynamically added here -->
+                <p class="empty-cart-message">Your collection is empty</p>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; 2025 La Cité Du Vin. All rights reserved.</p>
+                <button id="checkout-btn" class="btn btn-checkout">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkout-modal">
+        <div class="checkout-content">
+            <div class="checkout-header">
+                <h3>Complete Your Order</h3>
+                <button id="close-checkout" class="close-checkout"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="checkout-body">
+                <div class="checkout-steps">
+                    <div class="step active" data-step="1">1. Delivery</div>
+                    <div class="step" data-step="2">2. Payment</div>
+                    <div class="step" data-step="3">3. Confirmation</div>
+                </div>
+                
+                <!-- Step 1: Delivery Options -->
+                <div class="checkout-step-content active" id="step-1">
+                    <h4>Delivery Method</h4>
+                    <div class="delivery-options">
+                        <div class="delivery-option">
+                            <input type="radio" name="delivery" id="click-collect" value="click-collect" checked>
+                            <label for="click-collect">
+                                <div class="option-info">
+                                    <span class="option-title">Click & Collect</span>
+                                    <span class="option-desc">Pick up at La Cité Du Vin, Bordeaux</span>
+                                </div>
+                                <span class="option-price">Free</span>
+                            </label>
+                        </div>
+                        <div class="delivery-option">
+                            <input type="radio" name="delivery" id="standard" value="standard">
+                            <label for="standard">
+                                <div class="option-info">
+                                    <span class="option-title">Standard Shipping</span>
+                                    <span class="option-desc">5-7 business days</span>
+                                </div>
+                                <span class="option-price">$12</span>
+                            </label>
+                        </div>
+                        <div class="delivery-option">
+                            <input type="radio" name="delivery" id="express" value="express">
+                            <label for="express">
+                                <div class="option-info">
+                                    <span class="option-title">Express Delivery</span>
+                                    <span class="option-desc">2-3 business days</span>
+                                </div>
+                                <span class="option-price">$24</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <h4>Shipping Information</h4>
+                    <form id="shipping-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name">First Name</label>
+                                <input type="text" id="first-name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" id="last-name" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" id="address" class="form-control" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="postal-code">Postal Code</label>
+                                <input type="text" id="postal-code" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <select id="country" class="form-control" required>
+                                <option value="">Select Country</option>
+                                <option value="FR">France</option>
+                                <option value="US">United States</option>
+                                <option value="GB">United Kingdom</option>
+                                <option value="DE">Germany</option>
+                                <option value="IT">Italy</option>
+                                <option value="ES">Spain</option>
+                                <option value="CA">Canada</option>
+                                <option value="AU">Australia</option>
+                                <option value="JP">Japan</option>
+                            </select>
+                        </div>
+                    </form>
+                    
+                    <div class="step-actions">
+                        <button id="to-step-2" class="btn btn-next">Continue to Payment</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Payment -->
+                <div class="checkout-step-content" id="step-2">
+                    <h4>Payment Method</h4>
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <input type="radio" name="payment" id="credit-card" value="credit-card" checked>
+                            <label for="credit-card">
+                                <div class="option-info">
+                                    <span class="option-title">Credit Card</span>
+                                    <div class="card-icons">
+                                        <i class="fab fa-cc-visa"></i>
+                                        <i class="fab fa-cc-mastercard"></i>
+                                        <i class="fab fa-cc-amex"></i>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" name="payment" id="paypal" value="paypal">
+                            <label for="paypal">
+                                <div class="option-info">
+                                    <span class="option-title">PayPal</span>
+                                    <i class="fab fa-paypal payment-icon"></i>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Credit Card Form -->
+                    <div id="credit-card-form">
+                        <div class="form-group">
+                            <label for="card-number">Card Number</label>
+                            <input type="text" id="card-number" class="form-control" placeholder="XXXX XXXX XXXX XXXX" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiry">Expiry Date</label>
+                                <input type="text" id="expiry" class="form-control" placeholder="MM/YY" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" class="form-control" placeholder="XXX" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="card-name">Name on Card</label>
+                            <input type="text" id="card-name" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="order-summary">
+                        <h4>Order Summary</h4>
+                        <div class="summary-item">
+                            <span>Subtotal</span>
+                            <span id="summary-subtotal">$0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Shipping</span>
+                            <span id="summary-shipping">$0.00</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Total</span>
+                            <span id="summary-total">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button id="back-to-step-1" class="btn btn-back">Back</button>
+                        <button id="to-step-3" class="btn btn-next">Place Order</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Confirmation -->
+                <div class="checkout-step-content" id="step-3">
+                    <div class="order-confirmation">
+                        <div class="confirmation-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h4>Thank You for Your Order!</h4>
+                        <p>Your order has been successfully placed.</p>
+                        <div class="order-details">
+                            <div class="order-info">
+                                <span>Order Number:</span>
+                                <span id="order-number">TRR-2025-XXXX</span>
+                            </div>
+                            <div class="order-info">
+                                <span>Order Date:</span>
+                                <span id="order-date"></span>
+                            </div>
+                            <div class="order-info">
+                                <span>Estimated Delivery:</span>
+                                <span id="delivery-date"></span>
+                            </div>
+                        </div>
+                        <p class="confirmation-message">A confirmation email has been sent to <span id="confirmation-email"></span>.</p>
+                        
+                        <div class="tracking-section">
+                            <h5>Track Your Order</h5>
+                            <p>You can track your order status using the link below:</p>
+                            <a href="#" class="btn btn-tracking">Track Order</a>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button id="finish-order" class="btn btn-finish">Continue Shopping</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+
+    <!-- Modern Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="row">
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <div class="footer-brand">
+                            <h3>Terroir</h3>
+                            <p>An exclusive collection of fine wines from La Cité Du Vin, celebrating the art and culture of wine appreciation.</p>
+                        </div>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                        <h5>Explore</h5>
+                        <ul class="footer-links">
+                            <li><a href="index.html">Wine Map</a></li>
+                            <li><a href="wines.html">Collection</a></li>
+                            <li><a href="sommelier.html">Sommelier</a></li>
+                            <li><a href="knowledge.html">Wine Education</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                        <h5>Visit Us</h5>
+                        <p class="footer-address">
+                            La Cité du Vin<br>
+                            134 Quai de Bacalan<br>
+                            33300 Bordeaux<br>
+                            France
+                        </p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Stay Updated</h5>
+                        <p>Subscribe for exclusive offers and wine release notifications.</p>
+                        <form class="footer-form">
+                            <div class="input-with-button">
+                                <input type="email" placeholder="Your email address" required>
+                                <button type="submit"><i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <p class="copyright">© 2025 La Cité Du Vin. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="footer-meta-links">
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Terms of Service</a>
+                            <a href="#">Cookie Policy</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/wines.js"></script>
+    <script src="js/enhanced-wines.js"></script>
 </body>
 </html>

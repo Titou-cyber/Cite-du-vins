@@ -28,86 +28,98 @@
     <header class="hero">
         <div class="container text-center text-white">
             <h1 class="display-4">Wine Knowledge</h1>
-            <p class="lead">Learn about wine and test your knowledge</p>
+            <p class="lead">Learn about wine and test your expertise</p>
         </div>
     </header>
 
     <section class="py-5">
         <div class="container">
-            <ul class="nav nav-tabs" id="knowledgeTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="learn-tab" data-bs-toggle="tab" data-bs-target="#learn" type="button" role="tab">Learn</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="quiz-tab" data-bs-toggle="tab" data-bs-target="#quiz" type="button" role="tab">Wine Quiz</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="glossary-tab" data-bs-toggle="tab" data-bs-target="#glossary" type="button" role="tab">Wine Glossary</button>
-                </li>
-            </ul>
+            <!-- Custom Navigation Tabs -->
+            <div class="mb-4">
+                <div class="d-flex border-bottom">
+                    <div class="knowledge-tab active" data-tab="learn">Learn</div>
+                    <div class="knowledge-tab" data-tab="quiz">Wine Quiz</div>
+                    <div class="knowledge-tab" data-tab="glossary">Wine Glossary</div>
+                </div>
+            </div>
             
-            <div class="tab-content py-4" id="knowledgeTabsContent">
+            <div class="tab-content py-2">
                 <!-- Learn Tab -->
-                <div class="tab-pane fade show active" id="learn" role="tabpanel" aria-labelledby="learn-tab">
+                <div id="learn-tab-content" class="tab-pane active">
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <div class="card h-100">
-                                <img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" class="card-img-top" alt="Wine Basics">
-                                <div class="card-body">
-                                    <h5 class="card-title">Wine Basics</h5>
-                                    <p class="card-text">Learn about different wine types, production methods, and basic tasting techniques.</p>
-                                    <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#wineBasics">Read More</button>
-                                    <div class="collapse mt-3" id="wineBasics">
-                                        <h6>Types of Wine</h6>
-                                        <p>There are five basic types of wine: red, white, rosé, sparkling, and dessert. Each has distinct characteristics based on the grapes used and production methods.</p>
-                                        
-                                        <h6>Wine Production</h6>
-                                        <p>Wine production involves harvesting grapes, crushing them, fermenting the juice, aging the wine, and finally bottling it. Each step influences the final flavor.</p>
-                                        
-                                        <h6>Wine Tasting</h6>
-                                        <p>Wine tasting involves examining a wine's appearance, smelling its aromas, and tasting it to evaluate its flavors, body, and finish.</p>
+                            <div class="card knowledge-module">
+                                <div class="wine-type-icon wine-type-red">
+                                    <h3 class="text-white">Wine Basics</h3>
+                                </div>
+                                <div class="card-body knowledge-module-content">
+                                    <p class="text-muted mb-3">Learn about different wine types, production methods, and basic tasting techniques.</p>
+                                    
+                                    <div class="mb-3">
+                                        <h5>Types of Wine</h5>
+                                        <p class="small">There are five basic types of wine: red, white, rosé, sparkling, and dessert. Each has distinct characteristics based on the grapes used and production methods.</p>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h5>Wine Production</h5>
+                                        <p class="small">Wine production involves harvesting grapes, crushing them, fermenting the juice, aging the wine, and finally bottling it. Each step influences the final flavor.</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <h5>Wine Tasting</h5>
+                                        <p class="small">Wine tasting involves examining a wine's appearance, smelling its aromas, and tasting it to evaluate its flavors, body, and finish.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="col-md-4 mb-4">
-                            <div class="card h-100">
-                                <img src="https://images.unsplash.com/photo-1474722883778-792e7990302f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80" class="card-img-top" alt="Wine Regions">
-                                <div class="card-body">
-                                    <h5 class="card-title">Wine Regions</h5>
-                                    <p class="card-text">Discover the major wine regions of the world and what makes each unique.</p>
-                                    <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#wineRegions">Read More</button>
-                                    <div class="collapse mt-3" id="wineRegions">
-                                        <h6>France</h6>
-                                        <p>France is home to famous regions like Bordeaux, Burgundy, and Champagne. Each region specializes in certain grape varieties and has distinct terroir.</p>
-                                        
-                                        <h6>Italy</h6>
-                                        <p>Italy boasts more grape varieties than any other country, with regions like Tuscany, Piedmont, and Veneto producing world-renowned wines.</p>
-                                        
-                                        <h6>New World Regions</h6>
-                                        <p>Regions like Napa Valley (USA), Mendoza (Argentina), and Marlborough (New Zealand) have made their mark with distinctive wines and innovative techniques.</p>
+                            <div class="card knowledge-module">
+                                <div class="wine-type-icon wine-type-white">
+                                    <h3 class="text-dark">Wine Regions</h3>
+                                </div>
+                                <div class="card-body knowledge-module-content">
+                                    <p class="text-muted mb-3">Discover the major wine regions of the world and what makes each unique.</p>
+                                    
+                                    <div class="mb-3">
+                                        <h5>France</h5>
+                                        <p class="small">France is home to famous regions like Bordeaux, Burgundy, and Champagne. Each region specializes in certain grape varieties and has distinct terroir.</p>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h5>Italy</h5>
+                                        <p class="small">Italy boasts more grape varieties than any other country, with regions like Tuscany, Piedmont, and Veneto producing world-renowned wines.</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <h5>New World Regions</h5>
+                                        <p class="small">Regions like Napa Valley (USA), Mendoza (Argentina), and Marlborough (New Zealand) have made their mark with distinctive wines and innovative techniques.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="col-md-4 mb-4">
-                            <div class="card h-100">
-                                <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" class="card-img-top" alt="Food Pairing">
-                                <div class="card-body">
-                                    <h5 class="card-title">Food and Wine Pairing</h5>
-                                    <p class="card-text">Master the art of pairing wines with food to enhance both culinary experiences.</p>
-                                    <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#foodPairing">Read More</button>
-                                    <div class="collapse mt-3" id="foodPairing">
-                                        <h6>Basic Principles</h6>
-                                        <p>The basic principle of wine pairing is to match the weight and intensity of food with a similarly weighted wine.</p>
-                                        
-                                        <h6>Red Wine Pairings</h6>
-                                        <p>Red wines typically pair well with red meats, hearty pasta dishes, and strong cheeses.</p>
-                                        
-                                        <h6>White Wine Pairings</h6>
-                                        <p>White wines often complement fish, chicken, and lighter vegetable dishes.</p>
+                            <div class="card knowledge-module">
+                                <div class="wine-type-icon wine-type-sparkling">
+                                    <h3 class="text-dark">Food Pairing</h3>
+                                </div>
+                                <div class="card-body knowledge-module-content">
+                                    <p class="text-muted mb-3">Master the art of pairing wines with food to enhance both culinary experiences.</p>
+                                    
+                                    <div class="mb-3">
+                                        <h5>Basic Principles</h5>
+                                        <p class="small">The basic principle of wine pairing is to match the weight and intensity of food with a similarly weighted wine.</p>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h5>Red Wine Pairings</h5>
+                                        <p class="small">Red wines typically pair well with red meats, hearty pasta dishes, and strong cheeses.</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <h5>White Wine Pairings</h5>
+                                        <p class="small">White wines often complement fish, chicken, and lighter vegetable dishes.</p>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +128,7 @@
                 </div>
                 
                 <!-- Quiz Tab -->
-                <div class="tab-pane fade" id="quiz" role="tabpanel" aria-labelledby="quiz-tab">
+                <div id="quiz-tab-content" class="tab-pane">
                     <div class="row justify-content-center">
                         <div class="col-md-8">
                             <div class="card">
@@ -130,20 +142,25 @@
                                     </div>
                                     
                                     <div id="quiz-container" class="d-none">
-                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
                                             <h3 class="h5 mb-0">Question <span id="current-question">1</span>/10</h3>
-                                            <div class="progress" style="width: 150px; height: 10px;">
-                                                <div id="quiz-progress" class="progress-bar" role="progressbar" style="width: 10%;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
                                         </div>
                                         
-                                        <div id="question-container">
+                                        <div class="quiz-progress">
+                                            <div id="quiz-progress-bar" class="quiz-progress-bar" style="width: 10%;"></div>
+                                        </div>
+                                        
+                                        <div id="question-container" class="my-4">
                                             <!-- Questions will be inserted here -->
                                         </div>
                                         
+                                        <div id="quiz-explanation" class="quiz-explanation d-none">
+                                            <!-- Explanation will be inserted here -->
+                                        </div>
+                                        
                                         <div class="d-flex justify-content-between mt-4">
-                                            <button id="prev-question" class="btn btn-secondary d-none">Previous</button>
-                                            <button id="next-question" class="btn btn-primary">Next</button>
+                                            <button id="prev-question" class="btn btn-outline-secondary d-none">Previous</button>
+                                            <button id="next-question" class="btn btn-primary" disabled>Next</button>
                                         </div>
                                     </div>
                                     
@@ -153,7 +170,7 @@
                                             <div class="display-4 mb-2">
                                                 <span id="result-score">0</span>/10
                                             </div>
-                                            <p id="result-message">Your knowledge level will appear here.</p>
+                                            <p id="result-message" class="lead">Your knowledge level will appear here.</p>
                                         </div>
                                         <button id="restart-quiz" class="btn btn-primary">Take Quiz Again</button>
                                     </div>
@@ -164,48 +181,83 @@
                 </div>
                 
                 <!-- Glossary Tab -->
-                <div class="tab-pane fade" id="glossary" role="tabpanel" aria-labelledby="glossary-tab">
+                <div id="glossary-tab-content" class="tab-pane">
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title">Wine Terminology Glossary</h3>
-                            <p class="card-text">Explore common wine terms to enhance your wine vocabulary.</p>
+                            <h3 class="card-title mb-4">Wine Terminology Glossary</h3>
+                            <p class="card-text mb-4">Explore common wine terms to enhance your wine vocabulary.</p>
                             
-                            <div class="row mt-4">
+                            <div class="row">
                                 <div class="col-md-6">
-                                    <dl>
+                                    <div class="glossary-term">
                                         <dt>Acidity</dt>
                                         <dd>The tart or sour taste in wine that makes it refreshing and gives it structure.</dd>
-                                        
+                                    </div>
+                                    
+                                    <div class="glossary-term">
                                         <dt>Body</dt>
                                         <dd>The perception of weight and fullness of a wine in your mouth (light, medium, or full).</dd>
-                                        
+                                    </div>
+                                    
+                                    <div class="glossary-term">
                                         <dt>Bouquet</dt>
                                         <dd>The complex aromas that develop in wines as they age.</dd>
-                                        
+                                    </div>
+                                    
+                                    <div class="glossary-term">
                                         <dt>Finish</dt>
                                         <dd>The taste and sensations that linger after swallowing wine.</dd>
-                                        
+                                    </div>
+                                    
+                                    <div class="glossary-term">
                                         <dt>Legs</dt>
                                         <dd>The streams of wine that run down the side of a glass after swirling, indicating alcohol content.</dd>
-                                    </dl>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <dl>
+                                    <div class="glossary-term">
                                         <dt>Tannins</dt>
                                         <dd>Compounds that create a drying sensation in the mouth, mainly found in red wines.</dd>
-                                        
+                                    </div>
+                                    
+                                    <div class="glossary-term">
                                         <dt>Terroir</dt>
                                         <dd>The complete natural environment in which a wine is produced, including soil, climate, and topography.</dd>
-                                        
+                                    </div>
+                                    
+                                    <div class="glossary-term">
                                         <dt>Vintage</dt>
                                         <dd>The year in which a wine's grapes were harvested.</dd>
-                                        
+                                    </div>
+                                    
+                                    <div class="glossary-term">
                                         <dt>Sommelier</dt>
                                         <dd>A trained wine professional who specializes in all aspects of wine service and food pairing.</dd>
-                                        
+                                    </div>
+                                    
+                                    <div class="glossary-term">
                                         <dt>Appellation</dt>
                                         <dd>A legally defined and protected geographical indication used to identify where grapes for a wine were grown.</dd>
-                                    </dl>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glossary-vocabulary">
+                                <h4 class="h5 mb-3">Wine Tasting Vocabulary</h4>
+                                <p class="mb-3">When describing wines, professionals use these terms:</p>
+                                <div>
+                                    <span class="vocabulary-tag">Bold</span>
+                                    <span class="vocabulary-tag">Crisp</span>
+                                    <span class="vocabulary-tag">Earthy</span>
+                                    <span class="vocabulary-tag">Fruity</span>
+                                    <span class="vocabulary-tag">Herbaceous</span>
+                                    <span class="vocabulary-tag">Jammy</span>
+                                    <span class="vocabulary-tag">Mineral</span>
+                                    <span class="vocabulary-tag">Oaky</span>
+                                    <span class="vocabulary-tag">Tannic</span>
+                                    <span class="vocabulary-tag">Balanced</span>
+                                    <span class="vocabulary-tag">Complex</span>
+                                    <span class="vocabulary-tag">Elegant</span>
                                 </div>
                             </div>
                         </div>

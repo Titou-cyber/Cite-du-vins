@@ -35,71 +35,140 @@
     <section id="sommelier" class="py-5">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h3 class="card-title h4">Find Your Perfect Wine</h3>
-                            <p>Answer a few questions to get personalized wine recommendations</p>
-                            <form id="sommelier-form">
-                                <div class="mb-3">
-                                    <label class="form-label">Which flavors do you enjoy?</label>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="fruity" id="flavor-fruity">
-                                        <label class="form-check-label" for="flavor-fruity">Fruity</label>
+                <div class="col-md-8">
+                    <!-- Step Indicator -->
+                    <div class="sommelier-progress mb-4" id="sommelier-progress">
+                        <div class="sommelier-step active" id="step-1">
+                            1
+                            <span class="sommelier-step-label">Flavors</span>
+                        </div>
+                        <div class="sommelier-step" id="step-2">
+                            2
+                            <span class="sommelier-step-label">Details</span>
+                        </div>
+                        <div class="sommelier-step" id="step-3">
+                            3
+                            <span class="sommelier-step-label">Results</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Step Forms -->
+                    <div id="step-form-container">
+                        <!-- Step 1: Flavors -->
+                        <div class="card mb-4" id="step-form-1">
+                            <div class="card-body">
+                                <h3 class="card-title h4 mb-4">What flavors do you enjoy?</h3>
+                                <p class="text-muted mb-4">Select all that apply to help us find your perfect wine match.</p>
+                                
+                                <div class="row mb-4">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="preference-option" data-preference="fruity">
+                                            Fruity (berries, citrus, tropical)
+                                        </div>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="earthy" id="flavor-earthy">
-                                        <label class="form-check-label" for="flavor-earthy">Earthy</label>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="preference-option" data-preference="earthy">
+                                            Earthy (soil, leather, mineral)
+                                        </div>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="spicy" id="flavor-spicy">
-                                        <label class="form-check-label" for="flavor-spicy">Spicy</label>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="preference-option" data-preference="spicy">
+                                            Spicy (pepper, cinnamon, herbs)
+                                        </div>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="floral" id="flavor-floral">
-                                        <label class="form-check-label" for="flavor-floral">Floral</label>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="preference-option" data-preference="floral">
+                                            Floral (rose, violet, blossom)
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">What's your price range?</label>
-                                    <select class="form-select" id="price-preference">
-                                        <option value="budget">Under $20</option>
-                                        <option value="moderate">$20-$50</option>
-                                        <option value="premium">$50-$100</option>
-                                        <option value="luxury">$100+</option>
-                                    </select>
+                                
+                                <div class="text-end">
+                                    <button class="btn btn-primary" id="step-1-next">Next</button>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Wine type preference</label>
-                                    <select class="form-select" id="type-preference">
-                                        <option value="any">Any Type</option>
-                                        <option value="red">Red Wine</option>
-                                        <option value="white">White Wine</option>
-                                        <option value="rose">Rosé Wine</option>
-                                        <option value="sparkling">Sparkling Wine</option>
-                                    </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Details -->
+                        <div class="card mb-4 d-none" id="step-form-2">
+                            <div class="card-body">
+                                <h3 class="card-title h4 mb-4">Tell us more about your preferences</h3>
+                                
+                                <form id="sommelier-details-form">
+                                    <div class="mb-3">
+                                        <label class="form-label">What's your price range?</label>
+                                        <select class="form-select" id="price-preference">
+                                            <option value="budget">Under $20</option>
+                                            <option value="moderate" selected>$20-$50</option>
+                                            <option value="premium">$50-$100</option>
+                                            <option value="luxury">$100+</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Wine type preference</label>
+                                        <select class="form-select" id="type-preference">
+                                            <option value="any">Any Type</option>
+                                            <option value="red">Red Wine</option>
+                                            <option value="white">White Wine</option>
+                                            <option value="rose">Rosé Wine</option>
+                                            <option value="sparkling">Sparkling Wine</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">What will you be eating?</label>
+                                        <select class="form-select" id="food-preference">
+                                            <option value="none">Not pairing with food</option>
+                                            <option value="beef">Beef</option>
+                                            <option value="chicken">Chicken/Poultry</option>
+                                            <option value="fish">Fish/Seafood</option>
+                                            <option value="pasta">Pasta</option>
+                                            <option value="cheese">Cheese</option>
+                                            <option value="dessert">Dessert</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">What's the occasion?</label>
+                                        <select class="form-select" id="occasion-preference">
+                                            <option value="casual">Casual Dinner</option>
+                                            <option value="celebration">Celebration</option>
+                                            <option value="gift">Gift</option>
+                                            <option value="collection">For My Collection</option>
+                                        </select>
+                                    </div>
+                                </form>
+                                
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button class="btn btn-outline-secondary" id="step-2-back">Back</button>
+                                    <button class="btn btn-primary" id="step-2-next">Get Recommendations</button>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">What will you be eating?</label>
-                                    <select class="form-select" id="food-preference">
-                                        <option value="none">Not pairing with food</option>
-                                        <option value="beef">Beef</option>
-                                        <option value="chicken">Chicken/Poultry</option>
-                                        <option value="fish">Fish/Seafood</option>
-                                        <option value="pasta">Pasta</option>
-                                        <option value="cheese">Cheese</option>
-                                        <option value="dessert">Dessert</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">Get Recommendations</button>
-                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Results Container (initially hidden) -->
+                    <div id="recommendations-container" class="d-none">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="h3 mb-0">Your Perfect Matches</h2>
+                            <button id="restart-sommelier" class="btn btn-outline-secondary">Start Over</button>
+                        </div>
+                        
+                        <div id="recommendations" class="row">
+                            <!-- Recommendations will be added here by JavaScript -->
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-body">
+                                <h3 class="card-title h5">Why We Recommended These Wines</h3>
+                                <p id="recommendation-explanation" class="mb-3">
+                                    Based on your preferences, we've found wines that match your taste profile.
+                                </p>
+                                <ul id="recommendation-reasons" class="mb-0">
+                                    <!-- Reasons will be added here by JavaScript -->
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div id="recommendations" class="row mt-4">
-                <!-- Recommendations will be added here -->
             </div>
         </div>
     </section>

@@ -5,87 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terroir - La Cité Du Vin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/premium-styles.css">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+<body class="map-page">
+    <!-- Modern Navbar with Cart -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Terroir - La Cité Du Vin</a>
+            <a class="navbar-brand" href="index.html">
+                <span class="brand-icon"><i class="fas fa-wine-glass-alt"></i></span>
+                <span class="brand-text">Terroir</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="index.html">Wine Map</a></li>
-                    <li class="nav-item"><a class="nav-link" href="wines.html">Wines</a></li>
-                    <li class="nav-item"><a class="nav-link" href="sommelier.html">AI Sommelier</a></li>
-                    <li class="nav-item"><a class="nav-link" href="knowledge.html">Wine Knowledge</a></li>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Discover</a></li>
+                    <li class="nav-item"><a class="nav-link" href="wines.html">Collection</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sommelier.html">Sommelier</a></li>
+                    <li class="nav-item"><a class="nav-link" href="knowledge.html">Expertise</a></li>
                 </ul>
+                <div class="navbar-nav ms-auto d-flex align-items-center">
+                    <div class="search-icon me-3">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="cart-icon me-3 position-relative" id="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </div>
+                    <div class="user-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="container text-center text-white">
-            <h1 class="display-4">Interactive Wine Map</h1>
-            <p class="lead">Explore wine regions around the world</p>
+    <!-- Hero Map Section -->
+    <header class="map-hero">
+        <div class="map-overlay">
+            <div class="container text-center text-white">
+                <h1 class="display-3">Explore Wine Regions</h1>
+                <p class="lead">Journey through the world's most renowned terroirs</p>
+            </div>
         </div>
+        <div id="hero-map" class="hero-map-container"></div>
     </header>
 
-    <section id="map-section" class="py-5">
+    <!-- Map Explorer Section -->
+    <section class="map-explorer py-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-3 mb-4">
-                    <div class="card map-filters">
-                        <div class="card-body">
-                            <h3 class="card-title h5">Filter Regions</h3>
-                            <div class="mb-3">
-                                <label for="continent" class="form-label">Continent</label>
-                                <select class="form-select" id="continent">
-                                    <option value="all">All Continents</option>
-                                    <option value="europe">Europe</option>
-                                    <option value="northamerica">North America</option>
-                                    <option value="southamerica">South America</option>
-                                    <option value="africa">Africa</option>
-                                    <option value="asia">Asia</option>
-                                    <option value="oceania">Oceania</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="map-country" class="form-label">Country</label>
-                                <select class="form-select" id="map-country">
-                                    <option value="all">All Countries</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="map-variety" class="form-label">Major Grape Variety</label>
-                                <select class="form-select" id="map-variety">
-                                    <option value="all">All Varieties</option>
-                                </select>
-                            </div>
-                            <button id="apply-map-filters" class="btn btn-primary w-100">Apply Filters</button>
+                <!-- Map Filters -->
+                <div class="col-lg-3 mb-4">
+                    <div class="filters-container">
+                        <h3 class="filter-heading">Region Filters</h3>
+                        <div class="filter-group">
+                            <label class="filter-label">Continent</label>
+                            <select id="continent" class="form-select">
+                                <option value="all">All Continents</option>
+                                <option value="europe">Europe</option>
+                                <option value="northamerica">North America</option>
+                                <option value="southamerica">South America</option>
+                                <option value="africa">Africa</option>
+                                <option value="asia">Asia</option>
+                                <option value="oceania">Oceania</option>
+                            </select>
                         </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Country</label>
+                            <select id="map-country" class="form-select">
+                                <option value="all">All Countries</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Grape Variety</label>
+                            <select id="map-variety" class="form-select">
+                                <option value="all">All Varieties</option>
+                            </select>
+                        </div>
+                        <button id="apply-map-filters" class="btn btn-filter">Apply Filters</button>
                     </div>
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            <h3 class="card-title h5">Region Statistics</h3>
-                            <div id="region-stats">
-                                <p>Select a region on the map to see statistics.</p>
-                            </div>
+                    
+                    <div class="region-stats-container mt-4">
+                        <h3 class="filter-heading">Region Stats</h3>
+                        <div id="region-stats">
+                            <p class="text-center">Select a region on the map to see statistics.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-9">
-                    <div class="card mb-4">
-                        <div class="card-body p-0">
-                            <div id="wine-map" class="map-container"></div>
+                
+                <!-- Interactive Map & Details -->
+                <div class="col-lg-9">
+                    <div class="map-content-container">
+                        <div class="map-container">
+                            <div id="wine-map" class="wine-map"></div>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title h5" id="region-title">Region Details</h3>
-                            <div id="region-details">
+                        
+                        <div class="region-details-container mt-4">
+                            <h3 id="region-title" class="region-title">Region Details</h3>
+                            <div id="region-details" class="region-details">
                                 <p>Select a region on the map to see details.</p>
                             </div>
                         </div>
@@ -94,16 +118,140 @@
             </div>
         </div>
     </section>
-
-    <footer class="bg-dark text-white py-4">
+    
+    <!-- Region Showcase -->
+    <section class="region-showcase py-5 bg-light">
         <div class="container">
+            <h2 class="section-title text-center mb-5">Iconic Wine Regions</h2>
+            
             <div class="row">
-                <div class="col-md-6">
-                    <h5>Terroir - La Cité Du Vin</h5>
-                    <p>An immersive wine experience platform</p>
+                <div class="col-md-4 mb-4">
+                    <div class="region-card" onclick="window.location.href='wines.html?region=Bordeaux'">
+                        <div class="region-image">
+                            <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Bordeaux, France">
+                            <div class="region-overlay">
+                                <span class="region-name">Bordeaux</span>
+                                <span class="region-country">France</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; 2025 La Cité Du Vin. All rights reserved.</p>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="region-card" onclick="window.location.href='wines.html?region=Tuscany'">
+                        <div class="region-image">
+                            <img src="https://images.unsplash.com/photo-1566419808810-658178380987?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Tuscany, Italy">
+                            <div class="region-overlay">
+                                <span class="region-name">Tuscany</span>
+                                <span class="region-country">Italy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="region-card" onclick="window.location.href='wines.html?region=Napa+Valley'">
+                        <div class="region-image">
+                            <img src="https://images.unsplash.com/photo-1507434800635-78f25bc18784?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Napa Valley, USA">
+                            <div class="region-overlay">
+                                <span class="region-name">Napa Valley</span>
+                                <span class="region-country">United States</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Your Collection</h3>
+                <button id="close-cart" class="close-cart"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be dynamically added here -->
+                <p class="empty-cart-message">Your collection is empty</p>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <button id="checkout-btn" class="btn btn-checkout">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkout-modal">
+        <!-- Same checkout content as in wines.html -->
+    </div>
+    
+    <!-- Overlay -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+
+    <!-- Modern Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="row">
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <div class="footer-brand">
+                            <h3>Terroir</h3>
+                            <p>An exclusive collection of fine wines from La Cité Du Vin, celebrating the art and culture of wine appreciation.</p>
+                        </div>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                        <h5>Explore</h5>
+                        <ul class="footer-links">
+                            <li><a href="index.html">Wine Map</a></li>
+                            <li><a href="wines.html">Collection</a></li>
+                            <li><a href="sommelier.html">Sommelier</a></li>
+                            <li><a href="knowledge.html">Wine Education</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                        <h5>Visit Us</h5>
+                        <p class="footer-address">
+                            La Cité du Vin<br>
+                            134 Quai de Bacalan<br>
+                            33300 Bordeaux<br>
+                            France
+                        </p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Stay Updated</h5>
+                        <p>Subscribe for exclusive offers and wine release notifications.</p>
+                        <form class="footer-form">
+                            <div class="input-with-button">
+                                <input type="email" placeholder="Your email address" required>
+                                <button type="submit"><i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <p class="copyright">© 2025 La Cité Du Vin. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="footer-meta-links">
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Terms of Service</a>
+                            <a href="#">Cookie Policy</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -111,6 +259,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-    <script src="js/map.js"></script>
+    <script src="js/premium-map.js"></script>
 </body>
 </html>

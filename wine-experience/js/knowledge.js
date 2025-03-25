@@ -1,14 +1,19 @@
-// Wine Knowledge and Quiz JavaScript
+// Enhanced Wine Knowledge and Quiz JavaScript
+
+// DOM Elements for Tab Navigation
+const tabButtons = document.querySelectorAll('.knowledge-tab');
+const tabContents = document.querySelectorAll('.tab-pane');
 
 // DOM Elements for Quiz
 const startQuizButton = document.getElementById('start-quiz');
 const quizIntro = document.getElementById('quiz-intro');
 const quizContainer = document.getElementById('quiz-container');
 const questionContainer = document.getElementById('question-container');
+const quizExplanationContainer = document.getElementById('quiz-explanation');
 const nextButton = document.getElementById('next-question');
 const prevButton = document.getElementById('prev-question');
 const currentQuestionSpan = document.getElementById('current-question');
-const progressBar = document.getElementById('quiz-progress');
+const progressBar = document.getElementById('quiz-progress-bar');
 const quizResults = document.getElementById('quiz-results');
 const resultScoreSpan = document.getElementById('result-score');
 const resultMessageP = document.getElementById('result-message');
@@ -18,6 +23,7 @@ const restartQuizButton = document.getElementById('restart-quiz');
 let currentQuestion = 0;
 let answers = [];
 let score = 0;
+let optionSelected = false;
 
 // Quiz Questions
 const questions = [
@@ -83,9 +89,55 @@ const questions = [
     }
 ];
 
-// Initialize Quiz
-document.addEventListener('DOMContentLoaded', initQuiz);
+// Initialize the application
+document.addEventListener('DOMContentLoaded', init);
 
+// Initialize 
+function init() {
+    // Set up tab navigation
+    setupTabs();
+    
+    // Set up quiz functionality
+    initQuiz();
+}
+
+// Tab navigation
+function setupTabs() {
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Get target tab
+            const targetTab = button.getAttribute('data-tab');
+            
+            // Remove active class from all buttons
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+            
+            // Hide all tab contents
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                content.style.display = 'none';
+            });
+            
+            // Show target tab content
+            const tabContent = document.getElementById(`${targetTab}-tab-content`);
+            tabContent.classList.add('active');
+            tabContent.style.display = 'block';
+        });
+    });
+    
+    // Set initial visibility
+    tabContents.forEach((content, index) => {
+        if (index === 0) {
+            content.style.display = 'block';
+        } else {
+            content.style.display = 'none';
+        }
+    });
+}
+
+// Initialize Quiz
 function initQuiz() {
     // Set up event listeners
     if (startQuizButton) {
@@ -126,44 +178,67 @@ function displayQuestion() {
     currentQuestionSpan.textContent = currentQuestion + 1;
     const progress = ((currentQuestion + 1) / questions.length) * 100;
     progressBar.style.width = `${progress}%`;
-    progressBar.setAttribute('aria-valuenow', progress);
+    
+    // Reset option selected flag
+    optionSelected = answers[currentQuestion] !== null;
+    
+    // Enable/disable next button based on selection
+    nextButton.disabled = !optionSelected;
     
     // Display question and options
     const question = questions[currentQuestion];
     
+    // Create question HTML
     questionContainer.innerHTML = `
         <h4 class="question mb-4">${question.question}</h4>
         <div class="options">
             ${question.options.map((option, index) => `
-                <div class="form-check mb-3">
-                    <input class="form-check-input" type="radio" name="question-option" id="option-${index}" value="${index}" ${answers[currentQuestion] === index ? 'checked' : ''}>
-                    <label class="form-check-label" for="option-${index}">
-                        ${option}
-                    </label>
+                <div class="quiz-option ${answers[currentQuestion] === index ? 
+                    (answers[currentQuestion] === question.answer ? 'correct' : 'incorrect') : ''}" 
+                    data-index="${index}">
+                    ${option}
                 </div>
             `).join('')}
         </div>
-        ${answers[currentQuestion] !== null ? `
-            <div class="mt-4 p-3 ${answers[currentQuestion] === question.answer ? 'bg-success' : 'bg-danger'} text-white rounded">
-                <p class="mb-0">
-                    ${answers[currentQuestion] === question.answer 
-                        ? '<strong>Correct!</strong>' 
-                        : `<strong>Incorrect.</strong> The correct answer is: ${question.options[question.answer]}`
-                    }
-                </p>
-                <p class="mt-2 mb-0">${question.explanation}</p>
-            </div>
-        ` : ''}
     `;
     
-    // Set up event listeners for radio buttons
-    const radioButtons = questionContainer.querySelectorAll('input[type="radio"]');
-    radioButtons.forEach(radio => {
-        radio.addEventListener('change', () => {
-            answers[currentQuestion] = parseInt(radio.value);
-            displayQuestion(); // Refresh to show feedback
+    // Set up event listeners for options
+    const questionOptions = questionContainer.querySelectorAll('.quiz-option');
+    questionOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            // Clear previous selections
+            questionOptions.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Set current selection
+            const selectedIndex = parseInt(option.getAttribute('data-index'));
+            answers[currentQuestion] = selectedIndex;
+            
+            // Add appropriate classes
+            if (selectedIndex === question.answer) {
+                option.classList.add('selected', 'correct');
+            } else {
+                option.classList.add('selected', 'incorrect');
+                // Find and mark correct answer
+                questionOptions[question.answer].classList.add('correct');
+            }
+            
+            // Show explanation
+            displayExplanation(selectedIndex === question.answer);
+            
+            // Enable next button
+            optionSelected = true;
+            nextButton.disabled = false;
         });
     });
+    
+    // If answer already selected, show explanation
+    if (answers[currentQuestion] !== null) {
+        displayExplanation(answers[currentQuestion] === question.answer);
+    } else {
+        quizExplanationContainer.classList.add('d-none');
+    }
     
     // Show/hide previous/next buttons
     if (currentQuestion === 0) {
@@ -177,6 +252,21 @@ function displayQuestion() {
     } else {
         nextButton.textContent = 'Next';
     }
+}
+
+// Display explanation for current question
+function displayExplanation(isCorrect) {
+    const question = questions[currentQuestion];
+    
+    quizExplanationContainer.innerHTML = `
+        <p class="font-weight-bold mb-2">
+            ${isCorrect ? 'Correct!' : `Incorrect. The correct answer is: ${question.options[question.answer]}`}
+        </p>
+        <p class="mb-0">${question.explanation}</p>
+    `;
+    
+    quizExplanationContainer.classList.remove('d-none', 'correct', 'incorrect');
+    quizExplanationContainer.classList.add(isCorrect ? 'correct' : 'incorrect');
 }
 
 // Go to next question
