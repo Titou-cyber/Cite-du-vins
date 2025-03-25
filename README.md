@@ -1,5 +1,6 @@
 Avant toutes choses:
 
+npm install jsonwebtoken
 npm install cors express
 npm install -g http-server
 

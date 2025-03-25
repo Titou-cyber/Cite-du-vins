@@ -14,6 +14,23 @@ const loadWines = () => {
   }
 };
 
+// Get all wines
+const getAllWines = () => {
+  return loadWines();
+};
+
+// Get a specific wine by ID
+const getWineById = (id) => {
+  const wines = loadWines();
+  const index = parseInt(id);
+  
+  if (isNaN(index) || index < 0 || index >= wines.length) {
+    return null;
+  }
+  
+  return wines[index];
+};
+
 // Enhanced search with fuzzy matching and multiple fields
 const searchWines = (query) => {
   if (!query) return [];
@@ -161,6 +178,48 @@ const filterWines = (region, variety, minPrice, maxPrice, type, country, rating)
     console.error('Error in filterWines function:', error);
     return []; // Return empty array instead of throwing error
   }
+};
+
+// Get wine recommendations based on user preferences or popular choices
+const getRecommendations = (count = 10) => {
+  const wines = loadWines();
+  
+  // Sort by rating (points) and return top wines
+  return wines
+    .filter(wine => wine.points && wine.price) // Filter wines with both rating and price
+    .sort((a, b) => b.points - a.points)
+    .slice(0, count);
+};
+
+// Get a list of all unique regions
+const getUniqueRegions = () => {
+  const wines = loadWines();
+  const regions = new Set();
+  
+  wines.forEach(wine => {
+    if (wine.region_1 && wine.region_1.trim() !== '') {
+      regions.add(wine.region_1.trim());
+    }
+    if (wine.region_2 && wine.region_2.trim() !== '') {
+      regions.add(wine.region_2.trim());
+    }
+  });
+  
+  return Array.from(regions).sort();
+};
+
+// Get a list of all unique varieties
+const getUniqueVarieties = () => {
+  const wines = loadWines();
+  const varieties = new Set();
+  
+  wines.forEach(wine => {
+    if (wine.variety && wine.variety.trim() !== '') {
+      varieties.add(wine.variety.trim());
+    }
+  });
+  
+  return Array.from(varieties).sort();
 };
 
 // NEW: Get detailed wine information with similar wine recommendations
