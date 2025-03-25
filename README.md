@@ -1,4 +1,10 @@
-pour lancer le backend 
+Avant toutes choses:
+
+npm install cors express
+npm install -g http-server
+
+
+Pour lancer le backend 
 
 ~/Cite-du-vins/backend (main)
 $ npm start
