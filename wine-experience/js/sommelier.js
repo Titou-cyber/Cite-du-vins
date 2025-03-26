@@ -1,13 +1,14 @@
 /**
- * Enhanced AI Sommelier
+ * La Cité Du Vin - AI Sommelier Experience
  * 
- * This script powers the interactive wine recommendation system that analyzes
- * user preferences and suggests personalized wine selections based on taste
- * profile, occasion, food pairings, and price range.
+ * This script powers the interactive wine recommendation system 
+ * that analyzes user preferences and suggests personalized
+ * wine selections based on flavor profile, occasion, food pairings, 
+ * and other preferences.
  */
 
 // DOM Elements - Main UI Components
-const sommelierProgressEl = document.getElementById('sommelier-progress');
+const sommelierProgress = document.getElementById('sommelier-progress');
 const step1Form = document.getElementById('step-form-1');
 const step2Form = document.getElementById('step-form-2');
 const recommendationsContainer = document.getElementById('recommendations-container');
@@ -21,14 +22,14 @@ const step1Next = document.getElementById('step-1-next');
 const step2Back = document.getElementById('step-2-back');
 const step2Next = document.getElementById('step-2-next');
 
-// Step elements for progress tracking
+// Step indicators
 const step1El = document.getElementById('step-1');
 const step2El = document.getElementById('step-2');
 const step3El = document.getElementById('step-3');
 
-// Variables
+// Global variables
 let allWines = [];
-let loading = false;
+let isLoading = false;
 let userPreferences = {
     flavors: {
         fruity: false,
@@ -43,9 +44,9 @@ let userPreferences = {
     priceRange: 'moderate',
     wineType: 'any',
     foodPairing: 'none',
+    bodyPreference: 3,
     occasion: 'casual',
-    ageability: 'any',
-    bodyPreference: 'medium'
+    ageability: 'any'
 };
 
 // Flavor descriptions for tooltips
@@ -60,67 +61,51 @@ const flavorDescriptions = {
     smooth: "Wines with a velvety, round texture and balanced profile"
 };
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', init);
+// Initialize the application when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initialize);
 
 /**
- * Initialize the application by loading data and setting up event listeners
+ * Initialize the AI Sommelier application
  */
-async function init() {
+async function initialize() {
     try {
         // Show loading state
-        toggleLoading(true);
+        setLoading(true);
         
         // Load wine data
-        await loadWineData();
+        await fetchWineData();
         
         // Set up event listeners
         setupEventListeners();
         
-        // Initialize tooltips if available
-        if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-        }
+        // Initialize Bootstrap tooltips if available
+        initializeTooltips();
         
         // Hide loading state
-        toggleLoading(false);
+        setLoading(false);
         
     } catch (error) {
         console.error('Error initializing sommelier:', error);
-        
-        // Display error message
-        if (recommendationsDiv) {
-            recommendationsDiv.innerHTML = `
-                <div class="col-12">
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-circle me-2"></i> 
-                        Error loading wine data. Please try refreshing the page.
-                    </div>
-                </div>
-            `;
-        }
-        
-        toggleLoading(false);
+        displayErrorMessage('Failed to initialize the sommelier experience. Please refresh the page and try again.');
+        setLoading(false);
     }
 }
 
 /**
- * Toggle loading state
- * @param {boolean} isLoading - Whether the application is loading
+ * Set loading state and update UI accordingly
+ * @param {boolean} loading - Whether the application is in loading state
  */
-function toggleLoading(isLoading) {
-    loading = isLoading;
+function setLoading(loading) {
+    isLoading = loading;
     
     // Update UI elements based on loading state
-    if (isLoading) {
+    if (loading) {
+        // Add loading class to main containers
         if (step1Form) step1Form.classList.add('loading');
         if (step2Form) step2Form.classList.add('loading');
         if (recommendationsContainer) recommendationsContainer.classList.add('loading');
         
-        // Disable buttons
+        // Disable navigation buttons
         if (step1Next) step1Next.disabled = true;
         if (step2Back) step2Back.disabled = true;
         if (step2Next) step2Next.disabled = true;
@@ -128,47 +113,55 @@ function toggleLoading(isLoading) {
         
         // Show loader if not already present
         if (!document.querySelector('.sommelier-loader')) {
-            const loader = document.createElement('div');
-            loader.className = 'sommelier-loader';
-            loader.innerHTML = `
-                <div class="spinner">
-                    <div class="double-bounce1"></div>
-                    <div class="double-bounce2"></div>
-                </div>
-                <p>Analyzing wine data...</p>
-            `;
-            
-            if (step1Form) {
-                step1Form.appendChild(loader);
-            } else if (step2Form) {
-                step2Form.appendChild(loader);
-            } else if (recommendationsContainer) {
-                recommendationsContainer.appendChild(loader);
-            }
+            createAndAppendLoader();
         }
     } else {
-        // Remove loading state
+        // Remove loading states
         if (step1Form) step1Form.classList.remove('loading');
         if (step2Form) step2Form.classList.remove('loading');
         if (recommendationsContainer) recommendationsContainer.classList.remove('loading');
         
-        // Enable buttons
-        if (step1Next) step1Next.disabled = false;
+        // Enable buttons (except step1Next which depends on selection)
         if (step2Back) step2Back.disabled = false;
         if (step2Next) step2Next.disabled = false;
         if (restartButton) restartButton.disabled = false;
         
+        // Update step1Next based on flavor selection
+        updateNextButtonState();
+        
         // Remove loaders
-        const loaders = document.querySelectorAll('.sommelier-loader');
-        loaders.forEach(loader => loader.remove());
+        document.querySelectorAll('.sommelier-loader').forEach(loader => loader.remove());
     }
 }
 
 /**
- * Load wine data from the server
+ * Create and append loading indicator
+ */
+function createAndAppendLoader() {
+    const loader = document.createElement('div');
+    loader.className = 'sommelier-loader';
+    loader.innerHTML = `
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+        <p>Analyzing wine data...</p>
+    `;
+    
+    if (step1Form && !step1Form.classList.contains('d-none')) {
+        step1Form.appendChild(loader);
+    } else if (step2Form && !step2Form.classList.contains('d-none')) {
+        step2Form.appendChild(loader);
+    } else if (recommendationsContainer && !recommendationsContainer.classList.contains('d-none')) {
+        recommendationsContainer.appendChild(loader);
+    }
+}
+
+/**
+ * Fetch wine data from the server
  * @returns {Promise<Array>} - The loaded wine data
  */
-async function loadWineData() {
+async function fetchWineData() {
     try {
         const response = await fetch('data/wines.json');
         if (!response.ok) {
@@ -177,10 +170,10 @@ async function loadWineData() {
         
         const data = await response.json();
         
-        // If the response is not an array, convert it
+        // Ensure the data is an array
         allWines = Array.isArray(data) ? data : [data];
         
-        console.log(`Loaded ${allWines.length} wines`);
+        console.log(`Loaded ${allWines.length} wines for sommelier recommendations`);
         
         if (allWines.length === 0) {
             throw new Error('No wine data found');
@@ -194,13 +187,32 @@ async function loadWineData() {
 }
 
 /**
- * Set up event listeners for the UI components
+ * Set up all event listeners for interactive elements
  */
 function setupEventListeners() {
-    // Step 1 (Flavors) preference selection
+    // Setup flavor preference toggles
+    setupFlavorPreferenceToggles();
+    
+    // Step navigation buttons
+    if (step1Next) step1Next.addEventListener('click', navigateToStep2);
+    if (step2Back) step2Back.addEventListener('click', navigateToStep1);
+    if (step2Next) step2Next.addEventListener('click', submitPreferences);
+    if (restartButton) restartButton.addEventListener('click', resetSommelier);
+    
+    // Form input change listeners
+    setupFormInputListeners();
+    
+    // Range slider listeners
+    setupRangeSliders();
+}
+
+/**
+ * Set up event listeners for flavor preference toggles
+ */
+function setupFlavorPreferenceToggles() {
     const preferenceOptions = document.querySelectorAll('.preference-option');
     preferenceOptions.forEach(option => {
-        option.addEventListener('click', togglePreferenceOption);
+        option.addEventListener('click', toggleFlavorPreference);
         
         // Add flavor descriptions as tooltips
         const preference = option.getAttribute('data-preference');
@@ -210,20 +222,22 @@ function setupEventListeners() {
             option.setAttribute('data-bs-placement', 'top');
         }
     });
-    
-    // Step Navigation
-    if (step1Next) step1Next.addEventListener('click', goToStep2);
-    if (step2Back) step2Back.addEventListener('click', goToStep1);
-    if (step2Next) step2Next.addEventListener('click', submitPreferences);
-    if (restartButton) restartButton.addEventListener('click', resetSommelier);
-    
-    // Add input change listeners for form fields
-    const formInputs = document.querySelectorAll('#step-form-2 select, #step-form-2 input');
+}
+
+/**
+ * Set up change listeners for form inputs
+ */
+function setupFormInputListeners() {
+    const formInputs = document.querySelectorAll('#preferences-form select, #preferences-form input');
     formInputs.forEach(input => {
         input.addEventListener('change', updatePreferenceFromInput);
     });
-    
-    // Special handling for range sliders if they exist
+}
+
+/**
+ * Set up range slider event listeners
+ */
+function setupRangeSliders() {
     const rangeSliders = document.querySelectorAll('input[type="range"]');
     rangeSliders.forEach(slider => {
         const output = document.getElementById(`${slider.id}-value`);
@@ -237,6 +251,18 @@ function setupEventListeners() {
             updateRangeSliderOutput(slider, output);
         }
     });
+}
+
+/**
+ * Initialize Bootstrap tooltips if available
+ */
+function initializeTooltips() {
+    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }
 }
 
 /**
@@ -259,22 +285,37 @@ function updateRangeSliderOutput(slider, output) {
 }
 
 /**
- * Toggle a flavor preference option selection
+ * Toggle a flavor preference selection and update UI
  * @param {Event} event - The click event
  */
-function togglePreferenceOption(event) {
-    if (loading) return;
+function toggleFlavorPreference(event) {
+    if (isLoading) return;
     
     const option = event.currentTarget;
     const preference = option.getAttribute('data-preference');
     
     if (!preference || !userPreferences.flavors.hasOwnProperty(preference)) return;
     
-    // Toggle selection state
+    // Toggle selection state with visual feedback
     option.classList.toggle('selected');
+    option.classList.add('pulse');
+    
+    // Update preference in data model
     userPreferences.flavors[preference] = option.classList.contains('selected');
     
-    // Enable next button only if at least one flavor is selected
+    // Remove animation class after it completes
+    setTimeout(() => {
+        option.classList.remove('pulse');
+    }, 600);
+    
+    // Update next button state based on selections
+    updateNextButtonState();
+}
+
+/**
+ * Enable/disable the next button based on flavor selections
+ */
+function updateNextButtonState() {
     if (step1Next) {
         const anyFlavorSelected = Object.values(userPreferences.flavors).some(value => value);
         step1Next.disabled = !anyFlavorSelected;
@@ -288,223 +329,201 @@ function togglePreferenceOption(event) {
 }
 
 /**
- * Update user preferences based on form input changes
+ * Update preference model from form input changes
  * @param {Event} event - The change event
  */
 function updatePreferenceFromInput(event) {
     const input = event.target;
-    const preferenceName = input.id.replace('-preference', '');
+    const id = input.id.replace('-preference', '');
     
-    if (userPreferences.hasOwnProperty(preferenceName)) {
-        userPreferences[preferenceName] = input.value;
+    if (id === 'body') {
+        userPreferences.bodyPreference = parseInt(input.value);
+    } else if (userPreferences.hasOwnProperty(id)) {
+        userPreferences[id] = input.value;
     }
 }
 
 /**
- * Navigate to step 2
+ * Navigate from step 1 to step 2
  */
-function goToStep2() {
-    if (loading) return;
+function navigateToStep2() {
+    if (isLoading) return;
     
     // Validate that at least one flavor is selected
     const anyFlavorSelected = Object.values(userPreferences.flavors).some(value => value);
     if (!anyFlavorSelected) {
-        showValidationMessage("Please select at least one flavor preference");
+        showNotification("Please select at least one flavor preference", "error");
         return;
     }
     
-    // Update progress indicator with animation
-    step1El.classList.add('transitioning');
-    setTimeout(() => {
-        step1El.classList.remove('active');
-        step1El.classList.add('completed');
-        step1El.classList.remove('transitioning');
-        step2El.classList.add('active');
-    }, 300);
+    // Update progress indicators
+    updateProgressIndicator(2);
     
-    // Show step 2 form, hide step 1
-    step1Form.classList.add('slide-out');
-    setTimeout(() => {
-        step1Form.classList.add('d-none');
-        step1Form.classList.remove('slide-out');
-        step2Form.classList.remove('d-none');
-        step2Form.classList.add('slide-in');
-        
-        setTimeout(() => {
-            step2Form.classList.remove('slide-in');
-        }, 300);
-    }, 300);
+    // Animate transition between steps
+    animateStepTransition(step1Form, step2Form);
 }
 
 /**
- * Navigate back to step 1
+ * Navigate from step 2 back to step 1
  */
-function goToStep1() {
-    if (loading) return;
+function navigateToStep1() {
+    if (isLoading) return;
     
-    // Update progress indicator with animation
-    step2El.classList.add('transitioning');
-    setTimeout(() => {
-        step2El.classList.remove('active');
-        step1El.classList.remove('completed');
+    // Update progress indicators
+    updateProgressIndicator(1);
+    
+    // Animate transition between steps
+    animateStepTransition(step2Form, step1Form, true);
+}
+
+/**
+ * Update the progress indicator to show current step
+ * @param {number} stepNumber - The current step (1, 2, or 3)
+ */
+function updateProgressIndicator(stepNumber) {
+    // Remove active class from all steps
+    [step1El, step2El, step3El].forEach(step => {
+        step.classList.remove('active');
+        step.classList.remove('completed');
+    });
+    
+    // Set appropriate classes based on current step
+    if (stepNumber === 1) {
         step1El.classList.add('active');
-        step2El.classList.remove('transitioning');
-    }, 300);
+    } else if (stepNumber === 2) {
+        step1El.classList.add('completed');
+        step2El.classList.add('active');
+    } else if (stepNumber === 3) {
+        step1El.classList.add('completed');
+        step2El.classList.add('completed');
+        step3El.classList.add('active');
+    }
     
-    // Show step 1 form, hide step 2
-    step2Form.classList.add('slide-out-right');
+    // Add animation class for visual feedback
+    sommelierProgress.classList.add('progress-update');
     setTimeout(() => {
-        step2Form.classList.add('d-none');
-        step2Form.classList.remove('slide-out-right');
-        step1Form.classList.remove('d-none');
-        step1Form.classList.add('slide-in-left');
+        sommelierProgress.classList.remove('progress-update');
+    }, 500);
+}
+
+/**
+ * Animate transition between step forms
+ * @param {HTMLElement} currentStep - The current step element
+ * @param {HTMLElement} nextStep - The next step element
+ * @param {boolean} reverse - Whether this is a backward transition
+ */
+function animateStepTransition(currentStep, nextStep, reverse = false) {
+    // Set transition classes based on direction
+    const outClass = reverse ? 'slide-out-right' : 'slide-out';
+    const inClass = reverse ? 'slide-in-left' : 'slide-in';
+    
+    // Apply exit animation to current step
+    currentStep.classList.add(outClass);
+    
+    // After exit animation completes, hide current and show next
+    setTimeout(() => {
+        currentStep.classList.add('d-none');
+        currentStep.classList.remove(outClass);
         
+        nextStep.classList.remove('d-none');
+        nextStep.classList.add(inClass);
+        
+        // Remove entry animation class after it completes
         setTimeout(() => {
-            step1Form.classList.remove('slide-in-left');
+            nextStep.classList.remove(inClass);
         }, 300);
     }, 300);
 }
 
 /**
- * Display a validation message
- * @param {string} message - The validation message to display
- */
-function showValidationMessage(message) {
-    const existingAlert = document.querySelector('.validation-alert');
-    if (existingAlert) {
-        existingAlert.remove();
-    }
-    
-    const alert = document.createElement('div');
-    alert.className = 'validation-alert';
-    alert.innerHTML = `
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-triangle me-2"></i> ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    `;
-    
-    // Add to the appropriate container
-    if (step1Form && !step1Form.classList.contains('d-none')) {
-        step1Form.prepend(alert);
-    } else if (step2Form && !step2Form.classList.contains('d-none')) {
-        step2Form.prepend(alert);
-    }
-    
-    // Auto-dismiss after 5 seconds
-    setTimeout(() => {
-        if (alert.parentNode) {
-            alert.querySelector('.alert').classList.remove('show');
-            setTimeout(() => {
-                if (alert.parentNode) {
-                    alert.parentNode.removeChild(alert);
-                }
-            }, 300);
-        }
-    }, 5000);
-}
-
-/**
- * Submit preferences and generate recommendations
+ * Submit preferences and generate wine recommendations
  */
 function submitPreferences() {
-    if (loading) return;
+    if (isLoading) return;
     
-    // Gather form data
+    // Gather all form data into preferences model
+    updatePreferencesFromForm();
+    
+    // Update progress indicator
+    updateProgressIndicator(3);
+    
+    // Animate transition to recommendations
+    animateStepTransition(step2Form, recommendationsContainer);
+    
+    // Generate recommendations with a slight delay for animation
+    setTimeout(() => {
+        generateRecommendations();
+    }, 400);
+}
+
+/**
+ * Update preferences model with all form values
+ */
+function updatePreferencesFromForm() {
+    // Get elements by ID
     const priceRange = document.getElementById('price-preference');
     const wineType = document.getElementById('type-preference');
     const foodPairing = document.getElementById('food-preference');
-    const occasion = document.getElementById('occasion-preference');
     const bodyPreference = document.getElementById('body-preference');
+    const occasion = document.getElementById('occasion-preference');
     const ageability = document.getElementById('ageability-preference');
     
+    // Update preference model
     if (priceRange) userPreferences.priceRange = priceRange.value;
     if (wineType) userPreferences.wineType = wineType.value;
     if (foodPairing) userPreferences.foodPairing = foodPairing.value;
+    if (bodyPreference) userPreferences.bodyPreference = parseInt(bodyPreference.value);
     if (occasion) userPreferences.occasion = occasion.value;
-    if (bodyPreference) userPreferences.bodyPreference = bodyPreference.value;
     if (ageability) userPreferences.ageability = ageability.value;
-    
-    // Update progress indicator with animation
-    step2El.classList.add('transitioning');
-    setTimeout(() => {
-        step2El.classList.remove('active');
-        step2El.classList.add('completed');
-        step2El.classList.remove('transitioning');
-        step3El.classList.add('active');
-    }, 300);
-    
-    // Hide step forms, show recommendations with animation
-    const formContainer = document.getElementById('step-form-container');
-    if (formContainer) {
-        formContainer.classList.add('slide-out');
-        setTimeout(() => {
-            formContainer.classList.add('d-none');
-            formContainer.classList.remove('slide-out');
-            
-            if (recommendationsContainer) {
-                recommendationsContainer.classList.remove('d-none');
-                recommendationsContainer.classList.add('slide-in');
-                
-                setTimeout(() => {
-                    recommendationsContainer.classList.remove('slide-in');
-                }, 300);
-            }
-            
-            // Generate recommendations with a slight delay for animation
-            setTimeout(() => {
-                generateRecommendations();
-            }, 300);
-        }, 300);
-    } else {
-        // Fallback if animation container is missing
-        generateRecommendations();
-    }
 }
 
 /**
- * Reset the sommelier to start over
+ * Reset the sommelier experience to start over
  */
 function resetSommelier() {
-    if (loading) return;
+    if (isLoading) return;
     
-    // Reset progress indicator with animation
-    step3El.classList.add('transitioning');
-    setTimeout(() => {
-        step1El.classList.add('active');
-        step1El.classList.remove('completed');
-        step2El.classList.remove('active');
-        step2El.classList.remove('completed');
-        step3El.classList.remove('active');
-        step3El.classList.remove('transitioning');
-    }, 300);
+    // Update progress indicator
+    updateProgressIndicator(1);
     
-    // Reset form display with animation
-    recommendationsContainer.classList.add('slide-out');
-    setTimeout(() => {
-        recommendationsContainer.classList.add('d-none');
-        recommendationsContainer.classList.remove('slide-out');
-        
-        const formContainer = document.getElementById('step-form-container');
-        if (formContainer) {
-            formContainer.classList.remove('d-none');
-            formContainer.classList.add('slide-in');
-            
-            setTimeout(() => {
-                formContainer.classList.remove('slide-in');
-            }, 300);
-        }
-        
-        step1Form.classList.remove('d-none');
-        step2Form.classList.add('d-none');
-    }, 300);
+    // Animate transition back to step 1
+    animateStepTransition(recommendationsContainer, step1Form, true);
     
-    // Reset preference selections
+    // Reset preference selections UI
+    resetPreferenceUI();
+    
+    // Reset preference data model
+    resetPreferenceData();
+}
+
+/**
+ * Reset the preference UI elements to default state
+ */
+function resetPreferenceUI() {
+    // Unselect all flavor preferences
     document.querySelectorAll('.preference-option').forEach(option => {
         option.classList.remove('selected');
     });
     
-    // Reset userPreferences
+    // Reset form values
+    const form = document.getElementById('preferences-form');
+    if (form) form.reset();
+    
+    // Reset range slider displays
+    const bodyValue = document.getElementById('body-preference-value');
+    if (bodyValue) bodyValue.textContent = 'Medium';
+    
+    // Disable next button
+    if (step1Next) {
+        step1Next.disabled = true;
+        step1Next.classList.remove('ready');
+    }
+}
+
+/**
+ * Reset preference data model to defaults
+ */
+function resetPreferenceData() {
     userPreferences = {
         flavors: {
             fruity: false,
@@ -519,43 +538,10 @@ function resetSommelier() {
         priceRange: 'moderate',
         wineType: 'any',
         foodPairing: 'none',
+        bodyPreference: 3,
         occasion: 'casual',
-        ageability: 'any',
-        bodyPreference: 'medium'
+        ageability: 'any'
     };
-    
-    // Reset form values
-    if (document.getElementById('price-preference')) {
-        document.getElementById('price-preference').value = 'moderate';
-    }
-    
-    if (document.getElementById('type-preference')) {
-        document.getElementById('type-preference').value = 'any';
-    }
-    
-    if (document.getElementById('food-preference')) {
-        document.getElementById('food-preference').value = 'none';
-    }
-    
-    if (document.getElementById('occasion-preference')) {
-        document.getElementById('occasion-preference').value = 'casual';
-    }
-    
-    if (document.getElementById('body-preference')) {
-        document.getElementById('body-preference').value = '3';
-        const output = document.getElementById('body-preference-value');
-        if (output) output.textContent = 'Medium';
-    }
-    
-    if (document.getElementById('ageability-preference')) {
-        document.getElementById('ageability-preference').value = 'any';
-    }
-    
-    // Disable next button
-    if (step1Next) {
-        step1Next.disabled = true;
-        step1Next.classList.remove('ready');
-    }
 }
 
 /**
@@ -564,413 +550,354 @@ function resetSommelier() {
 function generateRecommendations() {
     try {
         // Show loading state
-        toggleLoading(true);
+        setLoading(true);
         
-        // Apply all filters to get matched wines
-        let matchedWines = allWines.filter(wine => {
-            if (!wine) return false;
-            
-            // Price filter
-            const price = parseFloat(wine.prix || wine.price || 0);
-            if (userPreferences.priceRange === 'budget' && price > 25) return false;
-            if (userPreferences.priceRange === 'moderate' && (price < 20 || price > 60)) return false;
-            if (userPreferences.priceRange === 'premium' && (price < 50 || price > 120)) return false;
-            if (userPreferences.priceRange === 'luxury' && price < 100) return false;
-            
-            // Type filter
-            const variety = (wine.variété || wine.varietal || '').toLowerCase();
-            if (userPreferences.wineType !== 'any') {
-                if (userPreferences.wineType === 'red' && 
-                    !(variety.includes('rouge') || 
-                      variety.includes('red') || 
-                      variety.includes('noir') || 
-                      variety.includes('cabernet') || 
-                      variety.includes('merlot') || 
-                      variety.includes('syrah') || 
-                      variety.includes('zinfandel') ||
-                      variety.includes('malbec') ||
-                      variety.includes('grenache') || 
-                      variety.includes('sangiovese'))) {
-                    return false;
-                }
-                
-                if (userPreferences.wineType === 'white' && 
-                    !(variety.includes('blanc') || 
-                      variety.includes('white') || 
-                      variety.includes('chardonnay') || 
-                      variety.includes('sauvignon') || 
-                      variety.includes('riesling') ||
-                      variety.includes('pinot gris') ||
-                      variety.includes('gewurztraminer') ||
-                      variety.includes('chenin') ||
-                      variety.includes('semillon'))) {
-                    return false;
-                }
-                
-                if (userPreferences.wineType === 'rose' && 
-                    !(variety.includes('rosé') || 
-                      variety.includes('rose'))) {
-                    return false;
-                }
-                
-                if (userPreferences.wineType === 'sparkling' && 
-                    !(variety.includes('sparkling') || 
-                      variety.includes('champagne') || 
-                      variety.includes('cava') || 
-                      variety.includes('prosecco') ||
-                      variety.includes('cremant') ||
-                      variety.includes('lambrusco'))) {
-                    return false;
-                }
-                
-                if (userPreferences.wineType === 'dessert' && 
-                    !(variety.includes('port') ||
-                      variety.includes('sauternes') ||
-                      variety.includes('tokaji') ||
-                      variety.includes('ice wine') ||
-                      variety.includes('late harvest') ||
-                      variety.includes('moscato') ||
-                      wine.description?.toLowerCase().includes('sweet'))) {
-                    return false;
-                }
-            }
-            
-            // Food pairing filter
-            if (userPreferences.foodPairing !== 'none') {
-                const description = (wine.description || '').toLowerCase();
-                
-                // Define wine varieties that pair well with each food type
-                const pairingMap = {
-                    'beef': ['cabernet sauvignon', 'merlot', 'syrah', 'malbec', 'bordeaux', 'barolo', 'chianti'],
-                    'chicken': ['chardonnay', 'pinot noir', 'sauvignon blanc', 'riesling'],
-                    'fish': ['sauvignon blanc', 'pinot grigio', 'albariño', 'chablis', 'vermentino'],
-                    'pasta': ['chianti', 'barbera', 'sangiovese', 'pinot noir', 'nebbiolo'],
-                    'cheese': ['chardonnay', 'cabernet', 'merlot', 'port', 'champagne'],
-                    'dessert': ['port', 'sauternes', 'riesling', 'moscato', 'ice wine'],
-                    'spicy': ['riesling', 'gewurztraminer', 'zinfandel', 'syrah'],
-                    'vegetarian': ['pinot noir', 'beaujolais', 'sauvignon blanc', 'grüner veltliner'],
-                    'salad': ['sauvignon blanc', 'pinot grigio', 'verdejo', 'albariño'],
-                }
-                
-                // Check if this wine's variety matches the preferred food pairing
-                const pairs = pairingMap[userPreferences.foodPairing] || [];
-                let pairsWithFood = false;
-                
-                // Check variety match
-                for (const pairingVariety of pairs) {
-                    if (variety.includes(pairingVariety)) {
-                        pairsWithFood = true;
-                        break;
-                    }
-                }
-                
-                // Check description for food pairing mentions
-                if (!pairsWithFood) {
-                    const foodTerms = {
-                        'beef': ['beef', 'steak', 'red meat'],
-                        'chicken': ['chicken', 'poultry', 'fowl'],
-                        'fish': ['fish', 'seafood', 'shellfish'],
-                        'pasta': ['pasta', 'italian', 'tomato sauce'],
-                        'cheese': ['cheese', 'creamy', 'dairy'],
-                        'dessert': ['dessert', 'sweet', 'chocolate'],
-                        'spicy': ['spicy', 'spice', 'hot'],
-                        'vegetarian': ['vegetable', 'vegetarian', 'herb'],
-                        'salad': ['salad', 'fresh', 'light']
-                    };
-                    
-                    const terms = foodTerms[userPreferences.foodPairing] || [];
-                    for (const term of terms) {
-                        if (description.includes(term)) {
-                            pairsWithFood = true;
-                            break;
-                        }
-                    }
-                }
-                
-                if (!pairsWithFood) return false;
-            }
-            
-            // Body preference filter if applicable
-            if (userPreferences.bodyPreference && userPreferences.bodyPreference !== '3') { // 3 is medium (default)
-                const bodyValue = parseInt(userPreferences.bodyPreference);
-                const description = (wine.description || '').toLowerCase();
-                
-                // Light-bodied indicators
-                const lightBodyTerms = ['light', 'delicate', 'elegant', 'crisp'];
-                
-                // Full-bodied indicators
-                const fullBodyTerms = ['full', 'bold', 'robust', 'powerful', 'rich', 'intense'];
-                
-                // Determine if wine matches body preference
-                if (bodyValue <= 2) { // Light to medium-light
-                    // For lighter wines
-                    let hasLightIndicator = false;
-                    
-                    for (const term of lightBodyTerms) {
-                        if (description.includes(term)) {
-                            hasLightIndicator = true;
-                            break;
-                        }
-                    }
-                    
-                    // Exclude wines with full-body indicators
-                    for (const term of fullBodyTerms) {
-                        if (description.includes(term)) {
-                            return false;
-                        }
-                    }
-                    
-                    // For very light preference (1), require explicit light body indicator
-                    if (bodyValue === 1 && !hasLightIndicator) {
-                        return false;
-                    }
-                    
-                } else if (bodyValue >= 4) { // Medium-full to full
-                    // For fuller wines
-                    let hasFullIndicator = false;
-                    
-                    for (const term of fullBodyTerms) {
-                        if (description.includes(term)) {
-                            hasFullIndicator = true;
-                            break;
-                        }
-                    }
-                    
-                    // Exclude wines with light-body indicators
-                    for (const term of lightBodyTerms) {
-                        if (description.includes(term)) {
-                            return false;
-                        }
-                    }
-                    
-                    // For very full preference (5), require explicit full body indicator
-                    if (bodyValue === 5 && !hasFullIndicator) {
-                        return false;
-                    }
-                }
-            }
-            
-            // Ageability filter if applicable
-            if (userPreferences.ageability && userPreferences.ageability !== 'any') {
-                const description = (wine.description || '').toLowerCase();
-                
-                if (userPreferences.ageability === 'now') {
-                    // Filter for wines ready to drink now
-                    if (description.includes('age') || 
-                        description.includes('cellar') || 
-                        description.includes('years') ||
-                        description.includes('develop')) {
-                        return false;
-                    }
-                } else if (userPreferences.ageability === 'aging') {
-                    // Filter for age-worthy wines
-                    const ageTerms = ['age', 'cellar', 'aging', 'develop', 'potential', 'structure', 'tannin'];
-                    let hasAgingPotential = false;
-                    
-                    for (const term of ageTerms) {
-                        if (description.includes(term)) {
-                            hasAgingPotential = true;
-                            break;
-                        }
-                    }
-                    
-                    if (!hasAgingPotential) {
-                        return false;
-                    }
-                }
-            }
-            
-            // Flavor preference scoring
-            const description = (wine.description || '').toLowerCase();
-            let flavorMatch = false;
-            
-            // Check if any selected flavor preference matches the wine description
-            for (const [flavor, isSelected] of Object.entries(userPreferences.flavors)) {
-                if (!isSelected) continue;
-                
-                const flavorTerms = getFlavorTerms(flavor);
-                for (const term of flavorTerms) {
-                    if (description.includes(term)) {
-                        flavorMatch = true;
-                        break;
-                    }
-                }
-                
-                if (flavorMatch) break;
-            }
-            
-            // Only include wines that match at least one flavor preference
-            if (!flavorMatch && Object.values(userPreferences.flavors).some(v => v)) {
-                return false;
-            }
-            
-            // Only consider wines with ratings
-            if ((wine.points || 0) < 85) {
-                return false;
-            }
-            
-            return true;
-        });
-        
-        // Calculate match scores
-        matchedWines = matchedWines.map(wine => {
-            // Base score is the wine's rating
-            let matchScore = wine.points || 85;
-            
-            // Adjust score based on preferences
-            const description = (wine.description || '').toLowerCase();
-            
-            // Flavor preference adjustments
-            let flavorMatches = 0;
-            let totalSelectedFlavors = 0;
-            
-            for (const [flavor, isSelected] of Object.entries(userPreferences.flavors)) {
-                if (!isSelected) continue;
-                totalSelectedFlavors++;
-                
-                const flavorTerms = getFlavorTerms(flavor);
-                for (const term of flavorTerms) {
-                    if (description.includes(term)) {
-                        flavorMatches++;
-                        matchScore += 2;
-                        break;
-                    }
-                }
-            }
-            
-            // Calculate flavor match percentage
-            const flavorMatchPercentage = totalSelectedFlavors > 0 
-                ? Math.min(100, Math.round((flavorMatches / totalSelectedFlavors) * 100))
-                : 0;
-            
-            // Adjust for price range match
-            const price = parseFloat(wine.prix || wine.price || 0);
-            if (userPreferences.priceRange === 'budget' && price <= 25) {
-                matchScore += 3;
-            } else if (userPreferences.priceRange === 'moderate' && price >= 20 && price <= 60) {
-                matchScore += 3;
-            } else if (userPreferences.priceRange === 'premium' && price >= 50 && price <= 120) {
-                matchScore += 3;
-            } else if (userPreferences.priceRange === 'luxury' && price >= 100) {
-                matchScore += 3;
-            }
-            
-            // Adjust for wine type match
-            const variety = (wine.variété || wine.varietal || '').toLowerCase();
-            if (userPreferences.wineType !== 'any') {
-                if ((userPreferences.wineType === 'red' && 
-                    (variety.includes('rouge') || variety.includes('red') || 
-                     variety.includes('noir') || variety.includes('cabernet') || 
-                     variety.includes('merlot'))) ||
-                    (userPreferences.wineType === 'white' && 
-                    (variety.includes('blanc') || variety.includes('white') || 
-                     variety.includes('chardonnay') || variety.includes('sauvignon'))) ||
-                    (userPreferences.wineType === 'rose' && 
-                    (variety.includes('rosé') || variety.includes('rose'))) ||
-                    (userPreferences.wineType === 'sparkling' && 
-                    (variety.includes('sparkling') || variety.includes('champagne'))) ||
-                    (userPreferences.wineType === 'dessert' && 
-                    (variety.includes('port') || variety.includes('sauternes')))) {
-                    matchScore += 5;
-                }
-            }
-            
-            // Add a slight random factor for variety
-            matchScore += Math.random() * 2;
-            
-            // Cap at 100
-            matchScore = Math.min(Math.round(matchScore), 100);
-            
-            return { 
-                ...wine, 
-                matchScore,
-                flavorMatchPercentage
-            };
-        });
-        
-        // Sort by match score
-        matchedWines.sort((a, b) => b.matchScore - a.matchScore);
-        
-        // Take top wines
-        matchedWines = matchedWines.slice(0, 3);
-        
-        // If we have less than 3 matches, relax the filters and try again
-        if (matchedWines.length < 3) {
-            console.log('Not enough matches, relaxing filters...');
-            
-            // Get additional recommendations with relaxed criteria
-            const additionalWines = allWines
-                .filter(wine => {
-                    // Exclude wines already in matches
-                    if (matchedWines.some(match => match.id === wine.id)) {
-                        return false;
-                    }
-                    
-                    // Apply only basic filters
-                    return (wine.points || 0) >= 85;
-                })
-                .map(wine => {
-                    let score = wine.points || 85;
-                    
-                    // Add small preference adjustments
-                    if (userPreferences.wineType !== 'any') {
-                        const variety = (wine.variété || wine.varietal || '').toLowerCase();
-                        if ((userPreferences.wineType === 'red' && 
-                            (variety.includes('rouge') || variety.includes('red'))) ||
-                            (userPreferences.wineType === 'white' && 
-                            (variety.includes('blanc') || variety.includes('white'))) ||
-                            (userPreferences.wineType === 'rose' && 
-                            (variety.includes('rosé') || variety.includes('rose'))) ||
-                            (userPreferences.wineType === 'sparkling' && 
-                            (variety.includes('sparkling') || variety.includes('champagne')))) {
-                            score += 3;
-                        }
-                    }
-                    
-                    // Add random factor
-                    score += Math.random() * 5;
-                    
-                    return {
-                        ...wine,
-                        matchScore: Math.min(Math.round(score), 95), // Cap slightly lower than primary matches
-                        flavorMatchPercentage: 0
-                    };
-                })
-                .sort((a, b) => b.matchScore - a.matchScore)
-                .slice(0, 3 - matchedWines.length);
-            
-            // Add additional wines to matches
-            matchedWines = [...matchedWines, ...additionalWines];
-        }
-        
-        // Hide loading state
-        toggleLoading(false);
-        
-        // Display recommendations
-        displayRecommendations(matchedWines);
-        
-    } catch (error) {
-        console.error('Error generating recommendations:', error);
-        
-        // Hide loading state
-        toggleLoading(false);
-        
-        // Display error message
+        // Clear previous recommendations
         if (recommendationsDiv) {
             recommendationsDiv.innerHTML = `
-                <div class="col-12">
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-circle me-2"></i> 
-                        An error occurred while generating recommendations. Please try again.
+                <div class="text-center py-4">
+                    <div class="spinner">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
                     </div>
+                    <p class="mt-3">Finding your perfect wines...</p>
                 </div>
             `;
         }
+        
+        // Apply filters to find matched wines
+        let matchedWines = filterWinesByPreferences();
+        
+        // Calculate match scores for each wine
+        matchedWines = calculateMatchScores(matchedWines);
+        
+        // Sort by match score (highest first)
+        matchedWines.sort((a, b) => b.matchScore - a.matchScore);
+        
+        // Take top wines (up to 3)
+        matchedWines = matchedWines.slice(0, 3);
+        
+        // If we have less than 3 matches, add additional recommendations
+        if (matchedWines.length < 3) {
+            const additionalWines = getAdditionalRecommendations(matchedWines);
+            matchedWines = [...matchedWines, ...additionalWines];
+        }
+        
+        // Short delay for better UX
+        setTimeout(() => {
+            // Display recommendations
+            displayRecommendations(matchedWines);
+            
+            // Update explanation
+            updateRecommendationExplanation();
+            
+            // Hide loading state
+            setLoading(false);
+        }, 800);
+        
+    } catch (error) {
+        console.error('Error generating recommendations:', error);
+        displayErrorMessage('An error occurred while generating recommendations. Please try again.');
+        setLoading(false);
     }
 }
 
 /**
- * Get flavor related terms for matching
+ * Filter wines based on user preferences
+ * @returns {Array} - Wines that match the user's preferences
+ */
+function filterWinesByPreferences() {
+    return allWines.filter(wine => {
+        if (!wine) return false;
+        
+        // Filter by price range
+        if (!matchesPriceRange(wine)) return false;
+        
+        // Filter by wine type
+        if (!matchesWineType(wine)) return false;
+        
+        // Filter by food pairing
+        if (!matchesFoodPairing(wine)) return false;
+        
+        // Filter by body preference
+        if (!matchesBodyPreference(wine)) return false;
+        
+        // Filter by aging potential
+        if (!matchesAgingPotential(wine)) return false;
+        
+        // Filter by flavor preferences
+        if (!matchesFlavorProfile(wine)) return false;
+        
+        // Only consider wines with decent ratings
+        if ((wine.points || 0) < 85) return false;
+        
+        return true;
+    });
+}
+
+/**
+ * Check if wine matches user's price range preference
+ * @param {Object} wine - Wine object to check
+ * @returns {boolean} - Whether the wine matches
+ */
+function matchesPriceRange(wine) {
+    const price = parseFloat(wine.prix || wine.price || 0);
+    
+    switch (userPreferences.priceRange) {
+        case 'budget':
+            return price <= 25;
+        case 'moderate':
+            return price >= 20 && price <= 60;
+        case 'premium':
+            return price >= 50 && price <= 120;
+        case 'luxury':
+            return price >= 100;
+        default:
+            return true;
+    }
+}
+
+/**
+ * Check if wine matches user's wine type preference
+ * @param {Object} wine - Wine object to check
+ * @returns {boolean} - Whether the wine matches
+ */
+function matchesWineType(wine) {
+    if (userPreferences.wineType === 'any') return true;
+    
+    const variety = (wine.variété || wine.varietal || '').toLowerCase();
+    const description = (wine.description || '').toLowerCase();
+    
+    switch (userPreferences.wineType) {
+        case 'red':
+            return variety.includes('rouge') || 
+                   variety.includes('red') || 
+                   variety.includes('noir') || 
+                   variety.includes('cabernet') || 
+                   variety.includes('merlot') || 
+                   variety.includes('syrah') || 
+                   variety.includes('zinfandel') ||
+                   variety.includes('malbec') ||
+                   variety.includes('grenache') || 
+                   variety.includes('sangiovese');
+        case 'white':
+            return variety.includes('blanc') || 
+                   variety.includes('white') || 
+                   variety.includes('chardonnay') || 
+                   variety.includes('sauvignon') || 
+                   variety.includes('riesling') ||
+                   variety.includes('pinot gris') ||
+                   variety.includes('gewurztraminer') ||
+                   variety.includes('chenin') ||
+                   variety.includes('semillon');
+        case 'rose':
+            return variety.includes('rosé') || 
+                   variety.includes('rose');
+        case 'sparkling':
+            return variety.includes('sparkling') || 
+                   variety.includes('champagne') || 
+                   variety.includes('cava') || 
+                   variety.includes('prosecco') ||
+                   variety.includes('cremant') ||
+                   variety.includes('lambrusco');
+        case 'dessert':
+            return variety.includes('port') ||
+                   variety.includes('sauternes') ||
+                   variety.includes('tokaji') ||
+                   variety.includes('ice wine') ||
+                   variety.includes('late harvest') ||
+                   variety.includes('moscato') ||
+                   description.includes('sweet');
+        default:
+            return true;
+    }
+}
+
+/**
+ * Check if wine matches user's food pairing preference
+ * @param {Object} wine - Wine object to check
+ * @returns {boolean} - Whether the wine matches
+ */
+function matchesFoodPairing(wine) {
+    if (userPreferences.foodPairing === 'none') return true;
+    
+    const variety = (wine.variété || wine.varietal || '').toLowerCase();
+    const description = (wine.description || '').toLowerCase();
+    
+    // Define wine varieties that pair well with each food type
+    const pairingMap = {
+        'beef': ['cabernet sauvignon', 'merlot', 'syrah', 'malbec', 'bordeaux', 'barolo', 'chianti'],
+        'chicken': ['chardonnay', 'pinot noir', 'sauvignon blanc', 'riesling'],
+        'fish': ['sauvignon blanc', 'pinot grigio', 'albariño', 'chablis', 'vermentino'],
+        'pasta': ['chianti', 'barbera', 'sangiovese', 'pinot noir', 'nebbiolo'],
+        'cheese': ['chardonnay', 'cabernet', 'merlot', 'port', 'champagne'],
+        'dessert': ['port', 'sauternes', 'riesling', 'moscato', 'ice wine'],
+        'spicy': ['riesling', 'gewurztraminer', 'zinfandel', 'syrah'],
+        'vegetarian': ['pinot noir', 'beaujolais', 'sauvignon blanc', 'grüner veltliner'],
+        'salad': ['sauvignon blanc', 'pinot grigio', 'verdejo', 'albariño'],
+    };
+    
+    // Check if variety matches
+    const pairs = pairingMap[userPreferences.foodPairing] || [];
+    for (const pairingVariety of pairs) {
+        if (variety.includes(pairingVariety)) {
+            return true;
+        }
+    }
+    
+    // Check description for food pairing mentions
+    const foodTerms = {
+        'beef': ['beef', 'steak', 'red meat'],
+        'chicken': ['chicken', 'poultry', 'fowl'],
+        'fish': ['fish', 'seafood', 'shellfish'],
+        'pasta': ['pasta', 'italian', 'tomato sauce'],
+        'cheese': ['cheese', 'creamy', 'dairy'],
+        'dessert': ['dessert', 'sweet', 'chocolate'],
+        'spicy': ['spicy', 'spice', 'hot'],
+        'vegetarian': ['vegetable', 'vegetarian', 'herb'],
+        'salad': ['salad', 'fresh', 'light']
+    };
+    
+    const terms = foodTerms[userPreferences.foodPairing] || [];
+    for (const term of terms) {
+        if (description.includes(term)) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+/**
+ * Check if wine matches user's body preference
+ * @param {Object} wine - Wine object to check
+ * @returns {boolean} - Whether the wine matches
+ */
+function matchesBodyPreference(wine) {
+    // If no preference or middle preference (medium), accept all
+    if (!userPreferences.bodyPreference || userPreferences.bodyPreference === 3) {
+        return true;
+    }
+    
+    const bodyValue = userPreferences.bodyPreference;
+    const description = (wine.description || '').toLowerCase();
+    
+    // Light-bodied indicators
+    const lightBodyTerms = ['light', 'delicate', 'elegant', 'crisp'];
+    
+    // Full-bodied indicators
+    const fullBodyTerms = ['full', 'bold', 'robust', 'powerful', 'rich', 'intense'];
+    
+    // For lighter wine preference (1-2)
+    if (bodyValue <= 2) {
+        // Exclude wines with full-body indicators
+        for (const term of fullBodyTerms) {
+            if (description.includes(term)) {
+                return false;
+            }
+        }
+        
+        // For very light preference (1), require explicit light body indicator
+        if (bodyValue === 1) {
+            for (const term of lightBodyTerms) {
+                if (description.includes(term)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        return true;
+    } 
+    // For fuller wine preference (4-5)
+    else if (bodyValue >= 4) {
+        // Exclude wines with light-body indicators
+        for (const term of lightBodyTerms) {
+            if (description.includes(term)) {
+                return false;
+            }
+        }
+        
+        // For very full preference (5), require explicit full body indicator
+        if (bodyValue === 5) {
+            for (const term of fullBodyTerms) {
+                if (description.includes(term)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        return true;
+    }
+    
+    return true;
+}
+
+/**
+ * Check if wine matches user's aging potential preference
+ * @param {Object} wine - Wine object to check
+ * @returns {boolean} - Whether the wine matches
+ */
+function matchesAgingPotential(wine) {
+    if (userPreferences.ageability === 'any') return true;
+    
+    const description = (wine.description || '').toLowerCase();
+    
+    if (userPreferences.ageability === 'now') {
+        // Filter for wines ready to drink now
+        if (description.includes('age') || 
+            description.includes('cellar') || 
+            description.includes('years') ||
+            description.includes('develop')) {
+            return false;
+        }
+        return true;
+    } else if (userPreferences.ageability === 'aging') {
+        // Filter for age-worthy wines
+        const ageTerms = ['age', 'cellar', 'aging', 'develop', 'potential', 'structure', 'tannin'];
+        for (const term of ageTerms) {
+            if (description.includes(term)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    return true;
+}
+
+/**
+ * Check if wine matches user's flavor profile preferences
+ * @param {Object} wine - Wine object to check
+ * @returns {boolean} - Whether the wine matches
+ */
+function matchesFlavorProfile(wine) {
+    const description = (wine.description || '').toLowerCase();
+    
+    // Check if any selected flavor preference matches the wine description
+    const selectedFlavors = Object.entries(userPreferences.flavors)
+        .filter(([_, isSelected]) => isSelected)
+        .map(([flavor]) => flavor);
+    
+    // If no flavors selected, all wines pass
+    if (selectedFlavors.length === 0) return true;
+    
+    // Look for any flavor match
+    for (const flavor of selectedFlavors) {
+        const flavorTerms = getFlavorTerms(flavor);
+        for (const term of flavorTerms) {
+            if (description.includes(term)) {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+/**
+ * Get list of terms related to a specific flavor for matching
  * @param {string} flavor - The flavor preference
  * @returns {string[]} - Array of related terms
  */
@@ -990,20 +917,184 @@ function getFlavorTerms(flavor) {
 }
 
 /**
- * Display wine recommendations
- * @param {Array} wines - The recommended wines
+ * Calculate match scores for each wine based on preferences
+ * @param {Array} wines - List of wines that passed initial filtering
+ * @returns {Array} - Wines with added match scores
+ */
+function calculateMatchScores(wines) {
+    return wines.map(wine => {
+        // Base score starts with wine's rating
+        let matchScore = wine.points || 85;
+        
+        // Description for flavor matching
+        const description = (wine.description || '').toLowerCase();
+        
+        // Flavor preference adjustments
+        let flavorMatches = 0;
+        let totalSelectedFlavors = 0;
+        
+        // Count flavor matches
+        for (const [flavor, isSelected] of Object.entries(userPreferences.flavors)) {
+            if (!isSelected) continue;
+            totalSelectedFlavors++;
+            
+            const flavorTerms = getFlavorTerms(flavor);
+            for (const term of flavorTerms) {
+                if (description.includes(term)) {
+                    flavorMatches++;
+                    matchScore += 2; // Bonus points for each flavor match
+                    break;
+                }
+            }
+        }
+        
+        // Calculate flavor match percentage
+        const flavorMatchPercentage = totalSelectedFlavors > 0 
+            ? Math.min(100, Math.round((flavorMatches / totalSelectedFlavors) * 100))
+            : 0;
+        
+        // Price range precision bonus
+        const price = parseFloat(wine.prix || wine.price || 0);
+        if (userPreferences.priceRange === 'budget' && price <= 25) {
+            matchScore += 3;
+        } else if (userPreferences.priceRange === 'moderate' && price >= 25 && price <= 60) {
+            matchScore += 3;
+        } else if (userPreferences.priceRange === 'premium' && price >= 60 && price <= 120) {
+            matchScore += 3;
+        } else if (userPreferences.priceRange === 'luxury' && price >= 120) {
+            matchScore += 3;
+        }
+        
+        // Wine type match bonus
+        if (userPreferences.wineType !== 'any') {
+            const variety = (wine.variété || wine.varietal || '').toLowerCase();
+            
+            const wineTypeMap = {
+                'red': ['rouge', 'red', 'noir', 'cabernet', 'merlot', 'syrah', 'pinot noir'],
+                'white': ['blanc', 'white', 'chardonnay', 'sauvignon', 'riesling'],
+                'rose': ['rosé', 'rose'],
+                'sparkling': ['sparkling', 'champagne', 'prosecco', 'cava'],
+                'dessert': ['port', 'sauternes', 'sweet', 'dessert']
+            };
+            
+            const typeTerms = wineTypeMap[userPreferences.wineType] || [];
+            for (const term of typeTerms) {
+                if (variety.includes(term)) {
+                    matchScore += 5;
+                    break;
+                }
+            }
+        }
+        
+        // Food pairing bonus
+        if (userPreferences.foodPairing !== 'none' && matchesFoodPairing(wine)) {
+            matchScore += 4;
+        }
+        
+        // Body preference precision bonus
+        if (userPreferences.bodyPreference !== 3 && matchesBodyPreference(wine)) {
+            matchScore += 3;
+        }
+        
+        // Occasion bonus (slight adjustment)
+        if (userPreferences.occasion === 'celebration' && price > 50) {
+            matchScore += 2;
+        } else if (userPreferences.occasion === 'gift' && price > 40) {
+            matchScore += 2;
+        } else if (userPreferences.occasion === 'collection' && (wine.points || 0) > 90) {
+            matchScore += 2;
+        }
+        
+        // Add a slight random factor for variety
+        matchScore += Math.random() * 3;
+        
+        // Cap at 100 and round to integer
+        matchScore = Math.min(Math.round(matchScore), 100);
+        
+        return { 
+            ...wine, 
+            matchScore,
+            flavorMatchPercentage
+        };
+    });
+}
+
+/**
+ * Get additional wine recommendations if needed
+ * @param {Array} currentMatches - Current matched wines
+ * @returns {Array} - Additional wine recommendations
+ */
+function getAdditionalRecommendations(currentMatches) {
+    console.log('Finding additional recommendations...');
+    
+    // Get IDs of wines already matched
+    const matchedIds = currentMatches.map(wine => wine.id);
+    
+    // Find additional wines with more relaxed criteria
+    return allWines
+        .filter(wine => {
+            // Exclude wines already in matches
+            if (matchedIds.includes(wine.id)) return false;
+            
+            // Basic quality filter
+            return (wine.points || 0) >= 85;
+        })
+        .map(wine => {
+            let score = wine.points || 85;
+            
+            // Small bonus for matching wine type
+            if (userPreferences.wineType !== 'any') {
+                const variety = (wine.variété || wine.varietal || '').toLowerCase();
+                const description = (wine.description || '').toLowerCase();
+                
+                if (userPreferences.wineType === 'red' && 
+                    (variety.includes('rouge') || variety.includes('red'))) {
+                    score += 3;
+                } else if (userPreferences.wineType === 'white' && 
+                    (variety.includes('blanc') || variety.includes('white'))) {
+                    score += 3;
+                } else if (userPreferences.wineType === 'rose' && 
+                    (variety.includes('rosé') || variety.includes('rose'))) {
+                    score += 3;
+                } else if (userPreferences.wineType === 'sparkling' && 
+                    (variety.includes('sparkling') || variety.includes('champagne'))) {
+                    score += 3;
+                } else if (userPreferences.wineType === 'dessert' && 
+                    (variety.includes('dessert') || description.includes('sweet'))) {
+                    score += 3;
+                }
+            }
+            
+            // Random factor to vary results
+            score += Math.random() * 5;
+            
+            return {
+                ...wine,
+                matchScore: Math.min(Math.round(score), 95), // Cap slightly lower than primary matches
+                flavorMatchPercentage: 0 // These are backup matches, so no flavor match percentage
+            };
+        })
+        .sort((a, b) => b.matchScore - a.matchScore)
+        .slice(0, 3 - currentMatches.length);
+}
+
+/**
+ * Display wine recommendations to the user
+ * @param {Array} wines - The recommended wines to display
  */
 function displayRecommendations(wines) {
     if (!recommendationsDiv) return;
     
+    // Clear previous recommendations
     recommendationsDiv.innerHTML = '';
     
+    // Handle case with no matches
     if (wines.length === 0) {
         recommendationsDiv.innerHTML = `
             <div class="col-12">
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle me-2"></i>
-                    No wines match your preferences. Try adjusting your criteria.
+                    No wines match your specific preferences. Try adjusting your criteria for better results.
                 </div>
             </div>
         `;
@@ -1013,32 +1104,36 @@ function displayRecommendations(wines) {
     // Create wine recommendation cards
     wines.forEach((wine, index) => {
         const col = document.createElement('div');
-        col.className = 'col-md-4 mb-4 fade-in';
+        col.className = 'col-lg-4 col-md-6 mb-4 fade-in';
         col.style.animationDelay = `${index * 0.2}s`;
         
-        // Determine wine type and visuals
+        // Determine wine type for styling
         const wineType = wine.variété || wine.varietal || '';
         let typeClass = 'wine-type-red';
-        let iconClass = 'wine-icon-red';
+        let typeBadge = 'badge-burgundy';
+        let typeIcon = 'wine-bottle';
         
         if (wineType.toLowerCase().includes('blanc') || 
             wineType.toLowerCase().includes('white') || 
             wineType.toLowerCase().includes('chardonnay') || 
             wineType.toLowerCase().includes('sauvignon')) {
             typeClass = 'wine-type-white';
-            iconClass = 'wine-icon-white';
+            typeBadge = 'badge-gold';
+            typeIcon = 'wine-glass-alt';
         } else if (wineType.toLowerCase().includes('sparkling') || 
-                wineType.toLowerCase().includes('champagne')) {
+                   wineType.toLowerCase().includes('champagne')) {
             typeClass = 'wine-type-sparkling';
-            iconClass = 'wine-icon-sparkling';
+            typeBadge = 'badge-sparkle';
+            typeIcon = 'glass-cheers';
         } else if (wineType.toLowerCase().includes('rosé') || 
-                wineType.toLowerCase().includes('rose')) {
+                   wineType.toLowerCase().includes('rose')) {
             typeClass = 'wine-type-rose';
-            iconClass = 'wine-icon-rose';
+            typeBadge = 'badge-rose';
+            typeIcon = 'wine-glass';
         }
         
-        // Determine pairing icon
-        let pairingIcon = '';
+        // Determine food pairing icon if applicable
+        let pairingHtml = '';
         if (userPreferences.foodPairing !== 'none') {
             const pairingIconMap = {
                 'beef': '<i class="fas fa-drumstick-bite"></i>',
@@ -1052,61 +1147,80 @@ function displayRecommendations(wines) {
                 'salad': '<i class="fas fa-leaf"></i>'
             };
             
-            pairingIcon = pairingIconMap[userPreferences.foodPairing] || '';
+            const icon = pairingIconMap[userPreferences.foodPairing] || '';
+            if (icon) {
+                pairingHtml = `
+                    <div class="meta-item">
+                        ${icon} Pairs with ${userPreferences.foodPairing}
+                    </div>
+                `;
+            }
         }
         
-        // Build recommendation card
+        // Get rating class based on points
+        let ratingClass = 'average';
+        const points = wine.points || 0;
+        if (points >= 95) ratingClass = 'exceptional';
+        else if (points >= 90) ratingClass = 'excellent';
+        else if (points >= 87) ratingClass = 'very-good';
+        else if (points < 85) ratingClass = 'below-average';
+        
+        // Create star display
+        const fullStars = Math.floor(points / 20);
+        const stars = '★'.repeat(fullStars) + '☆'.repeat(5 - fullStars);
+        
+        // Build card HTML
         col.innerHTML = `
-            <div class="card h-100 recommendation-card">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <span>Perfect Match</span>
-                    <span class="match-percentage">
-                        <div class="circular-progress" style="--progress: ${wine.matchScore}%">
-                            <div class="inner">
-                                <span class="match-text">${wine.matchScore}%</span>
-                            </div>
-                        </div>
+            <div class="wine-card">
+                <div class="wine-badges">
+                    <span class="badge ${typeBadge}">
+                        <i class="fas fa-${typeIcon} me-1"></i>${wineType}
                     </span>
                 </div>
-                <div class="wine-type-icon ${typeClass}">
-                    <div class="wine-icon-container">
-                        <div class="wine-icon ${iconClass}"></div>
-                        <div class="mt-2">${wineType}</div>
+                
+                ${wine.matchScore >= 95 ? `
+                    <div class="featured-badge">
+                        <i class="fas fa-award me-1"></i> Perfect Match
                     </div>
-                </div>
+                ` : ''}
+                
                 <div class="card-body">
-                    <h3 class="card-title h5">${wine.title || 'Unnamed Wine'}</h3>
-                    <p class="card-subtitle text-muted mb-2">${wine.winery || 'Unknown Winery'}</p>
-                    <div class="wine-meta mb-3">
-                        <span class="wine-region">
+                    <h3 class="card-title">${wine.title || wine.name || 'Unnamed Wine'}</h3>
+                    <div class="card-subtitle">
+                        <span class="winery">${wine.winery || wine.producer || 'Unknown Producer'}</span>
+                        <span class="vintage">${wine.vintage || 'NV'}</span>
+                    </div>
+                    
+                    <div class="wine-meta">
+                        <div class="meta-item">
                             <i class="fas fa-map-marker-alt"></i> 
-                            ${wine.region_1 || wine.region || 'Unknown Region'}, ${wine.country || 'Unknown Country'}
-                        </span>
-                        ${pairingIcon ? `
-                            <span class="wine-pairing">
-                                ${pairingIcon} Pairs with ${userPreferences.foodPairing}
-                            </span>
-                        ` : ''}
-                    </div>
-                    <div class="card-text small mb-3" style="max-height: 100px; overflow-y: auto;">
-                        ${wine.description || 'No description available.'}
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="badge ${typeClass === 'wine-type-red' ? 'badge-red' : 
-                                typeClass === 'wine-type-white' ? 'badge-white' : 
-                                typeClass === 'wine-type-sparkling' ? 'badge-sparkling' : 'badge-rose'}">
-                            ${wineType}
-                        </span>
-                        <span class="wine-rating">${wine.points || 'N/A'} pts</span>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="flavor-match">
-                            <div class="flavor-match-bar" style="--match-percentage: ${wine.flavorMatchPercentage}%"></div>
-                            <span class="flavor-match-text">Flavor match: ${wine.flavorMatchPercentage}%</span>
+                            ${wine.region || wine.region_1 || 'Unknown Region'}, ${wine.country || 'Unknown Country'}
                         </div>
+                        ${pairingHtml}
+                    </div>
+                    
+                    <div class="wine-rating ${ratingClass}">
+                        <div class="star-rating">${stars}</div>
+                        <div class="rating-number">${points}</div>
+                    </div>
+                    
+                    <p class="card-description">
+                        ${wine.description || 'No description available.'}
+                    </p>
+                    
+                    <div class="match-meter" title="${wine.flavorMatchPercentage}% flavor profile match">
+                        <div class="match-label">Flavor Match</div>
+                        <div class="match-bar">
+                            <div class="match-fill" style="width: ${wine.flavorMatchPercentage}%"></div>
+                        </div>
+                        <div class="match-percentage">${wine.flavorMatchPercentage}%</div>
+                    </div>
+                    
+                    <div class="card-footer">
                         <span class="wine-price">$${(wine.prix || wine.price || 0).toFixed(2)}</span>
+                        <button class="btn-add-to-cart" onclick="addToCart('${wine.id}')">
+                            <i class="fas fa-plus me-2"></i>Add to Collection
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1115,53 +1229,24 @@ function displayRecommendations(wines) {
         recommendationsDiv.appendChild(col);
     });
     
-    // Display recommendation explanation
-    updateRecommendationExplanation();
-    
-    // Add bubbles to sparkling wine icons
+    // Add fade-in animation to give a staggered effect
     setTimeout(() => {
-        document.querySelectorAll('.wine-icon-sparkling').forEach(icon => {
-            addBubbles(icon);
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.classList.add('show');
         });
-    }, 500);
+    }, 100);
 }
 
 /**
- * Add animated bubbles to sparkling wine icons
- * @param {HTMLElement} iconElement - The sparkling wine icon element
- */
-function addBubbles(iconElement) {
-    const bubbleCount = 8;
-    
-    for (let i = 0; i < bubbleCount; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'wine-icon-bubble';
-        
-        // Randomize bubble properties
-        const size = 3 + Math.random() * 5;
-        const left = 5 + Math.random() * 10;
-        const delay = Math.random() * 3;
-        const duration = 2 + Math.random() * 2;
-        
-        bubble.style.width = `${size}px`;
-        bubble.style.height = `${size}px`;
-        bubble.style.left = `${left}px`;
-        bubble.style.animationDelay = `${delay}s`;
-        bubble.style.animationDuration = `${duration}s`;
-        
-        iconElement.querySelector('.wine-icon').appendChild(bubble);
-    }
-}
-
-/**
- * Update recommendation explanation based on user preferences
+ * Update the recommendation explanation based on user preferences
  */
 function updateRecommendationExplanation() {
     if (!recommendationReasons) return;
     
+    // Clear previous reasons
     recommendationReasons.innerHTML = '';
     
-    // Add explanation points based on user preferences
+    // Get selected flavors
     const selectedFlavors = [];
     for (const [flavor, isSelected] of Object.entries(userPreferences.flavors)) {
         if (isSelected) {
@@ -1169,42 +1254,34 @@ function updateRecommendationExplanation() {
         }
     }
     
+    // Add explanation for flavor preferences
     if (selectedFlavors.length > 0) {
         const flavorsList = selectedFlavors.map(f => f.charAt(0).toUpperCase() + f.slice(1)).join(', ');
-        addRecommendationReason(`Have ${flavorsList} characteristics`);
+        addRecommendationReason(`Have ${flavorsList} characteristics that match your taste profile`);
     }
     
-    // Price range
-    let priceText = '';
-    switch (userPreferences.priceRange) {
-        case 'budget':
-            priceText = 'budget-friendly (under $25)';
-            break;
-        case 'moderate':
-            priceText = 'moderate ($20-$60)';
-            break;
-        case 'premium':
-            priceText = 'premium ($50-$120)';
-            break;
-        case 'luxury':
-            priceText = 'luxury ($100+)';
-            break;
-    }
-    addRecommendationReason(`Match your ${priceText} price range`);
+    // Explanation for price range
+    const priceMap = {
+        'budget': 'budget-friendly (under $25)',
+        'moderate': 'moderate ($25-$60)',
+        'premium': 'premium ($60-$120)',
+        'luxury': 'luxury ($120+)'
+    };
+    addRecommendationReason(`Fall within your preferred ${priceMap[userPreferences.priceRange]} price range`);
     
-    // Wine type
+    // Wine type explanation
     if (userPreferences.wineType !== 'any') {
-        addRecommendationReason(`Are ${userPreferences.wineType} wines`);
+        addRecommendationReason(`Are ${userPreferences.wineType} wines as you requested`);
     }
     
-    // Food pairing
+    // Food pairing explanation
     if (userPreferences.foodPairing !== 'none') {
-        addRecommendationReason(`Pair well with ${userPreferences.foodPairing}`);
+        addRecommendationReason(`Pair exceptionally well with ${userPreferences.foodPairing}`);
     }
     
-    // Body preference
+    // Body preference explanation
     if (userPreferences.bodyPreference) {
-        const bodyValue = parseInt(userPreferences.bodyPreference);
+        const bodyValue = userPreferences.bodyPreference;
         let bodyText = 'medium';
         
         if (bodyValue === 1) bodyText = 'light';
@@ -1212,30 +1289,30 @@ function updateRecommendationExplanation() {
         else if (bodyValue === 4) bodyText = 'medium-full';
         else if (bodyValue === 5) bodyText = 'full';
         
-        addRecommendationReason(`Have a ${bodyText} body`);
+        addRecommendationReason(`Have a ${bodyText} body that matches your preference`);
     }
     
-    // Ageability
-    if (userPreferences.ageability && userPreferences.ageability !== 'any') {
+    // Ageability explanation
+    if (userPreferences.ageability !== 'any') {
         if (userPreferences.ageability === 'now') {
-            addRecommendationReason('Are ready to drink now');
+            addRecommendationReason('Are ready to drink now, without further aging');
         } else {
-            addRecommendationReason('Have good aging potential');
+            addRecommendationReason('Have excellent aging potential for your collection');
         }
     }
     
-    // Occasion
-    const occasionText = {
-        'casual': 'a casual gathering',
-        'celebration': 'a celebration',
-        'gift': 'giving as a gift',
-        'collection': 'adding to your collection',
-        'dinner': 'a dinner party'
+    // Occasion explanation
+    const occasionMap = {
+        'casual': 'casual gatherings',
+        'celebration': 'special celebrations',
+        'gift': 'giving as a memorable gift',
+        'collection': 'adding to a distinguished collection',
+        'dinner': 'impressive dinner parties'
     };
-    addRecommendationReason(`Are suitable for ${occasionText[userPreferences.occasion] || 'your occasion'}`);
+    addRecommendationReason(`Are perfectly suited for ${occasionMap[userPreferences.occasion] || 'your occasion'}`);
     
-    // Always add this point
-    addRecommendationReason('Have high quality ratings from wine experts');
+    // Quality statement (always included)
+    addRecommendationReason('Have been highly rated by wine experts and critics');
 }
 
 /**
@@ -1249,4 +1326,124 @@ function addRecommendationReason(reason) {
     li.className = 'fade-in';
     li.textContent = reason;
     recommendationReasons.appendChild(li);
+    
+    // Stagger animation
+    setTimeout(() => {
+        li.classList.add('show');
+    }, 100 * recommendationReasons.children.length);
 }
+
+/**
+ * Add a wine to the cart
+ * @param {string} wineId - The ID of the wine to add
+ */
+function addToCart(wineId) {
+    // Find wine in the dataset
+    const wine = allWines.find(w => w.id === wineId);
+    if (!wine) return;
+    
+    // Show notification
+    showNotification(`${wine.title || wine.name || 'Wine'} added to your collection`, 'success');
+    
+    // Update cart count (this would connect to your cart system)
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) {
+        const currentCount = parseInt(cartCount.textContent);
+        cartCount.textContent = (currentCount + 1).toString();
+        cartCount.classList.add('pulse');
+        setTimeout(() => {
+            cartCount.classList.remove('pulse');
+        }, 600);
+    }
+    
+    // Toggle button state on the wine card
+    const button = event.currentTarget;
+    button.classList.add('added');
+    button.innerHTML = '<i class="fas fa-check me-2"></i>Added to Collection';
+    
+    setTimeout(() => {
+        button.classList.remove('added');
+        button.innerHTML = '<i class="fas fa-plus me-2"></i>Add to Collection';
+    }, 2000);
+}
+
+/**
+ * Display a notification message to the user
+ * @param {string} message - The message to display
+ * @param {string} type - The notification type (success, error, info)
+ */
+function showNotification(message, type = 'info') {
+    // Remove any existing notification
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    // Create new notification
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    
+    // Set icon based on type
+    let icon = 'info-circle';
+    if (type === 'success') icon = 'check-circle';
+    if (type === 'error') icon = 'exclamation-circle';
+    
+    notification.innerHTML = `
+        <i class="fas fa-${icon}"></i>
+        <span>${message}</span>
+        <button class="close-notification">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    // Add to document
+    document.body.appendChild(notification);
+    
+    // Show notification with animation
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    // Add click handler to close button
+    const closeButton = notification.querySelector('.close-notification');
+    if (closeButton) {
+        closeButton.addEventListener('click', () => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        });
+    }
+    
+    // Auto-dismiss after 4 seconds
+    setTimeout(() => {
+        if (document.body.contains(notification)) {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    notification.remove();
+                }
+            }, 300);
+        }
+    }, 4000);
+}
+
+/**
+ * Display an error message in the recommendations area
+ * @param {string} message - The error message to display
+ */
+function displayErrorMessage(message) {
+    if (!recommendationsDiv) return;
+    
+    recommendationsDiv.innerHTML = `
+        <div class="col-12">
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle me-2"></i> 
+                ${message}
+            </div>
+        </div>
+    `;
+}
+
+// Add to cart function (to be connected to your cart system)
+window.addToCart = addToCart;

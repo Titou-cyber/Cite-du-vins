@@ -1,11 +1,12 @@
 /**
- * Enhanced Wine Knowledge Educational Component
+ * La Cité Du Vin - Wine Knowledge & Education Module
  * 
  * This script powers the interactive wine education features including:
  * - Dynamic tabbed interface for different learning modules
- * - Interactive wine quiz with score tracking
- * - Animated glossary of wine terminology
- * - Visual transition effects between educational content
+ * - Interactive wine quiz with score tracking and visual feedback
+ * - Animated glossary of wine terminology with filtering and search
+ * - Interactive wine aroma wheel with detailed explanations
+ * - Visual transition effects and scroll-based animations
  */
 
 // DOM Elements for Tab Navigation
@@ -21,11 +22,26 @@ const quizExplanationContainer = document.getElementById('quiz-explanation');
 const nextButton = document.getElementById('next-question');
 const prevButton = document.getElementById('prev-question');
 const currentQuestionSpan = document.getElementById('current-question');
+const totalQuestionsSpan = document.getElementById('total-questions');
 const progressBar = document.getElementById('quiz-progress-bar');
 const quizResults = document.getElementById('quiz-results');
 const resultScoreSpan = document.getElementById('result-score');
 const resultMessageP = document.getElementById('result-message');
 const restartQuizButton = document.getElementById('restart-quiz');
+
+// DOM Elements for Glossary
+const glossaryContainer = document.getElementById('glossary-container');
+const glossarySearch = document.getElementById('glossary-search');
+const glossaryCategories = document.querySelectorAll('.glossary-category');
+const glossaryCount = document.getElementById('glossary-count');
+
+// DOM Elements for Aroma Wheel
+const aromaWheel = document.getElementById('aroma-wheel');
+const aromaSegments = document.querySelectorAll('.aroma-segment');
+const aromaDescriptions = document.getElementById('aroma-descriptions');
+
+// DOM Elements for Animations
+const animateElements = document.querySelectorAll('.animate-on-scroll');
 
 // Variables
 let currentQuestion = 0;
@@ -218,24 +234,66 @@ const glossaryTerms = [
     }
 ];
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', init);
+// Aroma Wheel Descriptions
+const aromaCategories = {
+    'fruit': {
+        title: 'Fruit Aromas',
+        desc: 'Fruit aromas in wine can range from fresh to dried, including berries, stone fruits, citrus, and tropical notes. Red wines often feature red and black fruits, while white wines lean toward citrus, orchard, and tropical fruits.',
+        examples: 'Cherry, Blackberry, Lemon, Apple, Peach, Pineapple'
+    },
+    'floral': {
+        title: 'Floral Aromas',
+        desc: 'Floral notes add delicate aromatic qualities to wines. These are more common in white wines and some lighter reds like Pinot Noir.',
+        examples: 'Rose, Violet, Jasmine, Orange Blossom, Lavender, Honeysuckle'
+    },
+    'spice': {
+        title: 'Spice Aromas',
+        desc: 'Spice notes can come from the grape variety itself or from oak aging. They add complexity and warmth to a wine\'s profile.',
+        examples: 'Black Pepper, Cinnamon, Clove, Nutmeg, Vanilla, Licorice'
+    },
+    'earth': {
+        title: 'Earth Aromas',
+        desc: 'Earthy notes often reflect the terroir of a wine and are particularly prominent in Old World wines. These add depth and complexity.',
+        examples: 'Forest Floor, Mushroom, Wet Stone, Potting Soil, Leather, Tobacco'
+    },
+    'oak': {
+        title: 'Oak & Toast Aromas',
+        desc: 'These aromas come from aging wine in oak barrels. The intensity depends on factors like barrel age, toast level, and aging time.',
+        examples: 'Vanilla, Smoke, Cedar, Coffee, Chocolate, Caramel, Coconut'
+    },
+    'mineral': {
+        title: 'Mineral Aromas',
+        desc: 'Mineral notes are often associated with specific soil types and can give wines a distinctive character and sense of place.',
+        examples: 'Flint, Chalk, Slate, Saline, Wet Stone, Petrichor'
+    }
+};
+
+// Initialize the application when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initialize);
 
 /**
- * Initialize the application
+ * Initialize the wine knowledge application
  */
-function init() {
+function initialize() {
+    console.log('Initializing Wine Knowledge Module');
+    
     // Set up tab navigation
     setupTabs();
     
-    // Set up quiz functionality
-    initQuiz();
+    // Set up quiz if quiz elements exist
+    if (startQuizButton && quizIntro) {
+        initQuiz();
+    }
     
-    // Set up glossary filter and search
-    setupGlossary();
+    // Set up glossary if glossary elements exist
+    if (glossaryContainer && glossaryCategories) {
+        setupGlossary();
+    }
     
-    // Setup wine aroma wheel if it exists
-    setupAromaWheel();
+    // Set up aroma wheel if it exists
+    if (aromaWheel && aromaSegments) {
+        setupAromaWheel();
+    }
     
     // Set up scroll reveal animations
     setupScrollAnimations();
@@ -245,10 +303,15 @@ function init() {
  * Set up tab navigation with smooth transitions
  */
 function setupTabs() {
+    if (!tabButtons.length || !tabContents.length) return;
+    
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
             // Get target tab
             const targetTab = button.getAttribute('data-tab');
+            
+            // Skip if already active
+            if (button.classList.contains('active')) return;
             
             // Remove active class from all buttons
             tabButtons.forEach(btn => btn.classList.remove('active'));
@@ -270,18 +333,20 @@ function setupTabs() {
             // Show target tab content with fade in
             setTimeout(() => {
                 const tabContent = document.getElementById(`${targetTab}-tab-content`);
-                tabContent.classList.add('active');
-                tabContent.style.display = 'block';
-                tabContent.classList.add('tab-fade-in');
-                
-                setTimeout(() => {
-                    tabContent.classList.remove('tab-fade-in');
-                }, 200);
+                if (tabContent) {
+                    tabContent.classList.add('active');
+                    tabContent.style.display = 'block';
+                    tabContent.classList.add('tab-fade-in');
+                    
+                    setTimeout(() => {
+                        tabContent.classList.remove('tab-fade-in');
+                    }, 200);
+                }
             }, 210);
         });
     });
     
-    // Set initial visibility
+    // Set initial tab visibility
     tabContents.forEach((content, index) => {
         if (index === 0) {
             content.style.display = 'block';
@@ -297,9 +362,7 @@ function setupTabs() {
  */
 function initQuiz() {
     // Set up event listeners
-    if (startQuizButton) {
-        startQuizButton.addEventListener('click', startQuiz);
-    }
+    startQuizButton.addEventListener('click', startQuiz);
     
     if (nextButton) {
         nextButton.addEventListener('click', goToNextQuestion);
@@ -316,6 +379,11 @@ function initQuiz() {
     // Initialize answers array
     answers = new Array(questions.length).fill(null);
     
+    // Update total questions display
+    if (totalQuestionsSpan) {
+        totalQuestionsSpan.textContent = questions.length;
+    }
+    
     // Preload quiz content for faster transitions
     preloadQuizContent();
 }
@@ -330,7 +398,7 @@ function preloadQuizContent() {
     document.body.appendChild(preloadContainer);
     
     // Preload question content
-    questions.forEach((question, index) => {
+    questions.forEach((question) => {
         const preloadQuestion = document.createElement('div');
         preloadQuestion.innerHTML = `
             <h4 class="question mb-4">${question.question}</h4>
@@ -366,7 +434,7 @@ function startQuiz() {
                     <div class="double-bounce1"></div>
                     <div class="double-bounce2"></div>
                 </div>
-                <p class="mt-3">Preparing your quiz...</p>
+                <p class="mt-3">Preparing your wine knowledge quiz...</p>
             </div>
         `;
     }
@@ -415,7 +483,7 @@ function startQuizTimer() {
         clearInterval(quizTimerInterval);
     }
     
-    // Set timer for 10 minutes (adjust as needed)
+    // Set timer for 10 minutes
     quizTimeLeft = 10 * 60;
     updateTimerDisplay();
     
@@ -458,102 +526,131 @@ function updateTimerDisplay() {
  */
 function displayQuestion() {
     // Update question number and progress bar
-    currentQuestionSpan.textContent = currentQuestion + 1;
-    const progress = ((currentQuestion + 1) / questions.length) * 100;
-    progressBar.style.width = `${progress}%`;
+    if (currentQuestionSpan) {
+        currentQuestionSpan.textContent = currentQuestion + 1;
+    }
+    
+    if (progressBar) {
+        const progress = ((currentQuestion + 1) / questions.length) * 100;
+        progressBar.style.width = `${progress}%`;
+    }
     
     // Reset option selected flag
     optionSelected = answers[currentQuestion] !== null;
     
     // Enable/disable next button based on selection
-    nextButton.disabled = !optionSelected;
+    if (nextButton) {
+        nextButton.disabled = !optionSelected;
+    }
     
     // Fade out current question
-    questionContainer.classList.add('question-fade-out');
-    
-    setTimeout(() => {
-        // Get current question
-        const question = questions[currentQuestion];
-        
-        // Create question HTML
-        questionContainer.innerHTML = `
-            <h4 class="question mb-4">${question.question}</h4>
-            <div class="options">
-                ${question.options.map((option, index) => `
-                    <div class="quiz-option ${answers[currentQuestion] === index ? 
-                        (answers[currentQuestion] === question.answer ? 'correct' : 'incorrect') : ''}" 
-                        data-index="${index}">
-                        ${option}
-                    </div>
-                `).join('')}
-            </div>
-        `;
-        
-        // Set up event listeners for options
-        const questionOptions = questionContainer.querySelectorAll('.quiz-option');
-        questionOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                // Clear previous selections
-                questionOptions.forEach(opt => {
-                    opt.classList.remove('selected', 'correct', 'incorrect');
-                });
-                
-                // Set current selection
-                const selectedIndex = parseInt(option.getAttribute('data-index'));
-                answers[currentQuestion] = selectedIndex;
-                
-                // Add appropriate classes
-                if (selectedIndex === question.answer) {
-                    option.classList.add('selected', 'correct');
-                } else {
-                    option.classList.add('selected', 'incorrect');
-                    // Find and mark correct answer
-                    questionOptions[question.answer].classList.add('correct');
-                }
-                
-                // Show explanation
-                displayExplanation(selectedIndex === question.answer);
-                
-                // Enable next button
-                optionSelected = true;
-                nextButton.disabled = false;
-                nextButton.classList.add('pulse-once');
-                setTimeout(() => {
-                    nextButton.classList.remove('pulse-once');
-                }, 1000);
-            });
-        });
-        
-        // If answer already selected, show explanation
-        if (answers[currentQuestion] !== null) {
-            displayExplanation(answers[currentQuestion] === question.answer);
-        } else {
-            quizExplanationContainer.classList.add('d-none');
-        }
-        
-        // Show/hide previous/next buttons
-        if (currentQuestion === 0) {
-            prevButton.classList.add('d-none');
-        } else {
-            prevButton.classList.remove('d-none');
-        }
-        
-        if (currentQuestion === questions.length - 1) {
-            nextButton.textContent = 'Finish Quiz';
-            nextButton.classList.add('btn-finish');
-        } else {
-            nextButton.textContent = 'Next';
-            nextButton.classList.remove('btn-finish');
-        }
-        
-        // Fade in new question
-        questionContainer.classList.remove('question-fade-out');
-        questionContainer.classList.add('question-fade-in');
+    if (questionContainer) {
+        questionContainer.classList.add('question-fade-out');
         
         setTimeout(() => {
-            questionContainer.classList.remove('question-fade-in');
+            // Get current question
+            const question = questions[currentQuestion];
+            
+            // Create question HTML
+            questionContainer.innerHTML = `
+                <h4 class="question mb-4">${question.question}</h4>
+                <div class="options">
+                    ${question.options.map((option, index) => `
+                        <div class="quiz-option ${answers[currentQuestion] === index ? 
+                            (answers[currentQuestion] === question.answer ? 'correct' : 'incorrect') : ''}" 
+                            data-index="${index}">
+                            ${option}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            // Set up event listeners for options
+            const questionOptions = questionContainer.querySelectorAll('.quiz-option');
+            questionOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    selectOption(option, questionOptions);
+                });
+            });
+            
+            // If answer already selected, show explanation
+            if (answers[currentQuestion] !== null) {
+                displayExplanation(answers[currentQuestion] === question.answer);
+            } else {
+                if (quizExplanationContainer) {
+                    quizExplanationContainer.classList.add('d-none');
+                }
+            }
+            
+            // Show/hide previous/next buttons
+            if (prevButton) {
+                if (currentQuestion === 0) {
+                    prevButton.classList.add('d-none');
+                } else {
+                    prevButton.classList.remove('d-none');
+                }
+            }
+            
+            if (nextButton) {
+                if (currentQuestion === questions.length - 1) {
+                    nextButton.textContent = 'Finish Quiz';
+                    nextButton.classList.add('btn-finish');
+                } else {
+                    nextButton.textContent = 'Next Question';
+                    nextButton.classList.remove('btn-finish');
+                }
+            }
+            
+            // Fade in new question
+            questionContainer.classList.remove('question-fade-out');
+            questionContainer.classList.add('question-fade-in');
+            
+            setTimeout(() => {
+                questionContainer.classList.remove('question-fade-in');
+            }, 300);
         }, 300);
-    }, 300);
+    }
+}
+
+/**
+ * Handle option selection
+ * @param {HTMLElement} selectedOption - The selected option element
+ * @param {NodeList} allOptions - All option elements
+ */
+function selectOption(selectedOption, allOptions) {
+    // Get current question
+    const question = questions[currentQuestion];
+    
+    // Clear previous selections
+    allOptions.forEach(opt => {
+        opt.classList.remove('selected', 'correct', 'incorrect');
+    });
+    
+    // Set current selection
+    const selectedIndex = parseInt(selectedOption.getAttribute('data-index'));
+    answers[currentQuestion] = selectedIndex;
+    
+    // Add appropriate classes
+    if (selectedIndex === question.answer) {
+        selectedOption.classList.add('selected', 'correct');
+    } else {
+        selectedOption.classList.add('selected', 'incorrect');
+        // Find and mark correct answer
+        allOptions[question.answer].classList.add('correct');
+    }
+    
+    // Show explanation
+    displayExplanation(selectedIndex === question.answer);
+    
+    // Enable next button
+    optionSelected = true;
+    if (nextButton) {
+        nextButton.disabled = false;
+        nextButton.classList.add('pulse-once');
+        setTimeout(() => {
+            nextButton.classList.remove('pulse-once');
+        }, 1000);
+    }
 }
 
 /**
@@ -561,6 +658,8 @@ function displayQuestion() {
  * @param {boolean} isCorrect - Whether the answer is correct
  */
 function displayExplanation(isCorrect) {
+    if (!quizExplanationContainer) return;
+    
     const question = questions[currentQuestion];
     
     quizExplanationContainer.innerHTML = `
@@ -624,26 +723,36 @@ function finishQuiz(timeExpired = false) {
     });
     
     // Update UI with animation
-    quizContainer.classList.add('slide-out');
-    
-    setTimeout(() => {
-        quizContainer.classList.add('d-none');
-        quizContainer.classList.remove('slide-out');
-        quizResults.classList.remove('d-none');
-        quizResults.classList.add('slide-in');
+    if (quizContainer && quizResults) {
+        quizContainer.classList.add('slide-out');
         
         setTimeout(() => {
-            quizResults.classList.remove('slide-in');
+            quizContainer.classList.add('d-none');
+            quizContainer.classList.remove('slide-out');
+            quizResults.classList.remove('d-none');
+            quizResults.classList.add('slide-in');
+            
+            setTimeout(() => {
+                quizResults.classList.remove('slide-in');
+            }, 300);
         }, 300);
-    }, 300);
+    }
     
     // Calculate percentage
     const scorePercentage = Math.round((score / questions.length) * 100);
     
     // Update result elements
-    resultScoreSpan.textContent = score;
-    document.getElementById('total-questions').textContent = questions.length;
-    document.getElementById('score-percentage').textContent = scorePercentage;
+    if (resultScoreSpan) {
+        resultScoreSpan.textContent = score;
+    }
+    
+    if (document.getElementById('total-questions')) {
+        document.getElementById('total-questions').textContent = questions.length;
+    }
+    
+    if (document.getElementById('score-percentage')) {
+        document.getElementById('score-percentage').textContent = scorePercentage;
+    }
     
     // Update circular progress
     const circularProgress = document.querySelector('.result-progress');
@@ -652,20 +761,22 @@ function finishQuiz(timeExpired = false) {
     }
     
     // Set result message
-    let message = '';
-    if (timeExpired) {
-        message = "Time's up! Here's how you did:";
-    } else if (score <= 3) {
-        message = "Wine Novice: You're just starting your wine journey. Keep learning!";
-    } else if (score <= 6) {
-        message = "Wine Enthusiast: You have a good foundation of wine knowledge. Keep exploring!";
-    } else if (score <= 9) {
-        message = "Wine Aficionado: Impressive knowledge of wine! You know your grapes well.";
-    } else {
-        message = "Wine Master: Outstanding! You have expert-level wine knowledge.";
+    if (resultMessageP) {
+        let message = '';
+        if (timeExpired) {
+            message = "Time's up! Here's how you did:";
+        } else if (score <= 3) {
+            message = "Wine Novice: You're just starting your wine journey. Keep learning!";
+        } else if (score <= 6) {
+            message = "Wine Enthusiast: You have a good foundation of wine knowledge. Keep exploring!";
+        } else if (score <= 9) {
+            message = "Wine Aficionado: Impressive knowledge of wine! You know your grapes well.";
+        } else {
+            message = "Wine Master: Outstanding! You have expert-level wine knowledge.";
+        }
+        
+        resultMessageP.textContent = message;
     }
-    
-    resultMessageP.textContent = message;
     
     // Show quiz statistics
     updateQuizStatistics();
@@ -683,6 +794,7 @@ function updateQuizStatistics() {
     const correctAnswers = answers.reduce((count, answer, index) => {
         return count + (answer === questions[index].answer ? 1 : 0);
     }, 0);
+    const incorrectAnswers = answeredQuestions - correctAnswers;
     const unansweredQuestions = answers.filter(answer => answer === null).length;
     
     // Create statistics content
@@ -695,7 +807,7 @@ function updateQuizStatistics() {
         </div>
         <div class="stats-item">
             <div class="stat-circle incorrect">
-                <span>${answeredQuestions - correctAnswers}</span>
+                <span>${incorrectAnswers}</span>
             </div>
             <p>Incorrect</p>
         </div>
@@ -727,32 +839,31 @@ function restartQuiz() {
     optionSelected = false;
     
     // Reset progress bar
-    progressBar.style.width = '0%';
+    if (progressBar) {
+        progressBar.style.width = '0%';
+    }
     
     // Hide results, show intro with animation
-    quizResults.classList.add('slide-out');
-    
-    setTimeout(() => {
-        quizResults.classList.add('d-none');
-        quizResults.classList.remove('slide-out');
-        quizIntro.classList.remove('d-none');
-        quizIntro.classList.add('slide-in');
+    if (quizResults && quizIntro) {
+        quizResults.classList.add('slide-out');
         
         setTimeout(() => {
-            quizIntro.classList.remove('slide-in');
+            quizResults.classList.add('d-none');
+            quizResults.classList.remove('slide-out');
+            quizIntro.classList.remove('d-none');
+            quizIntro.classList.add('slide-in');
+            
+            setTimeout(() => {
+                quizIntro.classList.remove('slide-in');
+            }, 300);
         }, 300);
-    }, 300);
+    }
 }
 
 /**
  * Set up glossary filtering and search
  */
 function setupGlossary() {
-    const glossaryContainer = document.getElementById('glossary-container');
-    const searchInput = document.getElementById('glossary-search');
-    const categoryFilters = document.querySelectorAll('.glossary-category');
-    const glossaryCount = document.getElementById('glossary-count');
-    
     if (!glossaryContainer) return;
     
     // Populate glossary initially
@@ -764,9 +875,9 @@ function setupGlossary() {
     }
     
     // Set up search functionality
-    if (searchInput) {
-        searchInput.addEventListener('input', () => {
-            const searchTerm = searchInput.value.toLowerCase();
+    if (glossarySearch) {
+        glossarySearch.addEventListener('input', () => {
+            const searchTerm = glossarySearch.value.toLowerCase();
             const activeCategory = document.querySelector('.glossary-category.active')?.getAttribute('data-category') || 'all';
             
             filterGlossary(searchTerm, activeCategory);
@@ -774,15 +885,15 @@ function setupGlossary() {
     }
     
     // Set up category filters
-    if (categoryFilters.length > 0) {
-        categoryFilters.forEach(filter => {
+    if (glossaryCategories.length > 0) {
+        glossaryCategories.forEach(filter => {
             filter.addEventListener('click', () => {
                 // Toggle active class
-                categoryFilters.forEach(f => f.classList.remove('active'));
+                glossaryCategories.forEach(f => f.classList.remove('active'));
                 filter.classList.add('active');
                 
                 const category = filter.getAttribute('data-category');
-                const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+                const searchTerm = glossarySearch ? glossarySearch.value.toLowerCase() : '';
                 
                 filterGlossary(searchTerm, category);
             });
@@ -857,7 +968,6 @@ function populateGlossary(terms, container) {
  * @param {string} category - Category filter
  */
 function filterGlossary(searchTerm, category) {
-    const glossaryContainer = document.getElementById('glossary-container');
     if (!glossaryContainer) return;
     
     // Apply filters
@@ -877,7 +987,6 @@ function filterGlossary(searchTerm, category) {
     }
     
     // Update term count
-    const glossaryCount = document.getElementById('glossary-count');
     if (glossaryCount) {
         glossaryCount.textContent = filteredTerms.length;
     }
@@ -890,17 +999,13 @@ function filterGlossary(searchTerm, category) {
  * Set up wine aroma wheel
  */
 function setupAromaWheel() {
-    const aromaWheel = document.getElementById('aroma-wheel');
-    if (!aromaWheel) return;
+    if (!aromaWheel || !aromaSegments) return;
     
     // Set up click handlers for segments
-    const segments = aromaWheel.querySelectorAll('.aroma-segment');
-    const aromaDescriptions = document.getElementById('aroma-descriptions');
-    
-    segments.forEach(segment => {
+    aromaSegments.forEach(segment => {
         segment.addEventListener('click', () => {
             // Toggle active state
-            segments.forEach(s => s.classList.remove('active'));
+            aromaSegments.forEach(s => s.classList.remove('active'));
             segment.classList.add('active');
             
             // Get aroma category
@@ -908,40 +1013,7 @@ function setupAromaWheel() {
             
             // Update description
             if (aromaDescriptions) {
-                const descriptions = {
-                    'fruit': {
-                        title: 'Fruit Aromas',
-                        desc: 'Fruit aromas in wine can range from fresh to dried, including berries, stone fruits, citrus, and tropical notes. Red wines often feature red and black fruits, while white wines lean toward citrus, orchard, and tropical fruits.',
-                        examples: 'Cherry, Blackberry, Lemon, Apple, Peach, Pineapple'
-                    },
-                    'floral': {
-                        title: 'Floral Aromas',
-                        desc: 'Floral notes add delicate aromatic qualities to wines. These are more common in white wines and some lighter reds like Pinot Noir.',
-                        examples: 'Rose, Violet, Jasmine, Orange Blossom, Lavender, Honeysuckle'
-                    },
-                    'spice': {
-                        title: 'Spice Aromas',
-                        desc: 'Spice notes can come from the grape variety itself or from oak aging. They add complexity and warmth to a wines profile.',
-                        examples: 'Black Pepper, Cinnamon, Clove, Nutmeg, Vanilla, Licorice'
-                    },
-                    'earth': {
-                        title: 'Earth Aromas',
-                        desc: 'Earthy notes often reflect the terroir of a wine and are particularly prominent in Old World wines. These add depth and complexity.',
-                        examples: 'Forest Floor, Mushroom, Wet Stone, Potting Soil, Leather, Tobacco'
-                    },
-                    'oak': {
-                        title: 'Oak & Toast Aromas',
-                        desc: 'These aromas come from aging wine in oak barrels. The intensity depends on factors like barrel age, toast level, and aging time.',
-                        examples: 'Vanilla, Smoke, Cedar, Coffee, Chocolate, Caramel, Coconut'
-                    },
-                    'mineral': {
-                        title: 'Mineral Aromas',
-                        desc: 'Mineral notes are often associated with specific soil types and can give wines a distinctive character and sense of place.',
-                        examples: 'Flint, Chalk, Slate, Saline, Wet Stone, Petrichor'
-                    }
-                };
-                
-                const aroma = descriptions[category] || {
+                const aroma = aromaCategories[category] || {
                     title: 'Select a category',
                     desc: 'Click on a segment of the aroma wheel to learn about different wine aroma categories.',
                     examples: ''
@@ -966,51 +1038,131 @@ function setupAromaWheel() {
  * Set up scroll animations
  */
 function setupScrollAnimations() {
-    // Find elements to animate
-    const animateElements = document.querySelectorAll('.animate-on-scroll');
+    if (!animateElements.length) return;
     
-    if (animateElements.length === 0) return;
-    
-    // Create intersection observer
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animated');
-                
-                // Unobserve after animation
-                observer.unobserve(entry.target);
-            }
+    // Check if IntersectionObserver is available
+    if ('IntersectionObserver' in window) {
+        // Create intersection observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    
+                    // Unobserve after animation
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
         });
-    }, {
-        root: null,
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-    
-    // Observe elements
-    animateElements.forEach(element => {
-        observer.observe(element);
-    });
+        
+        // Observe elements
+        animateElements.forEach(element => {
+            observer.observe(element);
+        });
+    } else {
+        // Fallback for browsers that don't support IntersectionObserver
+        animateElements.forEach(element => {
+            element.classList.add('animated');
+        });
+    }
 }
 
-// Export functions for HTML access
+/**
+ * Reset glossary filters - exposed for HTML access
+ */
 window.resetGlossaryFilters = function() {
-    const searchInput = document.getElementById('glossary-search');
-    if (searchInput) {
-        searchInput.value = '';
+    if (glossarySearch) {
+        glossarySearch.value = '';
     }
     
-    const categoryFilters = document.querySelectorAll('.glossary-category');
-    categoryFilters.forEach(filter => {
-        filter.classList.remove('active');
-    });
-    
-    // Set 'All' category active
-    const allFilter = document.querySelector('.glossary-category[data-category="all"]');
-    if (allFilter) {
-        allFilter.classList.add('active');
+    if (glossaryCategories.length > 0) {
+        glossaryCategories.forEach(filter => {
+            filter.classList.remove('active');
+        });
+        
+        // Set 'All' category active
+        const allFilter = document.querySelector('.glossary-category[data-category="all"]');
+        if (allFilter) {
+            allFilter.classList.add('active');
+        }
     }
     
     // Reset filters
     filterGlossary('', 'all');
+};
+
+/**
+ * Show a specific aroma category - exposed for HTML access
+ * @param {string} category - Aroma category to display
+ */
+window.showAromaCategory = function(category) {
+    const segment = document.querySelector(`.aroma-segment[data-category="${category}"]`);
+    if (segment) {
+        segment.click();
+    }
+};
+
+/**
+ * Show a notification
+ * @param {string} message - Message to display
+ * @param {string} type - Notification type (success, error, info)
+ * @param {number} duration - Duration in milliseconds
+ */
+window.showNotification = function(message, type = 'info', duration = 4000) {
+    // Remove any existing notification
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    // Create new notification
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    
+    // Set icon based on type
+    let icon = 'info-circle';
+    if (type === 'success') icon = 'check-circle';
+    if (type === 'error') icon = 'exclamation-circle';
+    
+    notification.innerHTML = `
+        <i class="fas fa-${icon}"></i>
+        <span>${message}</span>
+        <button class="close-notification">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    // Add to document
+    document.body.appendChild(notification);
+    
+    // Show notification with animation
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    // Add click handler to close button
+    const closeButton = notification.querySelector('.close-notification');
+    if (closeButton) {
+        closeButton.addEventListener('click', () => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        });
+    }
+    
+    // Auto-dismiss after duration
+    setTimeout(() => {
+        if (document.body.contains(notification)) {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    notification.remove();
+                }
+            }, 300);
+        }
+    }, duration);
 };

@@ -1004,58 +1004,125 @@ function filterWines() {
         return true;
     });
 }
+/**
+ * Determine the wine type and corresponding image
+ * @param {Object} wine - The wine object
+ * @returns {Object} - Wine type information
+ */
+function determineWineType(wine) {
+    // Extraction détaillée
+    const wineType = (wine.variété || wine.varietal || wine.variety || '').toLowerCase();
+    const title = (wine.title || '').toLowerCase();
+    const description = (wine.description || '').toLowerCase();
+    
+    // URLs d'images
+    const imageUrls = {
+        red: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=400&h=400&q=80',
+        white: 'https://images.unsplash.com/photo-1562601579-599dec564e06?auto=format&fit=crop&w=400&h=400&q=80',
+        sparkling: 'https://images.unsplash.com/photo-1605869310077-deaf8a22c128?auto=format&fit=crop&w=400&h=400&q=80',
+        rose: 'https://images.unsplash.com/photo-1558682125-c504d85a63a9?auto=format&fit=crop&w=400&h=400&q=80'
+    };
+    
+    // Indicateurs de type plus spécifiques
+    const typeIndicators = {
+        sparkling: [
+            'champagne', 'prosecco', 'cava', 'sparkling', 
+            'mousseux', 'pétillant', 'effervescent', 
+            'brut', 'crémant'
+        ],
+        rose: [
+            'rosé', 'rose', 'pink', 'blush', 
+            'vin rosé', 'rosado'
+        ],
+        white: [
+            'blanc', 'white', 'chardonnay', 'sauvignon', 
+            'riesling', 'pinot gris', 'gewurztraminer'
+        ],
+        red: [
+            'rouge', 'red', 'cabernet', 'merlot', 
+            'pinot noir', 'syrah', 'shiraz'
+        ]
+    };
+    
+    // Texte complet pour recherche
+    const fullText = `${wineType} ${title} ${description}`;
+    
+    // Détection de type
+    for (const [type, indicators] of Object.entries(typeIndicators)) {
+        const matchedIndicators = indicators.filter(indicator => 
+            fullText.includes(indicator)
+        );
+        
+        if (matchedIndicators.length > 0) {
+            switch(type) {
+                case 'sparkling':
+                    return {
+                        image: imageUrls.sparkling,
+                        badge: 'badge-sparkle',
+                        display: 'Vin Effervescent'
+                    };
+                case 'rose':
+                    return {
+                        image: imageUrls.rose,
+                        badge: 'badge-rose',
+                        display: 'Vin Rosé'
+                    };
+                case 'white':
+                    return {
+                        image: imageUrls.white,
+                        badge: 'badge-gold',
+                        display: 'Vin Blanc'
+                    };
+                case 'red':
+                    return {
+                        image: imageUrls.red,
+                        badge: 'badge-burgundy',
+                        display: 'Vin Rouge'
+                    };
+            }
+        }
+    }
+    
+    // Détection spécifique pour les exemples donnés
+    if (title.includes('champagne') || wineType.includes('champagne blend')) {
+        return {
+            image: imageUrls.sparkling,
+            badge: 'badge-sparkle',
+            display: 'Vin Effervescent'
+        };
+    }
+    
+    // Retour par défaut
+    return {
+        image: imageUrls.red,
+        badge: 'badge-burgundy',
+        display: 'Vin Rouge'
+    };
+}
 
 /**
- * Create a wine card element with consistent styling
+ * Create a wine card element
  * @param {Object} wine - The wine data
  * @param {number} index - The index for staggered animation
  * @param {boolean} isFeatured - Whether this is a featured wine
  * @returns {HTMLElement} - The wine card element
  */
 function createWineCard(wine, index, isFeatured = false) {
+    // Create container element
     const col = document.createElement('div');
     col.className = 'col-md-6 col-lg-4 mb-4 fade-in';
     col.style.animationDelay = `${index * 0.1}s`;
     
-    // Set wine type badge class
-    let wineTypeBadge = 'badge-burgundy';
-    let typeClass = 'wine-type-red';
-    let wineType = wine.variété || wine.varietal || '';
-    let wineTypeDisplay = 'Red Wine';
+    // Determine wine type and image
+    const wineTypeInfo = determineWineType(wine);
     
-    // More sophisticated wine type detection
-    if (wineType.toLowerCase().includes('blanc') || 
-        wineType.toLowerCase().includes('white') || 
-        wineType.toLowerCase().includes('chardonnay') || 
-        wineType.toLowerCase().includes('sauvignon') ||
-        wineType.toLowerCase().includes('riesling')) {
-        wineTypeBadge = 'badge-gold';
-        typeClass = 'wine-type-white';
-        wineTypeDisplay = 'White Wine';
-    } else if (wineType.toLowerCase().includes('sparkling') || 
-               wineType.toLowerCase().includes('champagne') ||
-               wineType.toLowerCase().includes('prosecco') ||
-               wineType.toLowerCase().includes('cava')) {
-        wineTypeBadge = 'badge-sparkle';
-        typeClass = 'wine-type-sparkling';
-        wineTypeDisplay = 'Sparkling Wine';
-    } else if (wineType.toLowerCase().includes('rosé') || 
-               wineType.toLowerCase().includes('rose')) {
-        wineTypeBadge = 'badge-rose';
-        typeClass = 'wine-type-rose';
-        wineTypeDisplay = 'Rosé Wine';
-    }
-    
-    // Create featured badge if applicable
-    const featuredBadge = isFeatured ? 
-        `<div class="featured-badge">
-            <i class="fas fa-award"></i> Featured
-        </div>` : '';
+    // Extract wine details
+    const wineType = wine.variété || wine.varietal || '';
+    const rating = wine.points || 0;
+    const price = parseFloat(wine.prix || wine.price || 0);
     
     // Calculate rating class
     let ratingClass = 'average';
-    const rating = wine.points || 0;
-    
     if (rating >= 95) {
         ratingClass = 'exceptional';
     } else if (rating >= 90) {
@@ -1066,39 +1133,38 @@ function createWineCard(wine, index, isFeatured = false) {
         ratingClass = 'below-average';
     }
     
-    // Wine image based on type
-    let wineImage = '';
-    if (wineTypeDisplay === 'Red Wine') {
-        wineImage = 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=400&q=80';
-    } else if (wineTypeDisplay === 'White Wine') {
-        wineImage = 'https://images.unsplash.com/photo-1562601579-599dec564e06?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=400&q=80';
-    } else if (wineTypeDisplay === 'Rosé Wine') {
-        wineImage = 'https://images.unsplash.com/photo-1558682125-c504d85a63a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=400&q=80';
-    } else {
-        wineImage = 'https://images.unsplash.com/photo-1605869310077-deaf8a22c128?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=400&q=80';
-    }
+    // Create featured badge
+    const featuredBadge = isFeatured 
+        ? '<div class="featured-badge"><i class="fas fa-award"></i> Featured</div>' 
+        : '';
     
+    // Construct wine card HTML
     col.innerHTML = `
         <div class="wine-card">
             ${featuredBadge}
             <div class="wine-image">
-                <img src="${wineImage}" alt="${wine.title || 'Wine'}" loading="lazy">
+                <img 
+                    src="${wineTypeInfo.image}" 
+                    alt="${wine.title || 'Vin'}" 
+                    onerror="this.src='https://via.placeholder.com/400?text=Vin'" 
+                    loading="lazy"
+                >
                 <div class="wine-badges">
-                    <span class="badge ${wineTypeBadge}">${wineTypeDisplay}</span>
+                    <span class="badge ${wineTypeInfo.badge}">${wineTypeInfo.display}</span>
                     ${rating >= 90 ? `<span class="badge badge-rating">${rating} Points</span>` : ''}
                 </div>
             </div>
             <div class="card-body">
-                <h4 class="card-title">${wine.title || 'Unnamed Wine'}</h4>
+                <h4 class="card-title">${wine.title || 'Vin sans nom'}</h4>
                 <p class="card-subtitle">
-                    <span class="winery">${wine.winery || 'Unknown Winery'}</span>
+                    <span class="winery">${wine.winery || 'Producteur inconnu'}</span>
                     <span class="vintage">${wine.vintage || ''}</span>
                 </p>
                 
                 <div class="wine-meta">
                     <div class="meta-item">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>${wine.region_1 || wine.region || 'Unknown Region'}, ${wine.country || 'Unknown Country'}</span>
+                        <span>${wine.region_1 || wine.region || 'Région inconnue'}, ${wine.country || 'Pays inconnu'}</span>
                     </div>
                     <div class="meta-item">
                         <i class="fas fa-wine-glass-alt"></i>
@@ -1115,19 +1181,19 @@ function createWineCard(wine, index, isFeatured = false) {
                     <span class="rating-number">${rating || 'N/A'}</span>
                 </div>
                 
-                <p class="card-description">${wine.description || 'No description available.'}</p>
+                <p class="card-description">${wine.description || 'Aucune description disponible.'}</p>
                 
                 <div class="card-footer">
-                    <span class="wine-price">$${(parseFloat(wine.prix || wine.price) || 0).toFixed(2)}</span>
+                    <span class="wine-price">$${price.toFixed(2)}</span>
                     <button class="btn-add-to-cart" data-wine-id="${wine.id}">
-                        <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                        <i class="fas fa-shopping-cart me-2"></i>Ajouter au panier
                     </button>
                 </div>
             </div>
         </div>
     `;
     
-    // Add event listener for add to cart button
+    // Add cart functionality
     const addToCartButton = col.querySelector('.btn-add-to-cart');
     if (addToCartButton) {
         addToCartButton.addEventListener('click', (e) => {
@@ -1138,12 +1204,12 @@ function createWineCard(wine, index, isFeatured = false) {
             if (selectedWine) {
                 addToCart(selectedWine);
                 
-                // Add button animation
-                addToCartButton.innerHTML = '<i class="fas fa-check me-2"></i>Added';
+                // Button animation
+                addToCartButton.innerHTML = '<i class="fas fa-check me-2"></i>Ajouté';
                 addToCartButton.classList.add('added');
                 
                 setTimeout(() => {
-                    addToCartButton.innerHTML = '<i class="fas fa-shopping-cart me-2"></i>Add to Cart';
+                    addToCartButton.innerHTML = '<i class="fas fa-shopping-cart me-2"></i>Ajouter au panier';
                     addToCartButton.classList.remove('added');
                 }, 2000);
             }
