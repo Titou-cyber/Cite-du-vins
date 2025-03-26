@@ -443,6 +443,32 @@ img {
     }
 }
 
+/* User dropdown menu */
+.user-dropdown {
+    background-color: var(--dark-gray);
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-2) 0;
+    min-width: 200px;
+}
+
+.dropdown-item {
+    color: var(--light-gray);
+    padding: var(--space-3) var(--space-4);
+    transition: all var(--transition-quick);
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--accent);
+}
+
+.dropdown-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: var(--space-2) 0;
+}
+
 /* Hero sections */
 .hero {
     position: relative;
@@ -531,6 +557,55 @@ img {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Wine Collection Hero */
+.wine-collection-hero {
+    background: linear-gradient(rgba(28, 31, 35, 0.7), rgba(28, 31, 35, 0.7)),
+                url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    position: relative;
+    padding-top: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.wine-collection-hero .hero-content {
+    position: relative;
+    z-index: 3;
+    padding: 100px 0;
+}
+
+.wine-collection-hero h1 {
+    color: var(--white);
+    margin-bottom: var(--space-6);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    display: inline-block;
+}
+
+.wine-collection-hero h1::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(to right, rgba(196, 154, 108, 0.5), var(--accent), rgba(196, 154, 108, 0.5));
+}
+
+.wine-collection-hero .lead {
+    color: var(--accent-light);
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    margin-bottom: var(--space-8);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Map Hero Section */
@@ -676,6 +751,513 @@ img {
     60% {
         transform: translateX(-50%) translateY(-5px);
     }
+}
+
+/* Search Modal */
+.search-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(28, 31, 35, 0.98);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-standard);
+}
+
+.search-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.search-modal-content {
+    width: 100%;
+    max-width: 600px;
+    padding: var(--space-8);
+}
+
+.search-form {
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: var(--space-5) var(--space-6);
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid var(--accent);
+    color: var(--white);
+    font-size: var(--font-size-2xl);
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--gray);
+}
+
+.search-submit {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: var(--font-size-2xl);
+    cursor: pointer;
+}
+
+.search-close {
+    position: absolute;
+    top: var(--space-8);
+    right: var(--space-8);
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: var(--font-size-2xl);
+    cursor: pointer;
+    transition: transform var(--transition-standard);
+}
+
+.search-close:hover {
+    transform: rotate(90deg);
+    color: var(--accent);
+}
+
+.search-suggestions {
+    margin-top: var(--space-8);
+}
+
+.search-suggestions h3 {
+    color: var(--accent);
+    margin-bottom: var(--space-4);
+    font-size: var(--font-size-lg);
+    position: relative;
+    display: inline-block;
+}
+
+.picks-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary);
+    opacity: 0.5;
+}
+
+.pick-card {
+    background-color: rgba(28, 31, 35, 0.8);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    height: 100%;
+    position: relative;
+    transition: all var(--transition-standard);
+    box-shadow: var(--shadow-sm);
+}
+
+.pick-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    background-color: var(--dark-gray);
+}
+
+.pick-card h5 {
+    color: var(--white);
+    margin: var(--space-2) 0;
+    font-size: var(--font-size-md);
+}
+
+.pick-card p {
+    color: var(--light-gray);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-3);
+}
+
+.badge-burgundy {
+    background-color: var(--red-wine);
+    color: white;
+}
+
+.badge-gold {
+    background-color: var(--white-wine);
+    color: var(--black);
+}
+
+.badge-rose {
+    background-color: var(--rose-wine);
+    color: var(--black);
+}
+
+.btn-burgundy {
+    background-color: var(--accent-dark);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--font-size-xs);
+    transition: all var(--transition-quick);
+    display: inline-block;
+}
+
+.btn-burgundy:hover {
+    background-color: var(--accent);
+    color: var(--black);
+}
+
+/* Price inputs */
+.price-inputs {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.price-separator {
+    color: var(--gray);
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Notification enhancements */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px 15px 15px;
+    background-color: var(--dark-gray);
+    color: var(--white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 280px;
+    max-width: 400px;
+    transform: translateX(120%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 3px solid var(--accent);
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification i {
+    font-size: 20px;
+}
+
+.notification.success i {
+    color: #4CAF50;
+}
+
+.notification.error i {
+    color: #F44336;
+}
+
+.notification span {
+    flex: 1;
+}
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-standard);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Animation for wine cards */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Cart notification */
+.cart-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    background-color: var(--dark-gray);
+    color: white;
+    box-shadow: var(--shadow-lg);
+    z-index: 1100;
+    transform: translateX(120%);
+    transition: transform 0.3s;
+}
+
+.cart-notification.show {
+    transform: translateX(0);
+}
+
+.cart-notification.success i {
+    color: #4CAF50;
+    margin-right: 10px;
+}
+
+.cart-notification.error i {
+    color: #F44336;
+    margin-right: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    :root {
+        --header-height: 60px;
+    }
+    
+    .navbar-brand {
+        font-size: var(--font-size-xl);
+    }
+    
+    .navbar-nav {
+        margin-top: var(--space-4);
+    }
+    
+    .nav-link {
+        padding: var(--space-2) var(--space-4);
+    }
+    
+    .hero {
+        min-height: 500px;
+    }
+    
+    .cart-modal {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .search-modal-content {
+        width: 90%;
+    }
+    
+    .search-close {
+        top: var(--space-4);
+        right: var(--space-4);
+    }
+    
+    .sommelier-profile {
+        text-align: center;
+        margin-bottom: var(--space-5);
+    }
+    
+    .recommendation-quote {
+        padding: var(--space-4);
+    }
+    
+    .wine-card .card-body {
+        padding: var(--space-4);
+    }
+}
+
+@media (max-width: 767px) {
+    :root {
+        --header-height: 56px;
+    }
+    
+    h1 {
+        font-size: var(--font-size-4xl);
+    }
+    
+    h2 {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .navbar-brand {
+        font-size: var(--font-size-lg);
+    }
+    
+    .hero {
+        min-height: 400px;
+    }
+    
+    .hero h1::after {
+        width: 60px;
+    }
+    
+    .map-container {
+        height: 350px;
+    }
+    
+    .search-input {
+        font-size: var(--font-size-xl);
+    }
+    
+    .suggestion-tags {
+        gap: var(--space-2);
+    }
+    
+    .suggestion-tag {
+        margin-bottom: var(--space-2);
+    }
+    
+    .wine-collection-hero {
+        min-height: 400px;
+    }
+    
+    .wine-image {
+        height: 220px;
+    }
+    
+    .collection-header {
+        text-align: center;
+    }
+    
+    .view-options {
+        margin-top: var(--space-3);
+        text-align: center;
+    }
+    
+    .pick-card {
+        margin-bottom: var(--space-4);
+    }
+}
+
+@media (max-width: 575px) {
+    .btn {
+        padding: var(--space-2) var(--space-4);
+    }
+    
+    .social-icons {
+        justify-content: center;
+    }
+    
+    .footer-meta-links {
+        flex-direction: column;
+        gap: var(--space-2);
+        align-items: center;
+    }
+    
+    .search-modal-content {
+        padding: var(--space-4);
+    }
+    
+    .wine-badges {
+        top: var(--space-3);
+        left: var(--space-3);
+    }
+    
+    .featured-badge {
+        top: 10px;
+        right: 10px;
+        padding: var(--space-1) var(--space-2);
+    }
+    
+    .card-footer {
+        flex-direction: column;
+        gap: var(--space-3);
+        align-items: flex-start;
+    }
+    
+    .btn-add-to-cart {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .wine-price {
+        align-self: flex-end;
+    }
+    
+    .filter-label {
+        margin-bottom: var(--space-1);
+    }
+}
+
+/* Accessibility improvements */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Add focus styles for keyboard navigation */
+a:focus, button:focus, input:focus, select:focus, textarea:focus, [tabindex]:focus {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+}
+
+/* High contrast mode improvements */
+@media (forced-colors: active) {
+    .btn, .nav-link, .search-icon, .cart-icon, .user-icon {
+        border: 1px solid currentColor;
+    }
+}
+
+/* Print styles */
+@media print {
+    body {
+        background-color: white;
+        color: black;
+    }
+    
+    .navbar, .site-footer, .modal-overlay, .cart-modal, .toast-container, .search-modal {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .wine-card, .filters-container, .order-summary {
+        box-shadow: none !important;
+        border: 1px solid #ccc;
+    }
+    
+    .btn {
+        display: none !important;
+    }
+    
+}.picks-title {
+    color: var(--accent);
+    margin-bottom: var(--space-4);
+}
+
+.suggestion-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.suggestion-tag {
+    padding: var(--space-2) var(--space-4);
+    background-color: rgba(44, 110, 139, 0.2);
+    border-radius: var(--radius-full);
+    color: var(--light-gray);
+    transition: all var(--transition-standard);
+    cursor: pointer;
+}
+
+.suggestion-tag:hover {
+    background-color: var(--primary);
+    color: var(--white);
 }
 
 /* Integrated Cart and Checkout */
@@ -911,6 +1493,12 @@ img {
     color: var(--accent);
     font-weight: 600;
     margin-bottom: var(--space-2);
+}
+
+.cart-item-price-qty {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .cart-item-quantity {
@@ -1227,6 +1815,25 @@ img {
 
 .btn-filter i {
     margin-right: var(--space-2);
+}
+
+.btn-outline-filter {
+    background-color: transparent;
+    color: var(--primary-accent);
+    border: 1px solid var(--primary-accent);
+    width: 100%;
+    border-radius: var(--radius-full);
+    padding: var(--space-3) var(--space-4);
+    font-weight: 600;
+    transition: all var(--transition-standard);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-outline-filter:hover {
+    background-color: rgba(122, 176, 196, 0.1);
+    color: var(--primary-light);
 }
 
 .region-stats-container {
@@ -1839,111 +2446,6 @@ img {
     color: var(--accent);
 }
 
-/* Search Modal */
-.search-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(28, 31, 35, 0.98);
-    z-index: 2000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: all var(--transition-standard);
-}
-
-.search-modal.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.search-modal-content {
-    width: 100%;
-    max-width: 600px;
-    padding: var(--space-8);
-}
-
-.search-form {
-    position: relative;
-}
-
-.search-input {
-    width: 100%;
-    padding: var(--space-5) var(--space-6);
-    background-color: transparent;
-    border: none;
-    border-bottom: 2px solid var(--accent);
-    color: var(--white);
-    font-size: var(--font-size-2xl);
-    outline: none;
-}
-
-.search-input::placeholder {
-    color: var(--gray);
-}
-
-.search-submit {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--accent);
-    font-size: var(--font-size-2xl);
-    cursor: pointer;
-}
-
-.search-close {
-    position: absolute;
-    top: var(--space-8);
-    right: var(--space-8);
-    background: none;
-    border: none;
-    color: var(--white);
-    font-size: var(--font-size-2xl);
-    cursor: pointer;
-    transition: transform var(--transition-standard);
-}
-
-.search-close:hover {
-    transform: rotate(90deg);
-    color: var(--accent);
-}
-
-.search-suggestions {
-    margin-top: var(--space-8);
-}
-
-.search-suggestions h3 {
-    color: var(--accent);
-    margin-bottom: var(--space-4);
-}
-
-.suggestion-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-}
-
-.suggestion-tag {
-    padding: var(--space-2) var(--space-4);
-    background-color: rgba(44, 110, 139, 0.2);
-    border-radius: var(--radius-full);
-    color: var(--light-gray);
-    transition: all var(--transition-standard);
-    cursor: pointer;
-}
-
-.suggestion-tag:hover {
-    background-color: var(--primary);
-    color: var(--white);
-}
-
 /* Map Loader and Custom Styles */
 .map-loader {
     position: absolute;
@@ -1979,11 +2481,6 @@ img {
 
 .double-bounce2 {
     animation-delay: -1.0s;
-}
-
-@keyframes bounce {
-    0%, 100% { transform: scale(0.0); }
-    50% { transform: scale(1.0); }
 }
 
 .map-popup {
@@ -2084,182 +2581,417 @@ img {
     }
 }
 
-/* Cart notification */
-.cart-notification {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 15px 20px;
-    border-radius: 8px;
+/* Enhanced wine cards */
+.wine-card {
+    height: 100%;
     background-color: var(--dark-gray);
-    color: white;
-    box-shadow: var(--shadow-lg);
-    z-index: 1100;
-    transform: translateX(120%);
-    transition: transform 0.3s;
-}
-
-.cart-notification.show {
-    transform: translateX(0);
-}
-
-.cart-notification.success i {
-    color: #4CAF50;
-    margin-right: 10px;
-}
-
-.cart-notification.error i {
-    color: #F44336;
-    margin-right: 10px;
-}
-
-/* Media queries */
-@media (max-width: 991px) {
-    :root {
-        --header-height: 60px;
-    }
-    
-    .navbar-brand {
-        font-size: var(--font-size-xl);
-    }
-    
-    .navbar-nav {
-        margin-top: var(--space-4);
-    }
-    
-    .nav-link {
-        padding: var(--space-2) var(--space-4);
-    }
-    
-    .hero {
-        min-height: 500px;
-    }
-    
-    .cart-modal {
-        width: 100%;
-        max-width: 100%;
-    }
-    
-    .search-modal-content {
-        width: 90%;
-    }
-    
-    .search-close {
-        top: var(--space-4);
-        right: var(--space-4);
-    }
-}
-
-@media (max-width: 767px) {
-    :root {
-        --header-height: 56px;
-    }
-    
-    h1 {
-        font-size: var(--font-size-4xl);
-    }
-    
-    h2 {
-        font-size: var(--font-size-3xl);
-    }
-    
-    .navbar-brand {
-        font-size: var(--font-size-lg);
-    }
-    
-    .hero {
-        min-height: 400px;
-    }
-    
-    .hero h1::after {
-        width: 60px;
-    }
-    
-    .map-container {
-        height: 350px;
-    }
-    
-    .search-input {
-        font-size: var(--font-size-xl);
-    }
-    
-    .suggestion-tags {
-        gap: var(--space-2);
-    }
-    
-    .suggestion-tag {
-        margin-bottom: var(--space-2);
-    }
-}
-
-@media (max-width: 575px) {
-    .btn {
-        padding: var(--space-2) var(--space-4);
-    }
-    
-    .social-icons {
-        justify-content: center;
-    }
-    
-    .footer-meta-links {
-        flex-direction: column;
-        gap: var(--space-2);
-        align-items: center;
-    }
-    
-    .search-modal-content {
-        padding: var(--space-4);
-    }
-}
-
-/* Accessibility improvements */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-standard);
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Add focus styles for keyboard navigation */
-a:focus, button:focus, input:focus, select:focus, textarea:focus, [tabindex]:focus {
-    outline: 2px solid var(--primary-light);
-    outline-offset: 2px;
+.wine-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
 }
 
-/* High contrast mode improvements */
-@media (forced-colors: active) {
-    .btn, .nav-link, .search-icon, .cart-icon, .user-icon {
-        border: 1px solid currentColor;
-    }
+.wine-card .card-body {
+    padding: var(--space-5);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Print styles */
-@media print {
-    body {
-        background-color: white;
-        color: black;
-    }
-    
-    .navbar, .site-footer, .modal-overlay, .cart-modal, .toast-container, .search-modal {
-        display: none !important;
-    }
-    
-    .container {
-        width: 100%;
-        max-width: none;
-    }
-    
-    .wine-card, .filters-container, .order-summary {
-        box-shadow: none !important;
-        border: 1px solid #ccc;
-    }
-    
-    .btn {
-        display: none !important;
-    }
+.wine-image {
+    position: relative;
+    height: 260px;
+    overflow: hidden;
+}
+
+.wine-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-standard);
+}
+
+.wine-card:hover .wine-image img {
+    transform: scale(1.05);
+}
+
+.wine-badges {
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-burgundy {
+    background-color: var(--red-wine);
+    color: var(--white);
+}
+
+.badge-gold {
+    background-color: var(--white-wine);
+    color: var(--black);
+}
+
+.badge-rose {
+    background-color: var(--rose-wine);
+    color: var(--black);
+}
+
+.badge-sparkle {
+    background-color: var(--sparkling-wine);
+    color: var(--black);
+}
+
+.badge-rating {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.featured-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: var(--accent);
+    color: var(--black);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: var(--font-size-xs);
+    z-index: 2;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.featured-badge i {
+    color: var(--primary-dark);
+}
+
+.wine-card .card-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-1);
+    color: var(--white);
+    font-weight: 600;
+}
+
+.wine-card .card-subtitle {
+    color: var(--accent);
+    margin-bottom: var(--space-4);
+    font-size: var(--font-size-sm);
+    display: flex;
+    justify-content: space-between;
+}
+
+.wine-card .winery {
+    font-style: italic;
+}
+
+.wine-card .vintage {
+    font-weight: 600;
+}
+
+.wine-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--light-gray);
+}
+
+.meta-item i {
+    color: var(--primary-accent);
+    width: 16px;
+    text-align: center;
+}
+
+.wine-rating {
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.star-rating {
+    color: var(--accent);
+    letter-spacing: 2px;
+}
+
+.rating-number {
+    font-weight: 600;
+    font-size: var(--font-size-md);
+    color: var(--white);
+    background-color: var(--primary-dark);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-md);
+}
+
+.wine-rating.exceptional .rating-number {
+    background-color: #9c27b0;
+}
+
+.wine-rating.excellent .rating-number {
+    background-color: var(--primary);
+}
+
+.wine-rating.very-good .rating-number {
+    background-color: #2196f3;
+}
+
+.wine-rating.average .rating-number {
+    background-color: var(--primary-dark);
+}
+
+.wine-rating.below-average .rating-number {
+    background-color: var(--gray);
+}
+
+.card-description {
+    color: var(--light-gray);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+    flex: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.wine-price {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.btn-add-to-cart {
+    padding: var(--space-2) var(--space-4);
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-standard);
+    font-weight: 500;
+    font-size: var(--font-size-sm);
+    display: flex;
+    align-items: center;
+}
+
+.btn-add-to-cart:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-add-to-cart.added {
+    background-color: #4caf50;
+    color: white;
+}
+
+/* Collection stats card */
+.collection-stats-card {
+    background-color: var(--dark-gray);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-md);
+}
+
+.stats-heading {
+    color: var(--accent);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: var(--font-size-md);
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-label {
+    color: var(--gray);
+}
+
+.stat-value {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* Collection header */
+.collection-header {
+    background-color: var(--dark-gray);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+    margin-bottom: var(--space-5);
+    box-shadow: var(--shadow-md);
+}
+
+.results-summary {
+    color: var(--light-gray);
+    font-size: var(--font-size-md);
+}
+
+.results-summary span {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.view-label {
+    color: var(--light-gray);
+    margin-right: var(--space-2);
+}
+
+.view-options .form-select-sm {
+    background-color: var(--black);
+    color: var(--white);
+    border: 1px solid var(--gray);
+    border-radius: var(--radius-md);
+}
+
+/* Load more button enhancement */
+#load-more {
+    padding: var(--space-3) var(--space-8);
+    background-color: transparent;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-standard);
+    letter-spacing: 1px;
+}
+
+#load-more:hover {
+    background-color: rgba(196, 154, 108, 0.1);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Sommelier section styling */
+.bg-dark-gradient {
+    background: linear-gradient(to bottom, var(--black), var(--dark-gray));
+    position: relative;
+}
+
+.bg-dark-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--accent), transparent);
+}
+
+.sommelier-highlight {
+    background-color: var(--dark-gray);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.sommelier-highlight::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(196, 154, 108, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.sommelier-image {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--accent);
+    margin: 0 auto var(--space-4);
+    box-shadow: var(--shadow-md);
+}
+
+.sommelier-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sommelier-name {
+    color: var(--accent);
+    margin-bottom: var(--space-1);
+    font-size: var(--font-size-xl);
+}
+
+.sommelier-title {
+    color: var(--gray);
+    font-style: italic;
+    margin-bottom: var(--space-3);
+}
+
+.sommelier-bio {
+    color: var(--light-gray);
+    margin-bottom: 0;
+}
+
+.recommendation-quote {
+    position: relative;
+    padding: var(--space-6);
+    color: var(--light-gray);
+    font-size: var(--font-size-lg);
+    font-style: italic;
+    line-height: 1.8;
+    border-radius: var(--radius-md);
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.quote-icon {
+    color: var(--accent);
+    font-size: 24px;
+    opacity: 0.5;
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+}
+
+.sommelier-picks {
+    padding-top: var(--space-4);
 }

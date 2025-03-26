@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore Terroir's premium wine collection featuring exceptional wines from the world's finest vineyards.">
-    <title>Premium Wine Collection | Terroir - La Cité Du Vin</title>
+    <meta name="description" content="Explore La Cité Du Vin's premium wine collection featuring exceptional wines from the world's finest vineyards.">
+    <title>Premium Wine Collection | La Cité Du Vin</title>
     
     <!-- Preload critical resources -->
     <link rel="preload" href="css/styles.css" as="style">
@@ -31,7 +31,7 @@
         <div class="container">
             <a class="navbar-brand" href="index.html">
                 <span class="brand-icon"><i class="fas fa-wine-glass-alt"></i></span>
-                <span class="brand-text">Terroir</span>
+                <span class="brand-text">La Cité Du Vin</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -44,32 +44,58 @@
                     <li class="nav-item"><a class="nav-link" href="knowledge.html">Expertise</a></li>
                 </ul>
                 <div class="navbar-nav ms-auto d-flex align-items-center">
-                    <div class="search-icon me-3" role="button" tabindex="0" aria-label="Search">
+                    <div class="search-icon me-3" role="button" tabindex="0" aria-label="Search" id="search-icon">
                         <i class="fas fa-search"></i>
                     </div>
                     <div class="cart-icon me-3 position-relative" id="cart-icon" role="button" tabindex="0" aria-label="Shopping cart">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count" id="cart-count">0</span>
                     </div>
-                    <div class="user-menu dropdown">
-                        <div class="user-icon" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" tabindex="0" aria-label="User account">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <ul class="dropdown-menu dropdown-menu-end user-dropdown" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-in-alt me-2"></i>Sign In</a></li>
-                            <li><a class="dropdown-item" href="register.html"><i class="fas fa-user-plus me-2"></i>Register</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="account.html"><i class="fas fa-user-circle me-2"></i>My Account</a></li>
-                        </ul>
+                    <div class="user-icon" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" tabindex="0" aria-label="User profile">
+                        <i class="fas fa-user"></i>
                     </div>
+                    <ul class="dropdown-menu dropdown-menu-end user-dropdown" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-in-alt me-2"></i>Sign In</a></li>
+                        <li><a class="dropdown-item" href="register.html"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="account.html"><i class="fas fa-user-circle me-2"></i>My Account</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section - Updated to match index.html structure -->
+    <!-- Search Modal -->
+    <div class="search-modal" id="search-modal">
+        <div class="search-modal-content">
+            <button class="search-close" id="search-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <form class="search-form">
+                <input type="text" class="search-input" placeholder="Search wines, regions, or varieties..." aria-label="Search">
+                <button type="submit" class="search-submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            <div class="search-suggestions">
+                <h3>Popular Searches</h3>
+                <div class="suggestion-tags">
+                    <span class="suggestion-tag">Bordeaux</span>
+                    <span class="suggestion-tag">Red Wines</span>
+                    <span class="suggestion-tag">Cabernet Sauvignon</span>
+                    <span class="suggestion-tag">France</span>
+                    <span class="suggestion-tag">Italy</span>
+                    <span class="suggestion-tag">Champagne</span>
+                    <span class="suggestion-tag">Vintage 2020</span>
+                    <span class="suggestion-tag">Wine Tours</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
     <header class="hero wine-collection-hero">
-        <div class="container text-center text-white">
+        <div class="hero-content">
             <h1 class="display-4">Curated Wine Collection</h1>
             <p class="lead">Exceptional wines selected from the world's finest vineyards</p>
             <div class="hero-cta">
@@ -83,7 +109,7 @@
     <!-- Wine Collection -->
     <section id="collection-section" class="collection-section py-5">
         <div class="container">
-            <!-- Added section header to match index.html -->
+            <!-- Section header -->
             <div class="section-header text-center mb-5">
                 <h2 class="section-title">Premium Wine Selection</h2>
                 <p class="section-subtitle">Discover exceptional wines curated by our sommeliers</p>
@@ -106,9 +132,27 @@
                         </div>
                         
                         <div class="filter-group">
+                            <label class="filter-label">Wine Type</label>
+                            <select id="type" class="form-select">
+                                <option value="">All Types</option>
+                                <option value="red">Red Wine</option>
+                                <option value="white">White Wine</option>
+                                <option value="rose">Rosé Wine</option>
+                                <option value="sparkling">Sparkling Wine</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
                             <label class="filter-label">Region</label>
                             <select id="region" class="form-select">
                                 <option value="">All Regions</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Country</label>
+                            <select id="country" class="form-select">
+                                <option value="">All Countries</option>
                             </select>
                         </div>
                         
@@ -128,14 +172,71 @@
                             </div>
                         </div>
                         
+                        <div class="filter-group">
+                            <label class="filter-label">Rating</label>
+                            <select id="rating-filter" class="form-select">
+                                <option value="0">Any Rating</option>
+                                <option value="90">90+ Points</option>
+                                <option value="95">95+ Points</option>
+                            </select>
+                        </div>
+                        
                         <button id="apply-filters" class="btn btn-filter">
                             <i class="fas fa-filter me-2"></i>Apply Filters
                         </button>
+                        <button onclick="resetFilters()" class="btn btn-outline-filter mt-2">
+                            <i class="fas fa-undo me-2"></i>Reset Filters
+                        </button>
+                    </div>
+                    
+                    <div class="collection-stats mt-4">
+                        <div class="collection-stats-card">
+                            <h3 class="stats-heading">Collection Stats</h3>
+                            <div class="stats-content">
+                                <div class="stat-row">
+                                    <span class="stat-label">Total Wines</span>
+                                    <span class="stat-value" id="result-count">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Countries</span>
+                                    <span class="stat-value">15</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Varieties</span>
+                                    <span class="stat-value">26</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Average Rating</span>
+                                    <span class="stat-value">92.4</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Wine Grid -->
                 <div class="col-lg-9">
+                    <div class="collection-header mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="results-summary">
+                                    <p>Showing <span id="showing-count">0</span> of <span id="total-count">0</span> exceptional wines</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <div class="view-options">
+                                    <span class="view-label">Sort by:</span>
+                                    <select id="sort-option" class="form-select-sm d-inline-block w-auto">
+                                        <option value="rating">Rating: High to Low</option>
+                                        <option value="price-asc">Price: Low to High</option>
+                                        <option value="price-desc">Price: High to Low</option>
+                                        <option value="name">Name: A to Z</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div id="wine-list" class="row">
                         <!-- Wine cards will be dynamically added here -->
                         <div class="text-center py-5 col-12">
@@ -146,6 +247,7 @@
                             <p class="mt-4">Discovering exceptional wines...</p>
                         </div>
                     </div>
+                    
                     <div class="text-center mt-5">
                         <button id="load-more" class="btn btn-outline">
                             <i class="fas fa-wine-bottle me-2"></i>Explore More Wines
@@ -156,7 +258,139 @@
         </div>
     </section>
 
-    <!-- Newsletter Section - Added to match index.html -->
+    <!-- Wine Regions Showcase -->
+    <section class="region-showcase py-5">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">Iconic Wine Regions</h2>
+                <p class="section-subtitle">Discover the most celebrated terroirs of the wine world</p>
+                <div class="title-decoration">
+                    <span></span><i class="fas fa-globe-europe"></i><span></span>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="region-card" onclick="window.location.href='wines.html?region=Bordeaux'">
+                        <div class="region-image">
+                            <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Bordeaux, France">
+                            <div class="region-overlay">
+                                <span class="region-name">Bordeaux</span>
+                                <span class="region-country">France</span>
+                            </div>
+                        </div>
+                        <div class="region-info">
+                            <p>Known for exceptional Cabernet Sauvignon and Merlot blends</p>
+                            <a href="wines.html?region=Bordeaux" class="region-link">Explore Wines <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="region-card" onclick="window.location.href='wines.html?region=Tuscany'">
+                        <div class="region-image">
+                            <img src="https://images.unsplash.com/photo-1566419808810-658178380987?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Tuscany, Italy">
+                            <div class="region-overlay">
+                                <span class="region-name">Tuscany</span>
+                                <span class="region-country">Italy</span>
+                            </div>
+                        </div>
+                        <div class="region-info">
+                            <p>Home to Chianti and Super Tuscan wines with rich Sangiovese character</p>
+                            <a href="wines.html?region=Tuscany" class="region-link">Explore Wines <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="region-card" onclick="window.location.href='wines.html?region=Napa+Valley'">
+                        <div class="region-image">
+                            <img src="https://images.unsplash.com/photo-1507434800635-78f25bc18784?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Napa Valley, USA">
+                            <div class="region-overlay">
+                                <span class="region-name">Napa Valley</span>
+                                <span class="region-country">United States</span>
+                            </div>
+                        </div>
+                        <div class="region-info">
+                            <p>Renowned for world-class Cabernet Sauvignon and Chardonnay</p>
+                            <a href="wines.html?region=Napa+Valley" class="region-link">Explore Wines <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sommelier Recommendations -->
+    <section class="sommelier-section py-5 bg-dark-gradient">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">Sommelier Recommendations</h2>
+                <p class="section-subtitle">Expert selections for every palate and occasion</p>
+                <div class="title-decoration">
+                    <span></span><i class="fas fa-glass-cheers"></i><span></span>
+                </div>
+            </div>
+            
+            <div class="sommelier-highlight">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <div class="sommelier-profile text-center text-lg-start">
+                            <div class="sommelier-image">
+                                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Marie Laurent, Head Sommelier" class="img-fluid rounded-circle">
+                            </div>
+                            <h3 class="sommelier-name">Marie Laurent</h3>
+                            <p class="sommelier-title">Head Sommelier</p>
+                            <p class="sommelier-bio">Award-winning sommelier with 15 years of experience in premier wine regions of Europe and the Americas.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="recommendation-quote">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <p class="quote-text">"For this season, I'm particularly drawn to the elegant Burgundy selections and the bold expressions from the emerging vineyards of Chile's Colchagua Valley. Each bottle in our collection has been carefully selected to provide a unique expression of its terroir."</p>
+                        </div>
+                        <div class="sommelier-picks mt-4">
+                            <h4 class="picks-title">This Month's Selections</h4>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="pick-card">
+                                        <div class="badge badge-burgundy">Red Wine</div>
+                                        <h5>Château Margaux 2018</h5>
+                                        <p>An exceptional Bordeaux with notes of blackcurrant and cedar</p>
+                                        <a href="wines.html?search=Château+Margaux" class="btn-sm btn-burgundy">View Wine</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="pick-card">
+                                        <div class="badge badge-gold">White Wine</div>
+                                        <h5>Puligny-Montrachet 2020</h5>
+                                        <p>Elegant white Burgundy with citrus and hazelnut notes</p>
+                                        <a href="wines.html?search=Puligny-Montrachet" class="btn-sm btn-burgundy">View Wine</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="pick-card">
+                                        <div class="badge badge-rose">Sparkling</div>
+                                        <h5>Dom Pérignon 2012</h5>
+                                        <p>Exceptional vintage champagne with remarkable complexity</p>
+                                        <a href="wines.html?search=Dom+Pérignon" class="btn-sm btn-burgundy">View Wine</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="sommelier.html" class="btn btn-outline">
+                    <i class="fas fa-user-tie me-2"></i>Meet Our Sommeliers
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
     <section class="newsletter-section py-5">
         <div class="container">
             <div class="newsletter-box">
@@ -217,8 +451,8 @@
                 <div class="row">
                     <div class="col-lg-4 mb-5 mb-lg-0">
                         <div class="footer-brand">
-                            <h3>Terroir</h3>
-                            <p>An exclusive collection of fine wines from La Cité Du Vin, celebrating the art and culture of wine appreciation.</p>
+                            <h3>La Cité Du Vin</h3>
+                            <p>An exclusive destination celebrating the art, culture, and enjoyment of wine from around the world.</p>
                         </div>
                         <div class="social-icons">
                             <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -282,7 +516,5 @@
     <!-- Custom Scripts -->
     <script src="js/enhanced-wines.js"></script>
     <script src="js/ui-components.js"></script>
-    <!-- Side Checkout JS - Properly loaded for checkout functionality -->
-    <script src="components/side-checkout.js"></script>
 </body>
 </html>
