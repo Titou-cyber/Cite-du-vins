@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Terroir - An immersive wine exploration platform by La Cité Du Vin featuring interactive wine region mapping, AI sommelier recommendations, and a comprehensive wine knowledge graph.">
-    <title>Terroir - La Cité Du Vin</title>
+    <meta name="description" content="La Cité Du Vin - An immersive wine exploration platform featuring interactive wine region mapping, AI sommelier recommendations, and a comprehensive wine knowledge graph.">
+    <title>La Cité Du Vin</title>
     
     <!-- Preload critical resources -->
     <link rel="preload" href="css/styles.css" as="style">
@@ -21,11 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="map-page">
@@ -34,7 +30,7 @@
         <div class="container">
             <a class="navbar-brand" href="index.html">
                 <span class="brand-icon"><i class="fas fa-wine-glass-alt"></i></span>
-                <span class="brand-text">Terroir</span>
+                <span class="brand-text">La Cité Du Vin</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -47,7 +43,7 @@
                     <li class="nav-item"><a class="nav-link" href="knowledge.html">Expertise</a></li>
                 </ul>
                 <div class="navbar-nav ms-auto d-flex align-items-center">
-                    <div class="search-icon me-3" role="button" tabindex="0" aria-label="Search">
+                    <div class="search-icon me-3" role="button" tabindex="0" aria-label="Search" id="search-icon">
                         <i class="fas fa-search"></i>
                     </div>
                     <div class="cart-icon me-3 position-relative" id="cart-icon" role="button" tabindex="0" aria-label="Shopping cart">
@@ -61,6 +57,34 @@
             </div>
         </div>
     </nav>
+
+    <!-- Search Modal -->
+    <div class="search-modal" id="search-modal">
+        <div class="search-modal-content">
+            <button class="search-close" id="search-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <form class="search-form">
+                <input type="text" class="search-input" placeholder="Search wines, regions, or varieties..." aria-label="Search">
+                <button type="submit" class="search-submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            <div class="search-suggestions">
+                <h3>Popular Searches</h3>
+                <div class="suggestion-tags">
+                    <span class="suggestion-tag">Bordeaux</span>
+                    <span class="suggestion-tag">Red Wines</span>
+                    <span class="suggestion-tag">Cabernet Sauvignon</span>
+                    <span class="suggestion-tag">France</span>
+                    <span class="suggestion-tag">Italy</span>
+                    <span class="suggestion-tag">Champagne</span>
+                    <span class="suggestion-tag">Vintage 2020</span>
+                    <span class="suggestion-tag">Wine Tours</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero Map Section -->
     <header class="map-hero">
@@ -319,7 +343,7 @@
             </div>
             
             <div class="text-center mt-4">
-                <a href="wines.html" class="btn btn-burgundy">
+                <a href="wines.html" class="btn btn-primary">
                     <i class="fas fa-wine-glass me-2"></i>View All Wines
                 </a>
             </div>
@@ -377,6 +401,9 @@
         </div>
     </div>
 
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+
     <!-- Modern Footer -->
     <footer class="site-footer">
         <div class="container">
@@ -384,8 +411,8 @@
                 <div class="row">
                     <div class="col-lg-4 mb-5 mb-lg-0">
                         <div class="footer-brand">
-                            <h3>Terroir</h3>
-                            <p>An exclusive collection of fine wines from La Cité Du Vin, celebrating the art and culture of wine appreciation.</p>
+                            <h3>La Cité Du Vin</h3>
+                            <p>An exclusive destination celebrating the art, culture, and enjoyment of wine from around the world.</p>
                         </div>
                         <div class="social-icons">
                             <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -394,7 +421,7 @@
                             <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                    <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
                         <h5>Explore</h5>
                         <ul class="footer-links">
                             <li><a href="index.html">Wine Map</a></li>
@@ -403,7 +430,7 @@
                             <li><a href="knowledge.html">Wine Education</a></li>
                         </ul>
                     </div>
-                    <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                    <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
                         <h5>Visit Us</h5>
                         <address class="footer-address">
                             La Cité du Vin<br>
@@ -413,8 +440,8 @@
                         </address>
                     </div>
                     <div class="col-lg-4">
-                        <h5>Stay Updated</h5>
-                        <p>Subscribe for exclusive offers and wine release notifications.</p>
+                        <h5>Join Our Newsletter</h5>
+                        <p>Subscribe for exclusive tastings, events and wine releases</p>
                         <form class="footer-form">
                             <div class="input-with-button">
                                 <input type="email" placeholder="Your email address" required aria-label="Subscribe to newsletter">
@@ -449,7 +476,7 @@
     
     <!-- Custom Scripts -->
     <script src="js/premium-map.js"></script>
-    <script src="js/featured-wines.js"></script>
+    <script src="js/enhanced-wines.js"></script>
     <script src="js/ui-components.js"></script>
 </body>
 </html>

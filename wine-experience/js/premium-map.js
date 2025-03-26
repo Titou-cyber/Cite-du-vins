@@ -43,7 +43,7 @@ let loadingElement;
 document.addEventListener('DOMContentLoaded', init);
 
 // Initialize the app with proper error handling
-async function init() {
+function init() {
     showLoader();
     
     try {
@@ -53,29 +53,45 @@ async function init() {
         // Update cart count
         updateCartCount();
         
-        // Load wine data
-        await loadWineData();
-        
-        // Process wine regions
-        processWineRegions();
-        
-        // Initialize maps
+        // Initialize maps directly without waiting for wine data
         if (heroMapContainer) initializeHeroMap();
         if (wineMapContainer) initializeDetailMap();
         
-        // Populate filter dropdowns
-        populateFilters();
+        // Load wine data in the background
+        loadWineData()
+            .then(() => {
+                // Process wine regions after data loads
+                processWineRegions();
+                
+                // Populate filter dropdowns
+                populateFilters();
+                
+                // Refresh map markers if maps are initialized
+                if (detailMap) addRegionMarkers();
+            })
+            .catch(error => {
+                console.error('Error loading wine data:', error);
+                // Show a non-blocking error message
+                if (regionDetailsContainer) {
+                    regionDetailsContainer.innerHTML = `
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i> 
+                            Some wine data could not be loaded. Basic map functionality is still available.
+                        </div>
+                    `;
+                }
+            })
+            .finally(() => {
+                hideLoader();
+            });
         
         // Set up event listeners
         setupEventListeners();
         
-        // Hide loader
-        hideLoader();
-        
     } catch (error) {
         console.error('Error initializing map:', error);
         hideLoader();
-        showErrorMessage('An error occurred while loading the map data. Please try refreshing the page.');
+        showErrorMessage('An error occurred while loading the map. Please try refreshing the page.');
     }
 }
 
@@ -418,38 +434,41 @@ function initializeHeroMap() {
             keyboard: false,
             touchZoom: false,
             attributionControl: false
-        }).setView([30, 10], 2);
+        }).setView([46.6031, 2.3522], 4); // Center on France by default
         
         // Add dark tile layer with custom styling
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         }).addTo(heroMap);
         
-        // Add region markers with enhanced visual effects
-        wineRegions.forEach(region => {
-            if (!region.coordinates) return; // Skip regions without coordinates
-            
-            // Calculate marker size based on wine count (with limits)
-            const baseSize = 4;
-            const sizeMultiplier = 1.5;
-            const maxSize = 18;
-            const size = Math.min(baseSize + Math.sqrt(region.count) * sizeMultiplier, maxSize);
-            
+        // Add some default wine regions even if data hasn't loaded
+        const defaultRegions = [
+            { name: "Bordeaux", coordinates: [44.8378, -0.5792], country: "France" },
+            { name: "Tuscany", coordinates: [43.7711, 11.2486], country: "Italy" },
+            { name: "Napa Valley", coordinates: [38.5025, -122.2654], country: "United States" },
+            { name: "Mendoza", coordinates: [-32.8908, -68.8272], country: "Argentina" },
+            { name: "Barossa Valley", coordinates: [-34.5339, 138.9523], country: "Australia" }
+        ];
+        
+        // Add the default regions to the map
+        defaultRegions.forEach(region => {
             // Create a pulsing circle marker
             const marker = L.circleMarker([region.coordinates[0], region.coordinates[1]], {
-                radius: size,
-                fillColor: '#D4AF37', // Gold
+                radius: 8,
+                fillColor: '#0099cc', // Updated color
                 fillOpacity: 0.7,
                 color: '#FFFFFF',
                 weight: 0.5,
                 opacity: 0.8
             }).addTo(heroMap);
             
-            // Add a subtle pulse animation for a more dynamic map
+            // Add a pulse animation
             setTimeout(() => {
                 addPulseAnimation(region.coordinates, heroMap);
-            }, Math.random() * 5000); // Stagger animations
+            }, Math.random() * 2000);
         });
+        
+        hideLoader();
     } catch (error) {
         console.error('Error initializing hero map:', error);
         showErrorMessage('Failed to initialize the world wine map.');
@@ -518,20 +537,50 @@ function initializeDetailMap() {
             worldCopyJump: true
         }).setView([20, 0], 2);
         
-        // Add enhanced tile layer
+        // Add enhanced tile layer with proper attribution
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             noWrap: false
         }).addTo(detailMap);
-        
-        // Add region markers
-        addRegionMarkers();
         
         // Add map controls
         L.control.zoom({
             position: 'bottomright'
         }).addTo(detailMap);
         
+        // Add default wine regions if wine data hasn't loaded yet
+        if (wineRegions.length === 0) {
+            const defaultRegions = [
+                { name: "Bordeaux", coordinates: [44.8378, -0.5792], country: "France", count: 100 },
+                { name: "Tuscany", coordinates: [43.7711, 11.2486], country: "Italy", count: 75 },
+                { name: "Napa Valley", coordinates: [38.5025, -122.2654], country: "United States", count: 90 },
+                { name: "Mendoza", coordinates: [-32.8908, -68.8272], country: "Argentina", count: 60 },
+                { name: "Barossa Valley", coordinates: [-34.5339, 138.9523], country: "Australia", count: 50 }
+            ];
+            
+            defaultRegions.forEach(region => {
+                const marker = L.circleMarker([region.coordinates[0], region.coordinates[1]], {
+                    radius: Math.sqrt(region.count) * 0.8,
+                    fillColor: '#0099cc', // Updated color
+                    fillOpacity: 0.7,
+                    color: '#FFFFFF',
+                    weight: 1.5,
+                    className: 'wine-region-marker'
+                }).addTo(detailMap);
+                
+                // Add simplified popup
+                marker.bindPopup(`
+                    <div class="map-popup">
+                        <h4>${region.name}</h4>
+                        <p class="popup-country">${region.country}</p>
+                    </div>
+                `);
+                
+                regionMarkers.push(marker);
+            });
+        }
+        
+        hideLoader();
     } catch (error) {
         console.error('Error initializing detail map:', error);
         showErrorMessage('Failed to initialize the detailed wine region map.');

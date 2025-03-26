@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Expand your wine knowledge with Terroir's educational resources - covering wine regions, varieties, tasting techniques, and interactive wine quizzes.">
-    <title>Wine Knowledge | Terroir - La Cité Du Vin</title>
+    <title>Wine Knowledge | Cité Du Vin</title>
     
     <!-- Preload critical resources -->
     <link rel="preload" href="css/styles.css" as="style">
@@ -25,65 +25,93 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="knowledge-page">
+<body class="map-page">
     <!-- Modern Navbar with Cart -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.html">
                 <span class="brand-icon"><i class="fas fa-wine-glass-alt"></i></span>
-                <span class="brand-text">Terroir</span>
+                <span class="brand-text">La Cité Du Vin</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Discover</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="index.html" aria-current="page">Discover</a></li>
                     <li class="nav-item"><a class="nav-link" href="wines.html">Collection</a></li>
                     <li class="nav-item"><a class="nav-link" href="sommelier.html">Sommelier</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="knowledge.html" aria-current="page">Expertise</a></li>
+                    <li class="nav-item"><a class="nav-link" href="knowledge.html">Expertise</a></li>
                 </ul>
                 <div class="navbar-nav ms-auto d-flex align-items-center">
-                    <div class="search-icon me-3" role="button" tabindex="0" aria-label="Search">
+                    <div class="search-icon me-3" role="button" tabindex="0" aria-label="Search" id="search-icon">
                         <i class="fas fa-search"></i>
                     </div>
                     <div class="cart-icon me-3 position-relative" id="cart-icon" role="button" tabindex="0" aria-label="Shopping cart">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count" id="cart-count">0</span>
                     </div>
-                    <div class="user-menu dropdown">
-                        <div class="user-icon" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" tabindex="0" aria-label="User account">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <ul class="dropdown-menu dropdown-menu-end user-dropdown" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-in-alt me-2"></i>Sign In</a></li>
-                            <li><a class="dropdown-item" href="register.html"><i class="fas fa-user-plus me-2"></i>Register</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="account.html"><i class="fas fa-user-circle me-2"></i>My Account</a></li>
-                        </ul>
+                    <div class="user-icon" role="button" tabindex="0" aria-label="User profile">
+                        <i class="fas fa-user"></i>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="hero knowledge-hero">
-        <div class="container text-center text-white">
-            <h1 class="display-4">Wine Knowledge</h1>
-            <p class="lead">Expand your understanding of wine with our educational resources</p>
-            <div class="hero-cta">
-                <a href="#knowledge-tabs" class="btn btn-gold mt-4">
-                    <i class="fas fa-book-open me-2"></i>Start Learning
-                </a>
+    <!-- Search Modal -->
+    <div class="search-modal" id="search-modal">
+        <div class="search-modal-content">
+            <button class="search-close" id="search-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <form class="search-form">
+                <input type="text" class="search-input" placeholder="Search wines, regions, or varieties..." aria-label="Search">
+                <button type="submit" class="search-submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            <div class="search-suggestions">
+                <h3>Popular Searches</h3>
+                <div class="suggestion-tags">
+                    <span class="suggestion-tag">Bordeaux</span>
+                    <span class="suggestion-tag">Red Wines</span>
+                    <span class="suggestion-tag">Cabernet Sauvignon</span>
+                    <span class="suggestion-tag">France</span>
+                    <span class="suggestion-tag">Italy</span>
+                    <span class="suggestion-tag">Champagne</span>
+                    <span class="suggestion-tag">Vintage 2020</span>
+                    <span class="suggestion-tag">Wine Tours</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Map Section -->
+    <header class="map-hero">
+        <div class="map-overlay">
+            <div class="container text-center text-white">
+                <h1 class="display-3">Explore Wine Regions</h1>
+                <p class="lead">Journey through the world's most renowned terroirs</p>
+                <div class="hero-cta">
+                    <a href="#explore-section" class="btn btn-gold mt-4">
+                        <i class="fas fa-wine-bottle me-2"></i>Discover Wines
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="hero-map" class="hero-map-container"></div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <div class="arrows">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
     </header>
-
-    <!-- Reading Progress Bar -->
-    <div class="reading-progress-container">
-        <div id="reading-progress" class="reading-progress"></div>
-    </div>
 
     <!-- Knowledge Tabs Section -->
     <section id="knowledge-tabs" class="py-5">
@@ -578,6 +606,34 @@
             </div>
         </div>
     </section>
+
+    <!-- Shopping Cart Modal - Added to match index.html -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Your Collection</h3>
+                <button id="close-cart" class="close-cart" aria-label="Close cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be dynamically added here -->
+                <p class="empty-cart-message">Your collection is empty</p>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <button id="checkout-btn" class="btn btn-checkout" disabled>
+                    <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay - Added to match index.html -->
+    <div class="modal-overlay" id="modal-overlay"></div>
 
     <!-- Modern Footer -->
     <footer class="site-footer">

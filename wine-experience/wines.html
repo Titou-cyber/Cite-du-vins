@@ -24,8 +24,6 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
-    <!-- Side Checkout CSS - Added for proper side checkout styling -->
-    <link rel="stylesheet" href="components/side-checkout.css">
 </head>
 <body class="wine-shop-page">
     <!-- Modern Navbar with Cart -->
@@ -69,17 +67,31 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="wine-collection-hero">
+    <!-- Hero Section - Updated to match index.html structure -->
+    <header class="hero wine-collection-hero">
         <div class="container text-center text-white">
             <h1 class="display-4">Curated Wine Collection</h1>
             <p class="lead">Exceptional wines selected from the world's finest vineyards</p>
+            <div class="hero-cta">
+                <a href="#collection-section" class="btn btn-gold mt-4">
+                    <i class="fas fa-wine-bottle me-2"></i>Explore Collection
+                </a>
+            </div>
         </div>
     </header>
 
     <!-- Wine Collection -->
-    <section class="collection-section py-5">
+    <section id="collection-section" class="collection-section py-5">
         <div class="container">
+            <!-- Added section header to match index.html -->
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">Premium Wine Selection</h2>
+                <p class="section-subtitle">Discover exceptional wines curated by our sommeliers</p>
+                <div class="title-decoration">
+                    <span></span><i class="fas fa-wine-bottle"></i><span></span>
+                </div>
+            </div>
+            
             <div class="row">
                 <!-- Filters Sidebar -->
                 <div class="col-lg-3 mb-4">
@@ -143,6 +155,57 @@
             </div>
         </div>
     </section>
+
+    <!-- Newsletter Section - Added to match index.html -->
+    <section class="newsletter-section py-5">
+        <div class="container">
+            <div class="newsletter-box">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="newsletter-title">Join Our Wine Journey</h2>
+                        <p class="newsletter-text">
+                            Subscribe to receive exclusive offers, wine insights, and invitations to virtual tastings.
+                        </p>
+                    </div>
+                    <div class="col-lg-6">
+                        <form class="newsletter-form">
+                            <div class="input-with-button">
+                                <input type="email" placeholder="Your email address" required aria-label="Email address">
+                                <button type="submit" aria-label="Subscribe">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Your Collection</h3>
+                <button id="close-cart" class="close-cart" aria-label="Close cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be dynamically added here -->
+                <p class="empty-cart-message">Your collection is empty</p>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <button id="checkout-btn" class="btn btn-checkout" disabled>
+                    <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal Overlay -->
     <div class="modal-overlay" id="modal-overlay"></div>
